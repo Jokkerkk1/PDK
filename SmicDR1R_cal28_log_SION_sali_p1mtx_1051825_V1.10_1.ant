@@ -1,0 +1,1303 @@
+#! tvf
+namespace import tvf::*
+
+#Note 1: This Rule File will select to check M1, 1xMn(n = 2~8),2xMn(B1, B2),8xTMn(Mn = TM1, TM2),10xTMn(STM1, STM2),MTT2; 1xVn(n = 1~7),2xVn(W0, W1), 8xTVn(Vn = TV1, TV2), 10xTVn(STV1, STV2).
+#Note 2: "Switches selection 1" is for Metallization Options,please select one "value" for each switch in "Switches selection 1" base on the chip design.
+#         Here user can refer to design rule for metal options
+#Note 3: This runset must be run with calibre v2013.4_15.12 
+
+#  You need refer to two result reports after running this file.
+#  1) *.rep will provide GATE area information
+#  2) *.rpt will provide three numbers ( The first and sencond are GATE coordinate,
+#       the third is the ratio value )  
+
+#################################################
+#     Environmental Variables Setting           #
+#################################################
+
+#//*************************************
+#//    Switches selection 1 
+#//*************************************
+
+set total_metal_counts 12     ;#valid value is 5,6,7,8,9,10,11,12
+
+set 2X_metal_counts 2         ;#valid value is 0,1,2
+
+set 8X_top_metal_counts 2     ;#valid value is 0,1,2
+
+set 10X_top_metal_counts 0    ;#valid value is 0,1,2
+    
+set MTT2_top_metal_counts 0   ;#valid value is 0,1
+
+#//****************************************
+#//   Switches selection 2   ALPA thickness 
+#//****************************************
+
+# ALPA thickness used in this runset is defined as typical thickness.
+# There are two kinds of ALPA thickness for selection: 1.45um and 2.8um, Default to check 1.450um
+# If customer want to check 2.8um, please change this option to "set ALPA_thickness 2.8"
+
+set ALPA_thickness 1.45
+
+
+VERBATIM {
+
+//********************************************************************************
+//                           CALIBRE DRC PROGRAM
+//********************************************************************************
+
+//=================================================================================
+//|                                                                               |
+//|  28nm Calibre Antenna rule file for                                           |
+//|                                                                               |
+//|       SMIC:     28nm Logic Low Power (Poly/SION) 1.05V/1.8V/2.5V Design Rules |
+//|                                                                               |
+//|       Doc. No:   TD-LO28-DR-2006         Doc.Rev: 1R  Tech Dev.Rev : 1.10     |
+//|                                                                               |
+//|  SMIC Technology R&D                                                          |
+//|                                                                               |
+//|  Validated with Calibre version      calibre v2013.4_15.12                    |
+//|                                                                               |
+//|===============================================================================|
+//|                                                                               |
+//|    DISCLAIMER                                                                 |
+//|                                                                               |
+//|   SMIC hereby provides the quality information to you but makes no claims,    |
+//| promises or guarantees about the accuracy, completeness, or adequacy of the   |
+//| information herein. The information contained herein is provided on an "AS IS"|
+//| basis without any warranty, and SMIC assumes no obligation to provide support |
+//| of any kind or otherwise maintain the information.                            |
+//|                                                                               |
+//|   SMIC disclaims any representation that the information does not infringe any|
+//| intellectual property rights or proprietary rights of any third parties.SMIC  |
+//| makes no other warranty, whether express, implied or statutory as to any      |
+//| matter whatsoever, including but not limited to the accuracy or sufficiency of|
+//| any information or the merchantability and fitness for a particular purpose.  |
+//| Neither SMIC nor any of its representatives shall be liable for any cause of  |
+//| action incurred to connect to this service.                                   |
+//|                                                                               |
+//|===============================================================================|
+//|                                                                               |
+//|    STATEMENT OF USE AND CONFIDENTIALITY                                       |
+//|                                                                               |
+//|   The following/attached material contains confidential and proprietary       |
+//| information of SMIC. This material is based upon information which SMIC       |
+//| considers reliable, but SMIC neither represents nor warrants that such        |
+//| information is accurate or complete, and it must not be relied upon as such.  |
+//| This information was prepared for informational purposes and is for the use by|
+//| SMIC's customer only. SMIC reserves the right to make changes in the          |
+//| information at any time without notice.                                       |
+//|   No part of this information may be reproduced, transmitted, transcribed,    |
+//| stored in a retrieval system, or translated into any human or computer        |
+//| language, in any form or by any means, electronic, mechanical, magnetic,      |
+//| optical, chemical, manual, or otherwise, without the prior written consent of |
+//| SMIC. Any unauthorized use or disclosure of this material is strictly         |
+//| prohibited and may be unlawful. By accepting this material, the receiving     |
+//| party shall be deemed to have acknowledged, accepted, and agreed to be bound  |
+//| by the foregoing limitations and restrictions. Thank you.                     |
+//|                                                                               |
+//|===============================================================================|
+//|                                                                               |
+//| Revision History :                                                            |
+//|                                                                               |
+//|  Rev          Date           Who                      What                    |
+//| -----    ------------- -------------- ----------------------------------------|
+//| V1.10_1   22-Sep-2015  Dorian Zheng   Only update file name			  |
+//|										  |
+//| V1.10_1R  13-Jan-2015    Li Liu     ANT.GT9a/9b/11:change 14K to 14.5K        |
+//|										  |
+//| V1.0_0R  7-Jul-2014     Li Liu             initial version                    |
+//|                                                                               |
+//|===============================================================================|
+}
+
+
+VERBATIM {
+//*************************************
+//     DIRECTIVE SECTION
+//*************************************
+
+LAYOUT PATH "*.gds"
+LAYOUT PRIMARY "topcell"
+LAYOUT SYSTEM GDSII 
+
+DRC RESULTS DATABASE "antenna_CAL.OUT" ASCII 
+DRC SUMMARY REPORT "antenna_CAL.SUM" 
+
+DRC MAXIMUM RESULTS 1000
+DRC MAXIMUM VERTEX 199
+
+
+//************************************
+//    INPUT LAYER STATEMENTS
+//************************************
+
+LAYER MAP       10 DATATYPE 0 1009
+LAYER AAi       1009
+LAYER MAP       10 DATATYPE 1 1019
+LAYER AADUM     1019
+LAYER MAP       10 DATATYPE 7 1079
+LAYER AADOP     1079
+LAYER MAP       10 DATATYPE 8 1089
+LAYER AADMP     1089
+
+LAYER MAP 48  DATATYPE  0  638
+LAYER SAB 638
+
+LAYER MAP 96  DATATYPE  0  707
+LAYER RESP1 707
+
+LAYER MAP 81    DATATYPE 2    828
+LAYER EFUSE   828
+
+LAYER MAP       29 DATATYPE 0 2909
+LAYER DGi       2909
+
+LAYER MAP       30 DATATYPE 0 3009
+LAYER GTi       3009
+LAYER MAP       30 DATATYPE 1 3019
+LAYER GTDUM     3019
+LAYER MAP       30 DATATYPE 7 3079
+LAYER GTDOP     3079
+LAYER MAP       30 DATATYPE 8 3089
+LAYER GTDMP     3089
+
+LAYER MAP       50 DATATYPE 0 5009
+LAYER CT        5009
+LAYER MAP       61 DATATYPE 0 610
+LAYER M1i       610
+LAYER MAP       61 DATATYPE 1 611
+LAYER M1DUMi    611
+LAYER MAP       62 DATATYPE 0 620
+LAYER M2i       620
+LAYER MAP       62 DATATYPE 1 621
+LAYER M2DUMi    621
+LAYER MAP       63 DATATYPE 0 630
+LAYER M3i       630
+LAYER MAP       63 DATATYPE 1 631
+LAYER M3DUMi    631
+LAYER MAP       64 DATATYPE 0 640
+LAYER M4i       640
+LAYER MAP       64 DATATYPE 1 641
+LAYER M4DUMi    641
+LAYER MAP       65 DATATYPE 0 650
+LAYER M5i       650
+LAYER MAP       65 DATATYPE 1 651
+LAYER M5DUMi    651
+LAYER MAP       66 DATATYPE 0 660
+LAYER M6i       660
+LAYER MAP       66 DATATYPE 1 661
+LAYER M6DUMi    661
+LAYER MAP       67 DATATYPE 0 670
+LAYER M7i       670
+LAYER MAP       67 DATATYPE 1 671
+LAYER M7DUMi    671
+LAYER MAP       68 DATATYPE 0 680
+LAYER M8i       680
+LAYER MAP       68 DATATYPE 1 681
+LAYER M8DUMi    681
+LAYER MAP       70 DATATYPE 0 700
+LAYER V1i       700
+LAYER MAP       70 DATATYPE 1 701
+LAYER V1DUMi    701
+LAYER MAP       71 DATATYPE 0 710
+LAYER V2i       710
+LAYER MAP       71 DATATYPE 1 711
+LAYER V2DUMi    711
+LAYER MAP       72 DATATYPE 0 720
+LAYER V3i       720
+LAYER MAP       72 DATATYPE 1 721
+LAYER V3DUMi    721
+LAYER MAP       73 DATATYPE 0 730
+LAYER V4i       730
+LAYER MAP       73 DATATYPE 1 731
+LAYER V4DUMi    731
+LAYER MAP       74 DATATYPE 0 740
+LAYER V5i       740
+LAYER MAP       74 DATATYPE 1 741
+LAYER V5DUMi    741
+LAYER MAP       75 DATATYPE 0 750
+LAYER V6i       750
+LAYER MAP       75 DATATYPE 1 751
+LAYER V6DUMi    751
+LAYER MAP       76 DATATYPE 0 760
+LAYER V7i       760
+LAYER MAP       76 DATATYPE 1 761
+LAYER V7DUMi    761
+
+LAYER MAP       121 DATATYPE 0 1210
+LAYER TV1i      1210
+LAYER MAP       121 DATATYPE 1 1211
+LAYER TV1DUM    1211
+LAYER MAP       123 DATATYPE 0 1230
+LAYER TV2i      1230
+LAYER MAP       123 DATATYPE 1 1231
+LAYER TV2DUM    1231
+
+LAYER MAP       243 DATATYPE 0 2430
+LAYER STV1i     2430
+LAYER MAP       243 DATATYPE 1 2431
+LAYER STV1DUM   2431
+LAYER MAP       244 DATATYPE 0 2440
+LAYER STV2i     2440
+LAYER MAP       244 DATATYPE 1 2441
+LAYER STV2DUM   2441
+
+LAYER MAP       120 DATATYPE 0 1200
+LAYER TM1i      1200
+LAYER MAP       120 DATATYPE 1 1201
+LAYER TM1DUMi   1201
+LAYER MAP       122 DATATYPE 0 1220
+LAYER TM2i      1220
+LAYER MAP       122 DATATYPE 1 1221
+LAYER TM2DUMi   1221
+
+LAYER MAP       228 DATATYPE 0 2280
+LAYER STM1i     2280
+LAYER MAP       228 DATATYPE 1 2281
+LAYER STM1DUM   2281
+LAYER MAP       229 DATATYPE 0 2290
+LAYER STM2i     2290
+LAYER MAP       229 DATATYPE 1 2291
+LAYER STM2DUM   2291
+
+LAYER   MAP     61   DATATYPE 7 6170
+LAYER   M1DOP   6170
+LAYER   MAP     62   DATATYPE 7 6270
+LAYER   M2DOP   6270
+LAYER   MAP     63   DATATYPE 7 6370
+LAYER   M3DOP   6370
+LAYER   MAP     64   DATATYPE 7 6470
+LAYER   M4DOP   6470
+LAYER   MAP     65   DATATYPE 7 6570
+LAYER   M5DOP   6570
+LAYER   MAP     66   DATATYPE 7 6670
+LAYER   M6DOP   6670
+LAYER   MAP     67   DATATYPE 7 6770
+LAYER   M7DOP   6770
+LAYER   MAP     68   DATATYPE 7 6870
+LAYER   M8DOP   6870
+LAYER   MAP     70   DATATYPE 7 7070
+LAYER   V1DOP   7070
+LAYER   MAP     71   DATATYPE 7 7170
+LAYER   V2DOP   7170
+LAYER   MAP     72   DATATYPE 7 7270
+LAYER   V3DOP   7270
+LAYER   MAP     73   DATATYPE 7 7370
+LAYER   V4DOP   7370
+LAYER   MAP     74   DATATYPE 7 7470
+LAYER   V5DOP   7470
+LAYER   MAP     75   DATATYPE 7 7570
+LAYER   V6DOP   7570
+LAYER   MAP     76   DATATYPE 7 7670
+LAYER   V7DOP   7670
+
+LAYER   MAP     231 DATATYPE 0 2310
+LAYER   MTT2i   2310
+LAYER   MAP     231  DATATYPE 1 2311
+LAYER   MTT2DMi 2311
+
+LAYER   MAP     40   DATATYPE 0 400 
+LAYER   SN      400 
+LAYER   MAP     43   DATATYPE 0 430 
+LAYER   SP      430 
+LAYER   MAP     125 DATATYPE 0 1250
+LAYER   TGi     1250
+LAYER   MAP     80  DATATYPE 0 800 
+LAYER   PA      800 
+LAYER   MAP     83  DATATYPE 0 830 
+LAYER   ALPAi   830 
+LAYER   MAP     83  DATATYPE 11 8311
+LAYER   ALDUM   8311
+LAYER   MAP     31  DATATYPE 0  3100
+LAYER   P2i     3100
+LAYER   MAP     31  DATATYPE 1  3101
+LAYER   P2DUM   3101
+LAYER   MAP     31  DATATYPE 7  3107
+LAYER   P2DOP   3107
+LAYER   MAP     60  DATATYPE 0  6000
+LAYER   INST    6000
+
+LAYER   MAP     200 DATATYPE 0  2000
+LAYER   LT      2000
+LAYER   MAP     141 DATATYPE 0  1410
+LAYER   B1i     1410
+LAYER   MAP     141 DATATYPE 1  1411
+LAYER   B1DUM   1411
+LAYER   MAP     142 DATATYPE 0  1420
+LAYER   B2i     1420
+LAYER   MAP     142 DATATYPE 1  1421
+LAYER   B2DUM   1421
+
+LAYER   MAP     225 DATATYPE 0  2250
+LAYER   W0a      2250
+LAYER   MAP     226 DATATYPE 0  2260
+LAYER   W1a      2260
+
+M1DUM   = M1DUMi OR M1DOP
+M2DUM   = M2DUMi OR M2DOP
+M3DUM   = M3DUMi OR M3DOP
+M4DUM   = M4DUMi OR M4DOP
+M5DUM   = M5DUMi OR M5DOP
+M6DUM   = M6DUMi OR M6DOP
+M7DUM   = M7DUMi OR M7DOP
+M8DUM   = M8DUMi OR M8DOP
+V1DUM   = COPY V1DUMi
+V2DUM   = COPY V2DUMi
+V3DUM   = COPY V3DUMi
+V4DUM   = COPY V4DUMi
+V5DUM   = COPY V5DUMi
+V6DUM   = COPY V6DUMi
+V7DUM   = COPY V7DUMi
+
+M1a  = M1i OR M1DUM
+M2a  = M2i OR M2DUM
+M3a  = M3i OR M3DUM
+M4a  = M4i OR M4DUM
+M5a  = M5i OR M5DUM
+M6a  = M6i OR M6DUM
+M7a  = M7i OR M7DUM
+M8a  = M8i OR M8DUM
+
+TM1 = TM1i OR TM1DUMi
+TM2 = TM2i OR TM2DUMi
+MTT2 = MTT2i OR MTT2DMi
+
+STM1 = STM1i OR STM1DUM
+STM2 = STM2i OR STM2DUM
+
+V1a  = V1i OR V1DUM
+V2a  = V2i OR V2DUM
+V3a = V3i OR V3DUM
+V4a = V4i OR V4DUM
+V5a = V5i OR V5DUM
+V6a = V6i OR V6DUM
+V7a = V7i OR V7DUM
+
+TV1 = TV1i OR TV1DUM
+TV2 = TV2i OR TV2DUM
+
+STV1 = STV1i OR STV1DUM
+STV2 = STV2i OR STV2DUM
+
+B1a = B1i OR B1DUM
+B2a = B2i OR B2DUM
+
+ALPA = ALPAi OR ALDUM 
+
+AA  = AAi OR ((AADUM OR AADOP) OR AADMP)
+GT  = GTi OR ((GTDUM OR GTDOP) OR GTDMP)
+P2  = P2i OR (P2DUM OR P2DOP)
+
+//GATE = (((GT NOT P2) INTERACT CT) AND AA) INTERACT SD_1 == 2
+//SD_1 = (AA NOT GT) INTERACT CT
+/*
+GATE0 = (((GT NOT P2) INTERACT CT) AND AA ) not INST
+GATE_SRAM = (((GT NOT P2) INTERACT CT) AND AA ) and INST
+AA1 = (AA INTERACT GATE0) NOT GATE0 
+AA2 = AA1 TOUCH GATE0 > 1  
+AA3 = AA1 INTERACT CT     
+AA4 = AA2 OR AA3   
+GATE1 = GATE0 TOUCH AA4 == 2  
+AA_s1= ((AA INTERACT GATE_SRAM) NOT GATE_SRAM ) interact CT
+GATE3 = GATE_SRAM touch AA_s1 == 2 
+GATE = GATE1 OR GATE3
+*/
+
+GATE = (AA AND GT) INTERACT SD_1 == 2
+SD_1 = AA NOT GT
+
+SD = ((SN OR SP) AND AA) NOT GT
+
+GATE105 = GATE NOT (DGi OR TGi)
+GATE18 = GATE AND DGi
+GATE1825 = GATE AND (DGi OR TGi)
+
+DRC INCREMENTAL CONNECT YES
+
+}
+
+#generate top_metal_counts and M1_and_1XMn_metal_counts
+set top_metal_counts [expr $8X_top_metal_counts +$10X_top_metal_counts +$MTT2_top_metal_counts]
+set M1_and_1XMn_metal_counts [expr $total_metal_counts -$2X_metal_counts -$top_metal_counts]
+
+#---------------------------------------------------------------------------------------------
+#generate the layer list for M1 and 1X metal and via
+set M1_and_1XMn_list_temp { M1 M2 M3 M4 M5 M6 M7 M8 }
+set 1XVn_list_temp { V1 V2 V3 V4 V5 V6 V7 }
+
+set M1_and_1XMn_list [lrange $M1_and_1XMn_list_temp 0 [expr $M1_and_1XMn_metal_counts -1] ]
+set 1XVn_list [lrange $1XVn_list_temp 0 [expr $M1_and_1XMn_metal_counts -2] ]
+
+#---------------------------------------------------------------------------------------------
+
+#generate the layer list for 2X metal and via
+if { $2X_metal_counts > 0 } {
+  set 2X_metal_list_temp { B1 B2 }
+  set 2X_via_list_temp { W0 W1 }
+
+  set 2X_metal_list [lrange $2X_metal_list_temp [expr 2 -$2X_metal_counts] end]
+  set 2X_via_list [lrange $2X_via_list_temp [expr 2 -$2X_metal_counts] end]
+} else {
+  set 2X_metal_list ""
+  set 2X_via_list ""
+}
+
+#---------------------------------------------------------------------------------------------
+
+#generate the layer list for 8X metal and via
+if { $8X_top_metal_counts == 2 } {
+  set 8X_metal_list_temp { TM1 TM2 }
+  set 8X_via_list_temp { TV1 TV2 }
+
+  set 8X_metal_list { TM1 TM2 }
+  set 8X_via_list { TV1 TV2 }
+
+} elseif { ($8X_top_metal_counts == 1) && ($MTT2_top_metal_counts == 1) } {
+  set 8X_metal_list { TM1 }
+  set 8X_via_list { TV1 }
+
+} elseif { ($8X_top_metal_counts == 1) && ($MTT2_top_metal_counts == 0) } {
+  set 8X_metal_list { TM2 }
+  set 8X_via_list { TV2 }
+
+} elseif { $8X_top_metal_counts == 0 } {
+  set 8X_metal_list ""
+  set 8X_via_list ""
+}
+
+#---------------------------------------------------------------------------------------------
+
+#generate the layer list for 10X metal and via
+if { $10X_top_metal_counts == 2 } {
+  set 10X_metal_list_temp { STM1 STM2 }
+  set 10X_via_list_temp { STV1 STV2 }
+
+  set 10X_metal_list [lrange $10X_metal_list_temp [expr 2 -$10X_top_metal_counts] end]
+  set 10X_via_list [lrange $10X_via_list_temp [expr 2 -$10X_top_metal_counts] end]
+} elseif { ($10X_top_metal_counts == 1) && ($MTT2_top_metal_counts == 0) } {
+
+  set 10X_metal_list { STM2 }
+  set 10X_via_list {STV2 }
+
+} elseif { $10X_top_metal_counts == 0 } {
+  set 10X_metal_list ""
+  set 10X_via_list ""
+}
+
+#---------------------------------------------------------------------------------------------
+
+
+#generate the layer list for all metal layers or via layers
+set inter_metal_list [concat $M1_and_1XMn_list $2X_metal_list]
+set inter_via_list [concat $1XVn_list $2X_via_list]
+
+if { $MTT2_top_metal_counts == 0 } {
+  set total_metal_list [concat $M1_and_1XMn_list $2X_metal_list $8X_metal_list $10X_metal_list]
+  set total_via_list [concat $1XVn_list $2X_via_list $8X_via_list $10X_via_list]
+
+  set top_metal_list [concat $8X_metal_list $10X_metal_list]
+  set top_via_list [concat $8X_via_list $10X_via_list]
+} else {
+  set total_metal_list [concat $M1_and_1XMn_list $2X_metal_list $8X_metal_list $10X_metal_list MTT2]
+  set total_via_list [concat $1XVn_list $2X_via_list $8X_via_list $10X_via_list LT]
+
+  set top_metal_list [concat $8X_metal_list $10X_metal_list MTT2]
+  set top_via_list [concat $8X_via_list $10X_via_list LT]
+}
+
+set total_metal_via_list $total_metal_list
+for { set i 1 } { $i < [llength $total_metal_list] } {incr i } {
+  set total_metal_via_list [linsert $total_metal_via_list [expr $i*2 -1 ] [lindex $total_via_list [expr $i -1] ] ]
+}
+
+for { set i 1 } { $i <= [llength $inter_metal_list] } { incr i } {
+SETLAYER M$i = COPY [lindex $inter_metal_list [expr $i -1] ]a
+}
+
+for { set i 1 } { $i <= [llength $inter_via_list] } { incr i } {
+SETLAYER V$i = COPY [lindex $inter_via_list [expr $i -1] ]a
+}
+
+if { [llength $top_metal_list] == 2 } {
+set TM1_NAME  [lindex $top_metal_list 0]
+set TM2_NAME  [lindex $top_metal_list 1]
+
+set TV1_NAME  [lindex $top_via_list 0]
+set TV2_NAME  [lindex $top_via_list 1]
+} elseif { [llength $top_metal_list] == 1 } {
+set TM2_NAME  [lindex $top_metal_list 0]
+set TV2_NAME  [lindex $top_via_list 0]
+}
+
+set M $total_metal_counts
+set T $top_metal_counts
+
+#//*******************************************
+#//    LAYER DERIVATIONS AND OPERATIONS
+#//*******************************************
+
+
+#for rule ANT.GT12 ANT.GT13 ANT.GT14 ANT.GT15
+#proc ratio_up_via_low_metal { rule_name via metal gate_area ratio } {
+# OUTLAYER NET AREA RATIO $metal $via GATE ${metal}_DIO > $ratio \[!AREA(${metal}_DIO)*!~(AREA(GATE)-$gate_area)*(AREA($metal)/AREA($via))\] RDB ${rule_name}.rep $metal $via BY LAYER
+#}
+
+proc ratio_up_via_low_metal { rule_name via metal metal_area ratio } {
+ OUTLAYER NET AREA RATIO $metal $via GATE ${metal}_DIO > $ratio \[!!AREA(GATE)*!AREA(${metal}_DIO)*!~(AREA($metal)-$metal_area)*(AREA($metal)/AREA($via))\] RDB ${rule_name}.rep $metal $via BY LAYER
+}
+
+
+
+#//=================
+#//    GT Layer 
+#//=================
+
+SETLAYER GT_NEW = (GT NOT P2) NOT SAB
+
+CONNECT GT_NEW GATE
+CONNECT GT_NEW GATE105
+CONNECT GT_NEW GATE18
+CONNECT GT_NEW GATE1825
+
+RULECHECK ANT_GT_1 { 
+@ Max. (Poly perim*thickness / gate area) is 500
+
+ OUTLAYER   NET AREA RATIO GT_NEW GATE > 500
+ OUTLAYER      \[ PERIMETER(GT_NEW) * 0.070 / AREA(GATE) \] 
+ OUTLAYER   RDB ANT_GT_1.rep GT_NEW GATE
+}    
+
+RULECHECK ANT_GT_2 {
+@ Max. (Poly area / gate area) is 250
+
+ OUTLAYER  NET AREA RATIO GT_NEW GATE > 250
+ OUTLAYER      \[ AREA(GT_NEW) / AREA(GATE) \]
+ OUTLAYER  RDB ANT_GT_2.rep GT_NEW GATE
+}
+
+#//=================
+#//    CT Layer
+#//=================
+
+CONNECT CT GT_NEW
+
+RULECHECK ANT_GT_3 { 
+@ Max. (contact area / gate area) is 10
+
+ OUTLAYER  NET AREA RATIO CT GATE > 10
+ OUTLAYER      \[ AREA(CT) / AREA(GATE) \] 
+ OUTLAYER  RDB ANT_GT_3.rep CT GATE
+} 
+
+#//=================
+#//    M1 Layer 
+#//=================
+
+CONNECT M1 GT_NEW SD BY CT
+
+# minimum effective diode >0 um2
+SETLAYER M1_DIO = NET AREA SD  >0 
+CONNECT M1 M1_DIO BY CT
+
+RULECHECK ANT_GT_4a_5a_M1 { 
+@ Max. (M1 area / 1.05V,2.5V gate area) is 5000 (without effective diode)
+@ Max. (M1 area / 1.05V,2.5V gate area) is Ratio Equation (with effective diode)
+  
+ SETLAYER A1_105 = NET AREA RATIO GT_NEW M1 M1_DIO  GATE > 5000 ACCUMULATE   \[ AREA(M1)/AREA(GATE) -(AREA(M1_DIO)*500 + !!AREA(M1_DIO)*39000) \] 
+ OUTLAYER  RDB ANT_GT_4a_5a_M1.rep GT_NEW M1 M1_DIO GATE     
+ OUTLAYER COPY A1_105
+ OUTLAYER NET AREA RATIO PRINT A1_105 "M1.rpt"
+}
+
+RULECHECK ANT_GT_4b_5a_M1 {
+@ Max. (M1 area / 1.8v gate area) is 1000 (without effective diode)
+@ Max. (M1 area / 1.8v gate area) is Ratio Equation (with effective diode)
+ 
+ SETLAYER A1_18 = NET AREA RATIO GT_NEW M1 M1_DIO  GATE18 > 1000 ACCUMULATE   \[ AREA(M1)/AREA(GATE18) -(AREA(M1_DIO)*500 + !!AREA(M1_DIO)*43000) \]
+ OUTLAYER  RDB ANT_GT_4b_5a_M1.rep GT_NEW M1 M1_DIO GATE18
+ OUTLAYER COPY A1_18
+ OUTLAYER NET AREA RATIO PRINT A1_18 "M1_18.rpt"
+}
+
+
+#//=================
+#//   V1 Layer
+#//=================
+
+CONNECT V1 M1
+
+RULECHECK ANT_GT_6a_7_V1 {
+@ (V1 area / gate area) > 20 (without effective diode)
+@ (V1 area / gate area) > Ratio Equation (with effective diode)
+@ single layer Via area to the active poly gate area, no accumulate
+
+ SETLAYER AV1_no_accumulate = NET AREA RATIO GT_NEW M1 V1 M1_DIO  GATE > 20   \[ AREA(V1)/AREA(GATE) -(AREA(M1_DIO)*200 + !!AREA(M1_DIO)*980)  \]
+ OUTLAYER RDB ANT_GT_6a_7_V1_no_accumulate.rep GT_NEW M1 V1 M1_DIO  GATE
+ OUTLAYER COPY AV1_no_accumulate
+}
+
+RULECHECK ANT_GT_6b_7_V1 {
+@ (V1 area / gate area) > 50 (without effective diode)
+@ (V1 area / gate area) > Ratio Equation (with effective diode)
+
+ SETLAYER AV1 = NET AREA RATIO GT_NEW M1 V1 M1_DIO  GATE > 50 ACCUMULATE  \[ AREA(V1)/AREA(GATE) -(AREA(M1_DIO)*200 + !!AREA(M1_DIO)*950)  \]
+ OUTLAYER RDB ANT_GT_6b_7_V1.rep GT_NEW M1 V1 M1_DIO  GATE
+ OUTLAYER COPY AV1
+}
+
+
+RULECHECK ANT_GT_12_13_14_15_V1 {
+@ ANT.GT12 Area ratio of ((M1 or 1xMn) to upper 1xVn) in the same net,when M1 or 1xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT13 Area ratio of ((1xMn or 2xMn) to upper 2xVn) in the same net,when 1xMn or 2xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT14 Area ratio of ((1xMn or 2xMn or 8xTMn) or to upper 8xTVn) in the same net,when (1xMn or 2xMn or 8xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT15 Area ratio of ((1xMn or 2xMn or 10xTMn) or to upper 10xTVn) in the same net,when (1xMn or 2xMn or 10xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA.≤ 300000
+
+ratio_up_via_low_metal ANT_GT_12_13_14_15_V1 V1 M1 10000 300000
+}
+
+#//=================
+#//    M2 Layer 
+#//=================
+
+ SETLAYER AC1 = NET AREA RATIO  M1 GATE >=0 ACCUMULATE
+ SETLAYER AC1_18 = NET AREA RATIO  M1 GATE18 >=0 ACCUMULATE
+ SETLAYER AC1_V = NET AREA RATIO V1 GATE >=0 ACCUMULATE
+
+CONNECT M2 M1 BY V1
+
+# minimum effective diode >0um2
+ SETLAYER M2_DIO = NET AREA SD  >0 
+CONNECT M1 M2_DIO BY CT
+
+RULECHECK ANT_GT_4a_5a_M2 { 
+@ Max. (M2 area / 1.05V,2.5V gate area) is 5000 (without effective diode)
+@ Max. (M2 area / 1.05V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A2_105 = NET AREA RATIO GT_NEW M1 M2  M2_DIO  GATE > 5000  ACCUMULATE AC1  \[ AREA(M2)/AREA(GATE) -(AREA(M2_DIO)*500 + !!AREA(M2_DIO)*39000) \]   
+ OUTLAYER RDB ANT_GT_4a_5a_M2.rep GT_NEW M1 M2 M2_DIO  GATE  
+ OUTLAYER COPY A2_105
+ OUTLAYER NET AREA RATIO PRINT A2_105 "M2.rpt"
+}
+
+RULECHECK ANT_GT_4b_5a_M2 {
+@ Max. (M2 area / 1.8v gate area) is 1000 (without effective diode)
+@ Max. (M2 area / 1.8v gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A2_18 = NET AREA RATIO GT_NEW M1 M2  M2_DIO  GATE18 > 1000  ACCUMULATE AC1_18  \[ AREA(M2)/AREA(GATE18) -(AREA(M2_DIO)*500 + !!AREA(M2_DIO)*43000) \]
+ OUTLAYER RDB ANT_GT_4b_5a_M2.rep GT_NEW M1 M2 M2_DIO  GATE18
+ OUTLAYER COPY A2_18
+ OUTLAYER NET AREA RATIO PRINT A2_18 "M2_18.rpt"
+}
+
+if { $T == 1 } {
+
+set l [expr $M - 2]
+
+for { set i 2 } { $i <= $l } { incr i } {
+
+#//=================
+#//   V$i Layer
+#//=================
+
+CONNECT M$i V$i
+
+set v_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend v_list M$j
+}
+lappend v_list V$i
+lappend v_list M${i}_DIO
+
+RULECHECK ANT_GT_6a_7_V$i {
+@ (V$i area / gate area) > 20 (without effective diode)
+@ (V$i area / gate area) > Ratio Equation (with effective diode)
+@ single layer Via area to the active poly gate area, no accumulate
+
+ SETLAYER AV${i}_no_accumulate = NET AREA RATIO $v_list GATE > 20    \[ AREA(V$i)/AREA(GATE) - (AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*980) \]
+ OUTLAYER RDB ANT_GT_6a_7_V${i}_no_accumulate.rep $v_list GATE
+ OUTLAYER COPY AV${i}_no_accumulate
+}
+
+RULECHECK ANT_GT_6b_7_V$i {
+@ (V$i area / gate area) > 50 (without effective diode)
+@ (V$i area / gate area) > Ratio Equation (with effective diode)
+
+ SETLAYER AV$i = NET AREA RATIO $v_list GATE > 50 ACCUMULATE AC[expr $i - 1]_V   \[ AREA(V$i)/AREA(GATE) - (AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*950) \]
+ OUTLAYER RDB ANT_GT_6b_7_V$i.rep $v_list GATE
+ OUTLAYER COPY AV$i
+}
+
+RULECHECK ANT_GT_12_13_14_15_V$i {
+@ ANT.GT12 Area ratio of ((M1 or 1xMn) to upper 1xVn) in the same net,when M1 or 1xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT13 Area ratio of ((1xMn or 2xMn) to upper 2xVn) in the same net,when 1xMn or 2xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT14 Area ratio of ((1xMn or 2xMn or 8xTMn) or to upper 8xTVn) in the same net,when (1xMn or 2xMn or 8xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT15 Area ratio of ((1xMn or 2xMn or 10xTMn) or to upper 10xTVn) in the same net,when (1xMn or 2xMn or 10xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA.≤ 300000
+
+ratio_up_via_low_metal ANT_GT_12_13_14_15_V$i V$i M$i 10000 300000
+}
+
+#//========================
+#//    M[expr $i + 1] Layer 
+#//========================
+
+ SETLAYER AC${i} = NET AREA RATIO M$i GATE >=0 ACCUMULATE AC[expr $i - 1]
+ SETLAYER AC${i}_18 = NET AREA RATIO M$i GATE18 >=0 ACCUMULATE AC[expr $i - 1]_18
+ SETLAYER AC${i}_V = NET AREA RATIO V$i GATE >=0 ACCUMULATE AC[expr $i - 1]_V
+
+CONNECT M[expr $i + 1] M$i BY V$i
+
+ SETLAYER M[expr $i + 1]_DIO = NET AREA SD  >0 
+# minimum effective diode >0
+CONNECT M1 M[expr $i + 1]_DIO BY CT
+
+set k [expr $i + 1]
+
+set m_list GT_NEW
+for { set j 1 } { $j <= $k } { incr j } {
+lappend m_list M$j
+}
+lappend m_list M[expr $i + 1]_DIO
+
+RULECHECK ANT_GT_4a_5a_M[expr $i + 1 ] { 
+@ Max. (M[expr $i + 1 ] area / 1.05V,2.5V gate area) is 5000 (without effective diode)
+@ Max. (M[expr $i + 1 ] area / 1.05V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_105 = NET AREA RATIO $m_list GATE > 5000 ACCUMULATE AC${i}  \[ AREA(M[expr $i + 1])/AREA(GATE) - (AREA(M[expr $i + 1]_DIO)*500 + !!AREA(M[expr $i + 1]_DIO)*39000)\]    
+ OUTLAYER RDB ANT_GT_4a_5a_M[expr $i + 1].rep $m_list GATE  
+ OUTLAYER COPY A[expr $i + 1]_105
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_105 "M[expr $i + 1].rpt"
+}
+
+RULECHECK ANT_GT_4b_5a_M[expr $i + 1] {
+@ Max. (M[expr $i + 1] area / 1.8v gate area) is 1000 (without effective diode)
+@ Max. (M[expr $i + 1] area / 1.8v gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_18 = NET AREA RATIO $m_list  GATE18 > 1000 ACCUMULATE AC${i}_18  \[ AREA(M[expr $i + 1])/AREA(GATE18) -(AREA(M[expr $i + 1]_DIO)*500 + !!AREA(M[expr $i + 1]_DIO)*43000) \]
+ OUTLAYER RDB ANT_GT_4b_5a_M[expr $i + 1].rep $m_list  GATE18
+ OUTLAYER COPY A[expr $i + 1]_18
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_18 "M[expr $i + 1]_18.rpt"
+}
+}
+
+#//=================
+#//   $TV2_NAME Layer
+#//=================
+
+CONNECT $TV2_NAME M$i
+
+set tv_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend tv_list M$j
+}
+lappend tv_list $TV2_NAME
+lappend tv_list M${i}_DIO
+
+RULECHECK ANT_GT_6a_7_$TV2_NAME {
+@ ($TV2_NAME area / gate area) > 20 (without effective diode)
+@ ($TV2_NAME area / gate area) > Ratio Equation (with effective diode)
+@ single layer Via area to the active poly gate area, no accumulate
+
+ SETLAYER AV${i}_no_accumulate = NET AREA RATIO $tv_list  GATE > 20   \[ AREA($TV2_NAME)/AREA(GATE) -(AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*980)\]
+ OUTLAYER RDB ANT_GT_6a_7_${TV2_NAME}_no_accumulate.rep $tv_list GATE
+ OUTLAYER COPY AV${i}_no_accumulate
+}
+
+RULECHECK ANT_GT_6b_7_$TV2_NAME {
+@ ($TV2_NAME area / gate area) > 50 (without effective diode)
+@ ($TV2_NAME area / gate area) > Ratio Equation (with effective diode)
+
+ SETLAYER AV$i = NET AREA RATIO $tv_list  GATE > 50 ACCUMULATE AC[expr $i - 1]_V  \[ AREA($TV2_NAME)/AREA(GATE) -(AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*950)\]
+ OUTLAYER  RDB ANT_GT_6b_7_${TV2_NAME}.rep $tv_list GATE
+ OUTLAYER COPY AV$i
+}
+
+RULECHECK ANT_GT_12_13_14_15_$TV2_NAME {
+@ ANT.GT12 Area ratio of ((M1 or 1xMn) to upper 1xVn) in the same net,when M1 or 1xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT13 Area ratio of ((1xMn or 2xMn) to upper 2xVn) in the same net,when 1xMn or 2xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT14 Area ratio of ((1xMn or 2xMn or 8xTMn) or to upper 8xTVn) in the same net,when (1xMn or 2xMn or 8xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT15 Area ratio of ((1xMn or 2xMn or 10xTMn) or to upper 10xTVn) in the same net,when (1xMn or 2xMn or 10xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA.≤ 300000
+
+ratio_up_via_low_metal ANT_GT_12_13_14_15_$TV2_NAME $TV2_NAME M$i 10000 300000
+}
+
+#//=================
+#//   $TM2_NAME Layer  
+#//=================
+
+ SETLAYER AC${i} = NET AREA RATIO M$i GATE >=0 ACCUMULATE AC[expr $i - 1]
+ SETLAYER AC${i}_18 = NET AREA RATIO M$i GATE18 >=0 ACCUMULATE AC[expr $i - 1]_18
+
+CONNECT $TM2_NAME M$i BY $TV2_NAME
+
+SETLAYER ${TM2_NAME}_DIO = NET AREA SD  >0
+#minimum effective diode >0um2
+CONNECT M1 ${TM2_NAME}_DIO BY CT
+
+set tm_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend tm_list M$j
+}
+lappend tm_list $TM2_NAME
+
+RULECHECK ANT_GT_4a_5b_$TM2_NAME { 
+@ Max. ($TM2_NAME area / 1.05V,2.5V gate area) is 5000 (without effective diode)
+@ Max. ($TM2_NAME area / 1.05V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_105 = NET AREA RATIO $tm_list ${TM2_NAME}_DIO GATE > 5000 ACCUMULATE AC${i}  \[ AREA($TM2_NAME)/AREA(GATE) - (AREA(${TM2_NAME}_DIO)*9984 + !!AREA(${TM2_NAME}_DIO)*50000)\] 
+ OUTLAYER RDB ANT_GT_4a_5b_${TM2_NAME}.rep $tm_list ${TM2_NAME}_DIO GATE     
+ OUTLAYER COPY A[expr $i + 1]_105
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_105 "${TM2_NAME}.rpt"
+}
+
+RULECHECK ANT_GT_4b_5b_$TM2_NAME {
+@ Max. ($TM2_NAME area / 1.8v gate area) is 1000 (without effective diode)
+@ Max. ($TM2_NAME area / 1.8v gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_18 = NET AREA RATIO $tm_list ${TM2_NAME}_DIO GATE18 > 1000 ACCUMULATE AC${i}_18  \[ AREA($TM2_NAME)/AREA(GATE18) - (AREA(${TM2_NAME}_DIO)*9984 + !!AREA(${TM2_NAME}_DIO)*54000)\]
+ OUTLAYER  RDB ANT_GT_4b_5b_${TM2_NAME}.rep $tm_list ${TM2_NAME}_DIO GATE18
+ OUTLAYER COPY A[expr $i + 1]_18
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_18 "${TM2_NAME}_18.rpt"
+} 
+
+#//=================
+#//    PA Layer  
+#//=================
+
+CONNECT PA $TM2_NAME 
+
+RULECHECK ANT_GT_8a_10_PA { 
+@ Max. (PA area / 1.8V,2.5V gate area) is 20   (without effective diode)
+@ Max. (PA area / 1.8V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm_list PA ${TM2_NAME}_DIO GATE1825 > 20   
+ OUTLAYER      \[ AREA(PA)/AREA(GATE1825) - (AREA(${TM2_NAME}_DIO)*100 + !!AREA(${TM2_NAME}_DIO)*380)\]    
+ OUTLAYER  RDB ANT_GT_8a_10_PA.rep $tm_list PA ${TM2_NAME}_DIO GATE1825     
+}
+
+RULECHECK ANT_GT_8b_10_PA { 
+@ Max. (PA area / 1.05V gate area) is 200  (without effective diode)
+@ Max. (PA area / 1.05V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm_list PA ${TM2_NAME}_DIO GATE105 > 200   
+ OUTLAYER      \[ AREA(PA)/AREA(GATE105) - (AREA(${TM2_NAME}_DIO)*100 + !!AREA(${TM2_NAME}_DIO)*200)\]    
+ OUTLAYER  RDB ANT_GT_8b_10_PA.rep $tm_list PA ${TM2_NAME}_DIO GATE105     
+}
+
+#//=================
+#//    ALPA Layer  
+#//=================
+
+CONNECT ALPA $TM2_NAME BY PA
+
+SETLAYER ALPA_DIO = NET AREA SD  >0 
+# minimum effective diode >0um2
+
+RULECHECK ANT_GT_9a_11_ALPA { 
+@ Max. (ALPA side-wall area / 1.8V,2.5V gate area) is 1000 (without effective diode)
+@ Max. (ALPA side-wall area / 1.8V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm_list ALPA ALPA_DIO GATE1825 > 1000 
+ OUTLAYER  \[ PERIMETER(ALPA)*$ALPA_thickness/AREA(GATE1825) - (AREA(ALPA_DIO)*8500 + !!AREA(ALPA_DIO)*29000)\]    
+ OUTLAYER  RDB ANT_GT_9a_11_ALPA.rep $tm_list ALPA ALPA_DIO GATE1825     
+}
+
+RULECHECK ANT_GT_9b_11_ALPA { 
+@ Max. (ALPA side-wall area / 1.05V gate area) is 2000 (without effective diode)
+@ Max. (ALPA side-wall area / 1.05V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm_list ALPA ALPA_DIO GATE105 > 2000 
+ OUTLAYER  \[ PERIMETER(ALPA)*$ALPA_thickness/AREA(GATE105) - (AREA(ALPA_DIO)*8500 + !!AREA(ALPA_DIO)*28000)\]    
+ OUTLAYER  RDB ANT_GT_9b_11_ALPA.rep $tm_list ALPA ALPA_DIO GATE105      
+}
+}
+
+if { $T == 2 } {
+
+set l [expr $M - 3]
+
+for { set i 2 } { $i <= $l } { incr i } {
+
+#//=================
+#//   V$i Layer
+#//=================
+
+CONNECT M$i V$i
+
+set v_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend v_list M$j
+}
+lappend v_list V$i
+lappend v_list M${i}_DIO
+
+RULECHECK ANT_GT_6a_7_V$i {
+@ (V$i area / gate area) > 20 (without effective diode)
+@ (V$i area / gate area) > Ratio Equation (with effective diode)
+@ single layer Via area to the active poly gate area, no accumulate
+
+ SETLAYER AV${i}_no_accumulate = NET AREA RATIO $v_list GATE > 20   \[ AREA(V$i)/AREA(GATE) - (AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*980) \]
+ OUTLAYER RDB ANT_GT_6a_7_V${i}_no_accumulate.rep $v_list GATE
+ OUTLAYER COPY AV${i}_no_accumulate
+}
+
+RULECHECK ANT_GT_6b_7_V$i {
+@ (V$i area / gate area) > 50 (without effective diode)
+@ (V$i area / gate area) > Ratio Equation (with effective diode)
+
+ SETLAYER AV$i = NET AREA RATIO $v_list GATE > 50 ACCUMULATE AC[expr $i - 1]_V   \[ AREA(V$i)/AREA(GATE) - (AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*950) \]
+ OUTLAYER RDB ANT_GT_6b_7_V$i.rep $v_list GATE
+ OUTLAYER COPY AV$i
+}
+
+RULECHECK ANT_GT_12_13_14_15_V$i {
+@ ANT.GT12 Area ratio of ((M1 or 1xMn) to upper 1xVn) in the same net,when M1 or 1xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT13 Area ratio of ((1xMn or 2xMn) to upper 2xVn) in the same net,when 1xMn or 2xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT14 Area ratio of ((1xMn or 2xMn or 8xTMn) or to upper 8xTVn) in the same net,when (1xMn or 2xMn or 8xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT15 Area ratio of ((1xMn or 2xMn or 10xTMn) or to upper 10xTVn) in the same net,when (1xMn or 2xMn or 10xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA.≤ 300000
+
+ratio_up_via_low_metal ANT_GT_12_13_14_15_V$i V$i M$i 10000 300000
+}
+
+#//========================
+#//    M[expr $i + 1] Layer 
+#//========================
+
+ SETLAYER AC${i} = NET AREA RATIO M$i GATE >=0 ACCUMULATE AC[expr $i - 1]
+ SETLAYER AC${i}_18 = NET AREA RATIO M$i GATE18 >=0 ACCUMULATE AC[expr $i - 1]_18
+ SETLAYER AC${i}_V = NET AREA RATIO V$i GATE >=0 ACCUMULATE AC[expr $i - 1]_V
+
+CONNECT M[expr $i + 1] M$i BY V$i
+
+ SETLAYER M[expr $i + 1]_DIO = NET AREA SD  >0 
+# minimum effective diode >0um2
+CONNECT M1 M[expr $i + 1]_DIO BY CT
+
+set k [expr $i + 1]
+
+set m_list GT_NEW
+for { set j 1 } { $j <= $k } { incr j } {
+lappend m_list M$j
+}
+lappend m_list M[expr $i + 1]_DIO
+
+RULECHECK ANT_GT_4a_5a_M[expr $i + 1 ] { 
+@ Max. (M[expr $i + 1 ] area / 1.05V,2.5V gate area) is 5000 (without effective diode)
+@ Max. (M[expr $i + 1 ] area / 1.05V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_105 = NET AREA RATIO $m_list GATE > 5000 ACCUMULATE AC${i}  \[ AREA(M[expr $i + 1])/AREA(GATE) - (AREA(M[expr $i + 1]_DIO)*500 + !!AREA(M[expr $i + 1]_DIO)*39000)\]    
+ OUTLAYER RDB ANT_GT_4a_5a_M[expr $i + 1].rep $m_list GATE  
+ OUTLAYER COPY A[expr $i + 1]_105
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_105 "M[expr $i + 1].rpt"
+}
+
+RULECHECK ANT_GT_4b_5a_M[expr $i + 1] {
+@ Max. (M[expr $i + 1] area / 1.8v gate area) is 1000 (without effective diode)
+@ Max. (M[expr $i + 1] area / 1.8v gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_18 = NET AREA RATIO $m_list  GATE18 > 1000 ACCUMULATE AC${i}_18  \[ AREA(M[expr $i + 1])/AREA(GATE18) -(AREA(M[expr $i + 1]_DIO)*500 + !!AREA(M[expr $i + 1]_DIO)*43000) \]
+ OUTLAYER RDB ANT_GT_4b_5a_M[expr $i + 1].rep $m_list  GATE18
+ OUTLAYER COPY A[expr $i + 1]_18
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_18 "M[expr $i + 1]_18.rpt"
+}
+}
+
+#//=================
+#//  $TV1_NAME Layer
+#//=================
+
+CONNECT $TV1_NAME M$i
+
+set tv_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend tv_list M$j
+}
+lappend tv_list $TV1_NAME
+lappend tv_list M${i}_DIO
+
+RULECHECK ANT_GT_6a_7_$TV1_NAME {
+@ ($TV1_NAME area / gate area) > 20 (without effective diode)
+@ ($TV1_NAME area / gate area) > Ratio Equation (with effective diode)
+@ single layer Via area to the active poly gate area, no accumulate
+
+ SETLAYER AV${i}_no_accumulate = NET AREA RATIO $tv_list  GATE > 20  \[ AREA($TV1_NAME)/AREA(GATE) -(AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*980)\]
+ OUTLAYER RDB ANT_GT_6a_7_${TV1_NAME}_no_accumulate.rep $tv_list GATE
+ OUTLAYER COPY AV${i}_no_accumulate
+}
+
+RULECHECK ANT_GT_6b_7_$TV1_NAME {
+@ ($TV1_NAME area / gate area) > 50 (without effective diode)
+@ ($TV1_NAME area / gate area) > Ratio Equation (with effective diode)
+
+ SETLAYER AV$i = NET AREA RATIO $tv_list  GATE > 50 ACCUMULATE AC[expr $i - 1]_V  \[ AREA($TV1_NAME)/AREA(GATE) -(AREA(M${i}_DIO)*200 + !!AREA(M${i}_DIO)*950)\]
+ OUTLAYER RDB ANT_GT_6b_7_${TV1_NAME}.rep $tv_list GATE
+ OUTLAYER COPY AV$i
+}
+
+RULECHECK ANT_GT_12_13_14_15_$TV1_NAME {
+@ ANT.GT12 Area ratio of ((M1 or 1xMn) to upper 1xVn) in the same net,when M1 or 1xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT13 Area ratio of ((1xMn or 2xMn) to upper 2xVn) in the same net,when 1xMn or 2xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT14 Area ratio of ((1xMn or 2xMn or 8xTMn) or to upper 8xTVn) in the same net,when (1xMn or 2xMn or 8xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT15 Area ratio of ((1xMn or 2xMn or 10xTMn) or to upper 10xTVn) in the same net,when (1xMn or 2xMn or 10xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA.≤ 300000
+
+ratio_up_via_low_metal ANT_GT_12_13_14_15_$TV1_NAME $TV1_NAME M$i 10000 300000
+}
+
+
+#//=================
+#//    $TM1_NAME Layer
+#//=================
+
+ SETLAYER AC${i} = NET AREA RATIO M$i GATE >=0 ACCUMULATE AC[expr $i - 1]
+ SETLAYER AC${i}_18 = NET AREA RATIO M$i GATE18 >=0 ACCUMULATE AC[expr $i - 1]_18
+ SETLAYER AC${i}_V = NET AREA RATIO $TV1_NAME GATE >=0 ACCUMULATE AC[expr $i - 1]_V
+
+CONNECT $TM1_NAME M$i BY $TV1_NAME
+
+set tm_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend tm_list M$j
+}
+lappend tm_list $TM1_NAME
+lappend tm_list ${TM1_NAME}_DIO
+
+ SETLAYER ${TM1_NAME}_DIO = NET AREA SD  >0 
+#minimum effective diode >0um2
+CONNECT M1 ${TM1_NAME}_DIO BY CT
+
+
+RULECHECK ANT_GT_4a_5b_$TM1_NAME {
+@ Max. ($TM1_NAME area / 1.05V,2.5V gate area) is 5000 (without effective diode)
+@ Max. ($TM1_NAME area / 1.05V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_105 = NET AREA RATIO $tm_list GATE > 5000 ACCUMULATE AC${i} \[ AREA($TM1_NAME)/AREA(GATE) - (AREA(${TM1_NAME}_DIO)*9984 + !!AREA(${TM1_NAME}_DIO)*50000)\]
+ OUTLAYER RDB ANT_GT_4a_5b_${TM1_NAME}.rep $tm_list GATE
+ OUTLAYER COPY A[expr $i + 1]_105
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_105 "${TM1_NAME}.rpt"
+}
+
+RULECHECK ANT_GT_4b_5b_$TM1_NAME {
+@ Max. ($TM1_NAME area / 1.8v gate area) is 1000 (without effective diode)
+@ Max. ($TM1_NAME area / 1.8v gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 1]_18 = NET AREA RATIO $tm_list GATE18 > 1000 ACCUMULATE AC${i}_18   \[ AREA($TM1_NAME)/AREA(GATE18) - (AREA(${TM1_NAME}_DIO)*9984 + !!AREA(${TM1_NAME}_DIO)*54000)\]
+ OUTLAYER RDB ANT_GT_4b_5b_${TM1_NAME}.rep $tm_list GATE18
+ OUTLAYER COPY A[expr $i + 1]_18
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 1]_18 "${TM1_NAME}_18.rpt"
+}
+
+
+
+#//=================
+#//   $TV2_NAME Layer
+#//=================
+
+CONNECT $TV2_NAME $TM1_NAME
+
+set tv2_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend tv2_list M$j
+}
+lappend tv2_list $TM1_NAME
+lappend tv2_list $TV2_NAME
+lappend tv2_list ${TM1_NAME}_DIO
+
+RULECHECK ANT_GT_6a_7_$TV2_NAME {
+@ ($TV2_NAME area / gate area) > 20 (without effective diode)
+@ ($TV2_NAME area / gate area) > Ratio Equation (with effective diode)
+@ single layer Via area to the active poly gate area, no accumulate
+
+ SETLAYER AV[expr $i + 1]_no_accumulate = NET AREA RATIO  $tv2_list  GATE > 20   \[ AREA($TV2_NAME)/AREA(GATE) -(AREA(${TM1_NAME}_DIO)*200 + !!AREA(${TM1_NAME}_DIO)*980)\]
+ OUTLAYER RDB ANT_GT_6a_7_${TV2_NAME}_no_accumulate.rep $tv2_list GATE
+ OUTLAYER COPY AV[expr $i + 1]_no_accumulate
+}
+
+RULECHECK ANT_GT_6b_7_$TV2_NAME {
+@ ($TV2_NAME area / gate area) > 50 (without effective diode)
+@ ($TV2_NAME area / gate area) > Ratio Equation (with effective diode)
+
+ SETLAYER AV[expr $i + 1] = NET AREA RATIO  $tv2_list  GATE > 50 ACCUMULATE AC${i}_V  \[ AREA($TV2_NAME)/AREA(GATE) -(AREA(${TM1_NAME}_DIO)*200 + !!AREA(${TM1_NAME}_DIO)*950)\]
+ OUTLAYER RDB ANT_GT_6b_7_${TV2_NAME}.rep $tv2_list GATE
+ OUTLAYER COPY AV[expr $i + 1]
+}
+
+RULECHECK ANT_GT_12_13_14_15_$TV2_NAME {
+@ ANT.GT12 Area ratio of ((M1 or 1xMn) to upper 1xVn) in the same net,when M1 or 1xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT13 Area ratio of ((1xMn or 2xMn) to upper 2xVn) in the same net,when 1xMn or 2xMn connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT14 Area ratio of ((1xMn or 2xMn or 8xTMn) or to upper 8xTVn) in the same net,when (1xMn or 2xMn or 8xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA. ≤ 300000
+@ ANT.GT15 Area ratio of ((1xMn or 2xMn or 10xTMn) or to upper 10xTVn) in the same net,when (1xMn or 2xMn or 10xTMn) connects to gate with area > 10000um2 and doesn' t connect to AA.≤ 300000
+
+ratio_up_via_low_metal ANT_GT_12_13_14_15_$TV2_NAME $TV2_NAME $TM1_NAME 10000 300000
+}
+
+#//=================
+#//    $TM2_NAME Layer  
+#//=================
+
+ SETLAYER AC[expr $i + 1] = NET AREA RATIO $TM1_NAME GATE >=0 ACCUMULATE AC${i}
+ SETLAYER AC[expr $i + 1]_18 = NET AREA RATIO $TM1_NAME GATE18 >=0 ACCUMULATE AC${i}_18
+
+CONNECT $TM2_NAME $TM1_NAME BY $TV2_NAME
+
+ SETLAYER ${TM2_NAME}_DIO = NET AREA SD  >0 
+#minimum effective diode >0um2
+CONNECT M1 ${TM2_NAME}_DIO BY CT
+
+set tm2_list GT_NEW
+for { set j 1 } { $j <= $i } { incr j } {
+lappend tm2_list M$j
+}
+lappend tm2_list $TM1_NAME
+lappend tm2_list $TM2_NAME
+
+RULECHECK ANT_GT_4a_5b_$TM2_NAME { 
+@ Max. ($TM2_NAME area / 1.05V,2.5V gate area) is 5000 (without effective diode)
+@ Max. ($TM2_NAME area / 1.05V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 2]_105 = NET AREA RATIO $tm2_list ${TM2_NAME}_DIO GATE > 5000 ACCUMULATE AC[expr $i + 1]  \[ AREA($TM2_NAME)/AREA(GATE) - (AREA(${TM2_NAME}_DIO)*9984 + !!AREA(${TM2_NAME}_DIO)*50000)\]
+ OUTLAYER RDB ANT_GT_4a_5b_${TM2_NAME}.rep $tm2_list ${TM2_NAME}_DIO GATE     
+ OUTLAYER COPY A[expr $i + 2]_105
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 2]_105 "${TM2_NAME}.rpt"
+}
+
+RULECHECK ANT_GT_4b_5b_$TM2_NAME {
+@ Max. (${TM2_NAME} area / 1.8v gate area) is 1000 (without effective diode)
+@ Max. (${TM2_NAME} area / 1.8v gate area) is Ratio Equation (with effective diode)
+
+ SETLAYER A[expr $i + 2]_18 = NET AREA RATIO $tm2_list ${TM2_NAME}_DIO GATE18 > 1000 ACCUMULATE AC[expr $i + 1]_18  \[ AREA($TM2_NAME)/AREA(GATE18) - (AREA(${TM2_NAME}_DIO)*9984 + !!AREA(${TM2_NAME}_DIO)*54000)\]
+ OUTLAYER RDB ANT_GT_4b_5b_${TM2_NAME}.rep $tm2_list ${TM2_NAME}_DIO GATE18
+ OUTLAYER COPY A[expr $i + 2]_18
+ OUTLAYER NET AREA RATIO PRINT A[expr $i + 2]_18 "${TM2_NAME}_18.rpt"
+}
+
+#//=================
+#//    PA Layer  
+#//=================
+
+CONNECT PA $TM2_NAME 
+
+RULECHECK ANT_GT_8a_10_PA { 
+@ Max. (PA area / 1.8V,2.5V gate area) is 20   (without effective diode)
+@ Max. (PA area / 1.8V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm2_list PA ${TM2_NAME}_DIO GATE1825 > 20   
+ OUTLAYER      \[ AREA(PA)/AREA(GATE1825) - (AREA(${TM2_NAME}_DIO)*100 + !!AREA(${TM2_NAME}_DIO)*380)\]    
+ OUTLAYER  RDB ANT_GT_8a_10_PA.rep $tm2_list PA ${TM2_NAME}_DIO GATE1825     
+}
+
+RULECHECK ANT_GT_8b_10_PA { 
+@ Max. (PA area / 1.05V gate area) is 200  (without effective diode)
+@ Max. (PA area / 1.05V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm2_list PA ${TM2_NAME}_DIO GATE105 > 200   
+ OUTLAYER      \[ AREA(PA)/AREA(GATE105) - (AREA(${TM2_NAME}_DIO)*100 + !!AREA(${TM2_NAME}_DIO)*200)\]    
+ OUTLAYER  RDB ANT_GT_8b_10_PA.rep $tm2_list PA ${TM2_NAME}_DIO GATE105     
+}
+
+#//=================
+#//    ALPA Layer  
+#//=================
+
+CONNECT ALPA $TM2_NAME BY PA
+
+SETLAYER ALPA_DIO = NET AREA SD  >0 
+# minimum effective diode >0um2
+
+RULECHECK ANT_GT_9a_11_ALPA { 
+@ Max. (ALPA side-wall area / 1.8V,2.5V gate area) is 1000 (without effective diode)
+@ Max. (ALPA side-wall area / 1.8V,2.5V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm2_list ALPA ALPA_DIO GATE1825 > 1000 
+ OUTLAYER  \[ PERIMETER(ALPA)*$ALPA_thickness/AREA(GATE1825) - (AREA(ALPA_DIO)*8500 + !!AREA(ALPA_DIO)*29000)\]    
+ OUTLAYER  RDB ANT_GT_9a_11_ALPA.rep $tm2_list ALPA ALPA_DIO GATE1825     
+}
+
+RULECHECK ANT_GT_9b_11_ALPA { 
+@ Max. (ALPA side-wall area / 1.05V gate area) is 2000 (without effective diode)
+@ Max. (ALPA side-wall area / 1.05V gate area) is Ratio Equation (with effective diode)
+
+ OUTLAYER  NET AREA RATIO $tm2_list ALPA ALPA_DIO GATE105 > 2000 
+ OUTLAYER  \[ PERIMETER(ALPA)*$ALPA_thickness/AREA(GATE105) - (AREA(ALPA_DIO)*8500 + !!AREA(ALPA_DIO)*28000)\]    
+ OUTLAYER  RDB ANT_GT_9b_11_ALPA.rep $tm2_list ALPA ALPA_DIO GATE105      
+}
+}
+
+#Vaild metal option setting control
+set combinations {
+{5 0 1 0 0}
+{6 1 1 0 0}
+{7 2 1 0 0}
+{6 0 2 0 0}
+{7 1 2 0 0}
+{8 2 2 0 0}
+{6 0 1 0 0}
+{7 1 1 0 0}
+{8 2 1 0 0}
+{7 0 2 0 0}
+{8 1 2 0 0}
+{9 2 2 0 0}
+{7 0 1 0 0}
+{8 1 1 0 0}
+{9 2 1 0 0}
+{8 0 2 0 0}
+{9 1 2 0 0}
+{10 2 2 0 0}
+{8 0 1 0 0}
+{9 1 1 0 0}
+{10 2 1 0 0}
+{9 0 2 0 0}
+{10 1 2 0 0}
+{11 2 2 0 0}
+{9 0 1 0 0}
+{10 1 1 0 0}
+{11 2 1 0 0}
+{10 0 2 0 0}
+{11 1 2 0 0}
+{12 2 2 0 0}
+{5 0 0 1 0}
+{6 1 0 1 0}
+{7 2 0 1 0}
+{6 0 0 2 0}
+{7 1 0 2 0}
+{8 2 0 2 0}
+{6 0 0 1 0}
+{7 1 0 1 0}
+{8 2 0 1 0}
+{7 0 0 2 0}
+{8 1 0 2 0}
+{9 2 0 2 0}
+{7 0 0 1 0}
+{8 1 0 1 0}
+{9 2 0 1 0}
+{8 0 0 2 0}
+{9 1 0 2 0}
+{10 2 0 2 0}
+{8 0 0 1 0}
+{9 1 0 1 0}
+{10 2 0 1 0}
+{9 0 0 2 0}
+{10 1 0 2 0}
+{11 2 0 2 0}
+{9 0 0 1 0}
+{10 1 0 1 0}
+{11 2 0 1 0}
+{10 0 0 2 0}
+{11 1 0 2 0}
+{12 2 0 2 0}
+{5 0 0 0 1}
+{6 0 0 0 1}
+{7 0 0 0 1}
+{8 0 0 0 1}
+{9 0 0 0 1}
+{6 0 1 0 1}
+{7 0 1 0 1}
+{8 0 1 0 1}
+{9 0 1 0 1}
+{10 0 1 0 1}
+{8 1 1 0 1}
+}
+if { [lsearch -start 0 -all -inline $combinations "$total_metal_counts $2X_metal_counts $8X_top_metal_counts $10X_top_metal_counts $MTT2_top_metal_counts"] eq "" } {
+  puts "\nWrong metal option combination. Please check the setting for metal options.\n"
+  exit
+}
+
