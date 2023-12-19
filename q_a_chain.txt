@@ -1,0 +1,925 @@
+1.
+[question] AA minimum width(The INST connected area apply SRAMdesign rule) is 0.06
+[answer]   
+AA_1 {
+@ AA minimum width(The INST connected area apply SRAMdesign rule) is 0.06
+ X= INT AA_all < 0.06 ABUT<90 SINGULAR REGION
+ X OUTSIDE INST
+}
+
+2.
+[question] AA minimum width of NMOS/PMOS for 0.9/1.1/1.2V transistor is 0.12
+[answer]     
+AA_1a {
+@ AA minimum width of NMOS/PMOS for 0.9/1.1/1.2V transistor is 0.12
+ X= INT (Real_MOS12 IN EDGE GT) < 0.12 ABUT<90 REGION
+ X OUTSIDE INST
+}
+3.
+[question] AA inner vertex to inner vertex distance is 0.046
+[answer]
+SRAA_1sa {
+@ AA inner vertex to inner vertex distance is 0.046
+  X= EXT AA  < 0.046 ABUT<90 OPPOSITE REGION NOTCH 
+  X NOT OUT INST
+}
+4.
+[question] AA minimum width of NMOS/PMOS for 1.2V transistor is 0.12
+[answer]
+AA_1R {
+@ AA minimum width of NMOS/PMOS for 1.2V transistor is 0.12
+INT MOS12 < 0.12 ABUT<90 SINGULAR REGION
+}
+5.
+[question] AA (enclosure by TG or DG) minimum width of NMOS/PMOS for 1.8/2.5v transistor is 0.32
+[answer]
+AA_2 {
+@ AA (enclosure by TG or DG) minimum width of NMOS/PMOS for 1.8/2.5v transistor is 0.32
+INT ((Real_MOS AND (DG OR TG)) IN EDGE GT) < 0.32 ABUT<90 REGION
+}
+6.
+[question] AA minimum width for interconnect is 0.08
+[answer]
+AA_3 {
+@ AA minimum width for interconnect is 0.08
+INT AA < 0.08 ABUT<90 SINGULAR REGION
+}
+
+7.
+[question] AA minimum space is 0.08
+[answer]
+AA_4a {
+@ AA minimum space is 0.08
+X= EXT AA_all < 0.08 SINGULAR REGION
+X OUTSIDE INST
+}
+8.
+[question] AA min space is 0.065
+[answer]
+SRAA_4a {
+@ AA min space is 0.065
+X=EXT AA < 0.065 ABUT<90 SINGULAR REGION
+X NOT OUTSIDE INST
+}
+9.
+[question] AA with gate minimum space along gate poly direction is 0.085, if one of AA width (W3) >= 0.14um, and AA to AA overlap (run length) Y2 >= 0.14um
+[answer]
+SRAA_4c {
+@ AA with gate minimum space along gate poly direction is 0.085, if one of AA width (W3) >= 0.14um, and AA to AA overlap (run length) Y2 >= 0.14um
+AA_INGT=AA INTERACT GATE
+AA12 = AA_INGT WITH WIDTH >= 0.14
+AA_TCHGTX1 =AA_INGT TOUCH EDGE GATE
+AA_TCHGTX2 =AA12 TOUCH EDGE GATE
+AAspace = EXT AA_TCHGTX1 AA_TCHGTX2 <0.085 OPPOSITE REGION
+(AAspace NOT OUTSIDE INST) WITH EDGE (LENGTH (AAspace NOT OUTSIDE INST) >= 0.14)
+}
+10.
+[question] AA minimum area except floating AA is 0.02
+[answer]
+AA_9 {
+@ AA minimum area except floating AA is 0.02
+X=AREA (AA NOT FTAA) < 0.02
+X OUT INST
+}
+11
+[question] AA minimum area is 0.015
+[answer]
+SRAA_9 {
+@ AA minimum area is 0.015
+X= AREA AA < 0.015
+X NOT OUTSIDE INST
+}
+12
+[question] AA minimum area at floating AA is 0.015
+[answer]
+AA_9a {
+@ AA minimum area at floating AA is 0.015
+X = AREA (AA_all NOT INTERACT CTi) < 0.015
+X OUTSIDE INST
+}
+13
+[question] DG, TG, or core transistors mixed in the same AA are prohibited
+[answer]
+AA_10_R_ON {
+@ DG, TG, or core transistors mixed in the same AA are prohibited
+MOS CUT DG
+MOS CUT TG
+(MOS INTERACT DG) INTERACT TG
+}
+14
+[question] It is not allowed to draw AA straddle on NW, excluding LDMOS area. Waive the AA interact with RESNW.
+[answer]
+AA_11 {
+@ It is not allowed to draw AA straddle on NW, excluding LDMOS area. Waive the AA interact with RESNW
+((AA_all CUT NW) NOT LDBK) NOT (AA_all INTERACT RESNW)
+}
+15
+[question] AA channel width of NMOS/PMOS for 0.9/1.1/1.2V transistor is <=50. Waive transistor inside VARMOS.
+[answer]
+AA_12_R_ON {
+@ AA channel width of NMOS/PMOS for 0.9/1.1/1.2V transistor is <=50. Waive transistor inside VARMOS
+X = LENGTH (GT IN EDGE ((MOS NOT (DG OR TG)) NOT VARMOS)) > 50
+EXPAND EDGE X INSIDE BY 0.01
+}
+16
+[question] AA minimum enclosed area (um2) is 0.0395um2.
+[answer]
+AA_13 {
+@ AA minimum enclosed area (um2) is 0.0395um2.
+AAHOLE = HOLES AA_all INNER
+AREA (AAHOLE NOT AA_all) < 0.0395
+}
+17
+[question] AA density overlap by DUMBA min. is 20%. Density check window size: 200um200um, step size: 100um
+[answer]
+AA_15a_R_density_OFF {
+@ AA density overlap by DUMBA min. is 20%. Density check window size: 200um200um, step size: 100um
+DENSITY_MARK = DUMBA NOT MARKS
+CHECK_LAYER = (AAi OR AADUM) NOT MARKS
+CHECK_REGION = COPY DENSITY_MARK
+DENSITY CHECK_LAYER CHECK_REGION [area(CHECK_LAYER)/area(CHECK_REGION)] < 0.20 WINDOW 200 STEP 100 BACKUP INSIDE OF LAYER DENSITY_MARK PRINT density_report_AA_15a.log RDB density_report_AA15a.db
+}
+18
+[question] AA density overlap by DUMBA max. is 80%. Density check window size: 200um200um, step size: 100um
+[answer]
+AA_15b_R_density_OFF {
+@ AA density overlap by DUMBA max. is 80%. Density check window size: 200um200um, step size: 100um
+DENSITY_MARK = DUMBA NOT MARKS
+CHECK_LAYER = (AAi OR AADUM) NOT MARKS
+CHECK_REGION = COPY DENSITY_MARK
+DENSITY CHECK_LAYER CHECK_REGION [area(CHECK_LAYER)/area(CHECK_REGION)] > 0.80 WINDOW 200 STEP 100 BACKUP INSIDE OF LAYER DENSITY_MARK PRINT density_report_AA_15b.log RDB density_report_AA15b.db
+}
+19
+[question] Bent 45 degree AA width is >= 0.16
+[answer]
+AA_16 {
+@ Bent 45 degree AA width is >= 0.16
+X = ANGLE AA_all == 45
+INT X < 0.16 ABUT < 90 REGION
+}
+20
+[question] 45 degree AA space to parallel AA is >=0.16
+[answer]
+AA_17 {
+@ 45 degree AA space to parallel AA is >=0.16
+X = ANGLE AA_all == 45
+EXT X AA_all < 0.16 REGION PARA ONLY
+}
+21
+[question] AA space for U shape (notch) is >=0.15. Waive for extrusion E <= 0.03 or U shape bottom AA width W0 > 0.08um
+[answer]
+AA_18{
+@ AA space for U shape (notch) is >=0.15. Waive for extrusion E <= 0.03 or U shape bottom AA width W0 > 0.08um
+X =CONVEX EDGE AA ANGLE1>269.9<271.1 ANGLE2>269.9<271.1 WITH LENGTH<0.15
+Y= CONVEX EDGE AA ANGLE1>89.9<90.1 ANGLE2>269.9<271.1 WITH LENGTH>0.03
+Z= EXT X Y <0.001 ABUT == 90 INTERSECTING ONLY REGION
+M = INT X AA <=0.08 OPPOSITE REGION
+(((EXPAND EDGE X OUTSIDE BY 0.001) INTERACT Z == 2) INTERACT M) OUTSIDE INST
+}
+22
+[question] AA min width with space on both side <0.15um is 0.046
+[answer]
+SRAA_101 {
+@ AA min width with space on both side <0.15um is 0.046
+  AAspace = EXT (AA AND INST) < 0.150 ABUT <90 OPPOSITE REGION
+  AAspace_edge1 = AA COIN EDGE AAspace
+  AAspace_edge2 = AA NOT COIN EDGE AAspace_edge1
+  INT AAspace_edge2 < 0.046 ABUT <90 REGION
+}
+23
+[question] Maximum length of (AA NOT pickup AA) when AA width < 0.12um and butted with pickup AA is 0.4um.
+[answer]
+AA_20 {
+@ Maximum length of (AA NOT pickup AA) when AA width < 0.12um and butted with pickup AA is 0.4um.
+  X = (MOS TOUCH TAP) WITH WIDTH < 0.12
+  LENGTH (X TOUCH TAP) > 0.4
+}
+24
+[question] Maximum AA length between two contacts, or between one contact and AA line end when AA width < 0.12 m is <= 60um.
+[answer]
+AA_21 {
+@ Maximum AA length between two contacts, or between one contact and AA line end when AA width < 0.12 m is <= 60um.
+  AA_CHECK = (WITH WIDTH AA < 0.12) ENCLOSE CT > 0
+  X = SIZE CT BY 30 INSIDE OF AA_CHECK STEP 0.02
+  AA_CHECK INTERACT X > 1
+
+  Y = SIZE X BY 30 INSIDE OF AA_CHECK STEP 0.02
+  AA_CHECK NOT Y
+}
+25
+[question] AA density over the whole chip is >= 25%.
+[answer]
+AA_22_a_density {
+@ AA density over the whole chip is >= 25%.
+  DENSITY_MARK = BORDER NOT MARKS
+  CHECK_LAYER = (AAi OR AADUM) NOT MARKS
+  CHECK_REGION = COPY DENSITY_MARK
+  X = DENSITY CHECK_LAYER CHECK_REGION [area(CHECK_LAYER)/area(CHECK_REGION)] < 0.25 PRINT density_report_AA_22_a.log RDB density_report_AA_22_a.db
+  X NOT MARKS
+}
+26
+[question] AA density over the whole chip is <= 75%.
+[answer]
+AA_22_b_density {
+@ AA density over the whole chip is <= 75%.
+  DENSITY_MARK = BORDER NOT MARKS
+  CHECK_LAYER = (AAi OR AADUM) NOT MARKS
+  CHECK_REGION = COPY DENSITY_MARK
+  X = DENSITY CHECK_LAYER CHECK_REGION [area(CHECK_LAYER)/area(CHECK_REGION)] > 0.75 PRINT density_report_AA_22_b.log RDB density_report_AA_22_b.db
+  X NOT MARKS
+}
+27
+[question] For any geometry on AA, NW, GT, M1, or Mn (n=2~8), an edge of length < 1.0xWmin cannot have any adjacent edge with length < 1.0xWmin.
+[answer]
+AA_23_R_OFF {
+@ For any geometry on AA, NW, GT, M1, or Mn (n=2~8), an edge of length < 1.0xWmin cannot have any adjacent edge with length < 1.0xWmin.
+  CONVEX EDGE AA ANGLE1 > 0 LENGTH1 < 0.06 ANGLE2 > 0 WITH LENGTH < 0.06
+  CONVEX EDGE GT ANGLE1 > 0 LENGTH1 < 0.04 ANGLE2 > 0 WITH LENGTH < 0.04
+  CONVEX EDGE NW ANGLE1 > 0 LENGTH1 < 0.33 ANGLE2 > 0 WITH LENGTH < 0.33
+  CONVEX EDGE M1 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+  CONVEX EDGE M2 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+  CONVEX EDGE M3 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+  CONVEX EDGE M4 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+  CONVEX EDGE M5 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+  CONVEX EDGE M6 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+  CONVEX EDGE M7 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+  CONVEX EDGE M8 ANGLE1 > 0 LENGTH1 < 0.07 ANGLE2 > 0 WITH LENGTH < 0.07
+}
+
+28
+[question] AA resistor minimum width is 0.40; AA resistor mean AA with RESAA overlap SAB.
+[answer]
+RESAA_2 {
+@ AA resistor minimum width is 0.40; AA resistor mean AA with RESAA overlap SAB.
+  INT (AAR INSIDE EDGE SAB) < 0.40 ABUT<90 REGION
+}
+29
+[question] AA resistor minimum width is 0.40
+[answer]
+RESAA_2R {
+@ AA resistor minimum width is 0.40
+  INT (AAR IN EDGE SAB) < 0.40 ABUT<90 REGION
+}
+30
+[question] AA resistor minimum length is 0.40
+[answer]
+RESAA_3 {
+@ AA resistor minimum length is 0.40
+  INT (SAB COIN EDGE AAR) < 0.40 ABUT<90 REGION
+}
+31
+[question] AA resistor minimum length is 0.80
+[answer]
+RESAA_3R {
+@ AA resistor minimum length is 0.80
+  INT (SAB IN EDGE AAR) < 0.80 ABUT<90 REGION
+}
+[question] AA resistor must be orthogonal
+[answer]
+RESAA_4 {
+@ AA resistor must be orthogonal
+  ANGLE AAR >0 <90
+}
+[question] CT to SAB minimum space is 0.180
+[answer]
+RESAA_5 {
+@ CT to SAB minimum space is 0.180
+  EXT (CT INSIDE (AA INTERACT AAR)) SAB < 0.180 ABUT<90 SINGULAR REGION
+}
+[question] Extension of RESAA outside of AA minimum distance is 0.15
+[answer]
+RESAA_6 {
+@ Extension of RESAA outside of AA minimum distance is 0.15
+  ENC AA RESAA < 0.15 ABUT<90 SINGULAR REGION
+}
+[question] Dog-bone design at the end of AA resistor for contact pick-up is not suggested.
+[answer] RESAA_8 {
+@ Dog-bone design at the end of AA resistor for contact pick-up is not suggested.
+X = CONVEX EDGE AAR == 1
+EXPAND EDGE X INSIDE BY 0.01
+}
+
+[question] For AA resistor, make sure the AA be covered by SAB and implanted by either SN or SP
+[answer] RESAA_9 {
+@ For AA resistor, make sure the AA be covered by SAB and implanted by either SN or SP
+(AA AND RESAA) NOT SAB
+(AAR NOT IN SP) NOT IN SN
+}
+
+[question] AA SAB resistor with SP must lay on NW
+[answer] RESAA_10 {
+@ AA SAB resistor with SP must lay on NW
+(AAR AND SP) NOT NW
+}
+
+[question] Minimum AA extension of SAB is 0.40
+[answer] RESAA_11 {
+@ Minimum AA extension of SAB is 0.40
+ENC SAB AAR < 0.40 ABUT<90 SINGULAR REGION
+}
+
+[question] Minimum Space RESAA to non-related AA is 0.08
+[answer] RESAA_12 {
+@ Minimum Space RESAA to non-related AA is 0.08
+EXT RESAA AA < 0.08 ABUT>0<90 SINGULAR REGION
+}
+
+[question] Minimum Space RESAA to non-related Poly is 0.08
+[answer] RESAA_13 {
+@ Minimum Space RESAA to non-related Poly is 0.08
+EXT RESAA GT < 0.08 ABUT>0<90 SINGULAR REGION
+}
+
+[question] RESAA and SAB on AA should have coincident edge
+[answer] RESAA_14{
+@ RESAA and SAB on AA should have coincident edge
+X =SAB INSIDE EDGE AA
+Y = RESAA INSIDE EDGE AA
+Y NOT COIN EDGE X
+RESAA ENCLOSE AA
+}
+
+[question] Maximum containing rectangle of HDA is 250250
+[answer] AA_C_1 {
+@ Maximum containing rectangle of HDA is 250250
+(HDA WITH WIDTH > 250) NOT MARKS
+}
+
+[question] Minimum space between HDAs is 80
+[answer] AAC_2 {
+@ Minimum space between HDAs is 80
+EXT HDA < 80 ABUT<90 SINGULAR REGION
+}
+
+[question] Maximum containing rectangle of LDA is 5050
+[answer] AA_C_3 {
+@ Maximum containing rectangle of LDA is 5050
+(LDA WITH WIDTH > 50) NOT MARKS
+}
+
+[question] Maximum containing rectangle of MDA is 125125
+[answer] AA_C_4 {
+@ Maximum containing rectangle of MDA is 125125
+(MDA WITH WIDTH > 125) NOT MARKS
+}
+
+[question] AA Silicide resistor minimum width is 0.2
+[answer] DIFRES_1{
+@ AA Silicide resistor minimum width is 0.2
+INT AAD <0.2 ABUT<90 REGION
+}
+
+[question] DIFRES can not overlap with RESAA
+[answer] DIFRES_2{
+@ DIFRES can not overlap with RESAA
+DIFRES AND RESAA
+}
+
+[question] AA Silicide resistor minimum square number is 1
+[answer] DIFRES_3{
+@ AA Silicide resistor minimum square number is 1
+X = DIFRES INTERACT AA
+Y = AA AND DIFRES
+L = LENGTH Y >0
+L1 = EXPAND EDGE L OUTSIDE BY 0.001
+W = INSIDE EDGE X AA
+W1 = EXPAND EDGE W OUTSIDE BY 0.001
+L_RE =L1 NOT W1
+L_EDGE = L_RE COIN EDGE Y
+DFM PROPERTY Y L_EDGE W OVERLAP ABUT ALSO MULTI [WIDTH = LENGTH(W)] >0 [SQUARES = LENGTH(L_EDGE)/LENGTH(W)] < 1
+}
+
+[question] AA Silicide resistor must be orthogonal
+[answer] DIFRES_4{
+@ AA Silicide resistor must be orthogonal
+ANGLE AAD >0 <90
+}
+
+[question] CT to DIFRES space fix is 0.01
+[answer] DIFRES_5{
+@ CT to DIFRES space fix is 0.01
+X1 = EXT CT DIFRES <= 0.07 ABUT<90 REGION OPPOSITE
+X2 = EXT CT DIFRES == 0.01 ABUT<90 REGION OPPOSITE
+(X1 NOT (X2 NOT (X2 ENCLOSE CT))) OR (CT INTERACT DIFRES)
+}
+
+[question] Extension of DIFRES outside of AA minimum distance is 0
+[answer] DIFRES_6{
+@ Extension of DIFRES outside of AA minimum distance is 0
+X =AAD TOUCH (DIFRES NOT AAD) >1
+Y = DIFRES COIN EDGE AA
+Z =EXPAND EDGE Y INSIDE BY 0.001
+DIFRES NOT INTERACT (X OR (DIFRES INTERACT Z))
+}
+
+[question] For AA Silicide resistor, make sure the AA be implanted by either SN or SP. Minimum enclosure by SN or SP is 0.18
+[answer] DIFRES_8{
+@ For AA Silicide resistor, make sure the AA be implanted by either SN or SP. Minimum enclosure by SN or SP is 0.18
+((AA ENCLOSE AAD) NOT IN SP) NOT IN SN
+ENC (AA ENCLOSE AAD) SN <0.18 ABUT<90 SINGULAR REGION
+ENC (AA ENCLOSE AAD) SP <0.18 ABUT<90 SINGULAR REGION
+}
+
+[question] AA Silicide resistor with SP must lay on NW
+[answer] DIFRES_9{
+@ AA Silicide resistor with SP must lay on NW
+(AAD AND SP) NOT NW
+}
+
+[question] AA Silicide resistor with SN must lay on PW
+[answer] DIFRES_10{
+@ AA Silicide resistor with SN must lay on PW
+(AAD AND SN) NOT PW
+}
+
+[question] Minimum Space between DIFRES and non-related AA is 0.08
+[answer] DIFRES_11{
+@ Minimum Space between DIFRES and non-related AA is 0.08
+EXT DIFRES AA < 0.08 ABUT>0<90 SINGULAR REGION
+}
+
+[question] Minimum Space between DIFRES and non-related Poly is 0.08
+[answer] DIFRES_12{
+@ Minimum Space between DIFRES and non-related Poly is 0.08
+EXT DIFRES GT < 0.08 ABUT>0<90 SINGULAR REGION
+}
+
+[question] DNW minimum width is 0.52
+[answer] DNW_1 {
+@ DNW minimum width is 0.52
+INT DNW < 0.52 ABUT<90 SINGULAR REGION
+}
+
+[question] Minimum space between two DNW regions is 0.80
+[answer] DNW_2 {
+@ Minimum space between two DNW regions is 0.80
+EXT DNW < 0.80 ABUT<90 SINGULAR REGION
+}
+
+[question] Space between two DNW regions at different nets is 1.8um.
+[answer] DNW_2a {
+@ Space between two DNW regions at different nets is 1.8um.
+EXT DNW < 1.8 ABUT<90 REGION NOT CONNECTED
+}
+
+[question] Minimum overlap of NW and DNW region is 0
+[answer] DNW_3 {
+@ Minimum overlap of NW and DNW region is 0
+DNW OUT EDGE NW
+}
+
+[question] Minimum space between a DNW and a NW is 0.565
+[answer] DNW_4 {
+@ Minimum space between a DNW and a NW is 0.565
+X = NW NOT COIN EDGE DNW
+EXT X DNW < 0.565 ABUT<90 REGION
+}
+
+[question] Minimum space between a DNW region and a NW region of different net is 1.5um
+[answer] DNW_4a {
+@ Minimum space between a DNW region and a NW region of different net is 1.5um
+X = NW NOT COIN EDGE DNW
+EXT DNW X < 1.5 ABUT<90 REGION NOT CONNECTED
+}
+
+[question] Minimum space between P+AA to DNW is 0.21
+[answer] DNW_5 {
+@ Minimum space between P+AA to DNW is 0.21
+EXT DNW PACT < 0.21 ABUT<90 SINGULAR REGION
+}
+
+[question] Minimum space between N+AA enclosed by DNW to NW is 0.21
+[answer] DNW_6 {
+@ Minimum space between N+AA enclosed by DNW to NW is 0.21
+EXT (NACT AND DNW) NW < 0.21 ABUT<90 SINGULAR REGION
+}
+
+[question] Space between DNW and N+AA outside of DNW is >= 1.4um.
+[answer] DNW_7 {
+@ Space between DNW and N+AA outside of DNW is >= 1.4um.
+EXT ((NACT NOT NW) OUTSIDE DNW) DNW < 1.4 ABUT<90 SINGULAR REGION
+}
+
+[question] Space between (NW hole INSIDE DNW) and ((NW hole INSIDE DNW) or (PW NOT DNW)) at different nets is >= 0.6um.
+[answer] DNW_8 {
+@ Space between (NW hole INSIDE DNW) and ((NW hole INSIDE DNW) or (PW NOT DNW)) at different nets is >= 0.6um.
+X = (HOLES NW) INSIDE DNW
+Z = PW AND X
+H = PW AND (PW NOT DNW)
+
+OUT1 = EXT Z < 0.6 ABUT < 90 REGION NOT CONNECTED
+OUT1 NOT MARKS
+
+OUT2 = EXT Z H < 0.6 ABUT < 90 REGION NOT CONNECTED
+OUT2 NOT MARKS
+}
+[question] It is not allowed that N+AA CUT DNW.
+[answer] DNW_9 {
+@ It is not allowed that N+AA CUT DNW.
+(NACT NOT NW) CUT DNW
+}
+
+[question] NW minimum width(parallel side to side width, The INST connected area apply SRAM design rule) is 0.33
+[answer] NW_1 {
+@ NW minimum width(parallel side to side width, The INST connected area apply SRAM design rule) is 0.33
+X= INT NW < 0.33 REGION PARA ONLY
+X OUT INST
+}
+
+[question] NW minimum width is 0.27
+[answer] SRNW_1 {
+@ NW minimum width is 0.27
+X = INT NW < 0.27 ABUT<90 SINGULAR REGION
+X NOT OUTSIDE INST
+}
+
+[question] NW width for (((DNSRAM OR LRSRAM) OR D2SRAM) OR RFSRAM) connected area is >= 0.27.
+[answer] NW_1a {
+@ NW width for (((DNSRAM OR LRSRAM) OR D2SRAM) OR RFSRAM) connected area is >= 0.27.
+X= INT NW < 0.27 ABUT<90 SINGULAR REGION
+X NOT OUTSIDE SRAM
+}
+
+[question] NW width for NW resistor is 1.2
+[answer] NW_2 {
+@ NW width for NW resistor is 1.2
+INT NWR < 1.20 ABUT<90 OPPOSITE REGION
+}
+
+[question] Minimum space between two NW regions at the same net (with run length > 0 and skip to check jog <= 0.005um) is 0.33um.
+[answer] NW_3 {
+@ Minimum space between two NW regions at the same net (with run length > 0 and skip to check jog <= 0.005um) is 0.33um.
+JOG_EDGE = CONVEX EDGE NW == 1 WITH LENGTH <= 0.005
+X = NW NOT COIN EDGE JOG_EDGE
+EXT X < 0.33 ABUT<90 OPPOSITE REGION CONNECTED
+}
+
+[question] Minimum space between two 0.9/1.1/1.2v NW regions at the same potential is 0.324
+[answer] SRNW_3 {
+@ Minimum space between two 0.9/1.1/1.2v NW regions at the same potential is 0.324
+X = EXT NW < 0.324 ABUT<90 SINGULAR REGION CONNECTED
+X NOT OUTSIDE INST
+}
+
+[question] Minimum space between two NW regions at different net is 0.60
+[answer] NW_4 {
+@ Minimum space between two NW regions at different net is 0.60
+EXT NW < 0.60 ABUT<90 SINGULAR REGION NOT CONNECTED
+}
+
+[question] NW minimum area is 0.64um.
+[answer] NW_7 {
+@ NW minimum area is 0.64um.
+AREA NW < 0.64
+}
+
+[question] NW minimum enclosed area is 0.70
+[answer] NW_8 {
+@ NW minimum enclosed area is 0.70
+NWHOLE = HOLES NW INNER
+AREA (NWHOLE NOT NW) < 0.70
+}
+
+[question] NW minimum space to N+AA (enclosure by TG or DG) is 0.22
+[answer] NW_9 {
+@ NW minimum space to N+AA (enclosure by TG or DG) is 0.22
+EXT NW (NACT INSIDE (TG OR DG)) < 0.22 ABUT<90 SINGULAR REGION
+}
+
+[question] NW enclosure of P+AA (enclosed by TG or DG)is 0.22
+[answer] NW_10 {
+@ NW enclosure of P+AA (enclosed by TG or DG)is 0.22
+ENC (PACT INSIDE (TG OR DG)) NW < 0.22 ABUT<90 SINGULAR REGION
+}
+
+[question] N+AA adjacent both two edges space opposite to NW is >=0.16. Both of two adjacent edges space to NW smaller than rule value is not permitted.
+[answer] NW_11{
+@ N+AA adjacent both two edges space opposite to NW is >=0.16. Both of two adjacent edges space to NW smaller than rule value is not permitted.
+X = EXT [NACT] NW <0.16 ABUT<90 OPPOSITE
+Y=NACT TOUCH EDGE X
+Z =INT Y <0.002 ABUT REGION
+Z NOT SRAM
+}
+[question] P+AA enclosure by NW is 0.037
+[answer] SRNW_15 {
+@ P+AA enclosure by NW is 0.037
+X= ENC PACT NW < 0.037 ABUT<90 SINGULAR REGION INSIDE ALSO
+X NOT OUTSIDE INST
+}
+
+[question] N+ AA Minimum enclosure by NW is 0.08, excluding LDMOS area.Waive ((AA interact RESNW) and SN)
+[answer] NW_13 {
+@ N+ AA Minimum enclosure by NW is 0.08, excluding LDMOS area.Waive ((AA interact RESNW) and SN)
+ENC ((NACT OUTSIDE (INST OR LDBK)) NOT ((AA INTERACT RESNW) AND SN)) NW < 0.08 ABUT<90 SINGULAR REGION
+}
+
+[question] Minimum Space between NW and N+AA is 0.08um.
+[answer] NW_14 {
+@ Minimum Space between NW and N+AA is 0.08um.
+X = EXT NACT NW < 0.08 ABUT<90 SINGULAR REGION
+X OUTSIDE INST
+}
+
+[question] P+AA minimum enclosure by NW is 0.08, excluding LDMOS area.
+[answer] NW_15 {
+@ P+AA minimum enclosure by NW is 0.08, excluding LDMOS area.
+ENC (PACT OUTSIDE (INST OR LDBK)) NW < 0.08 ABUT<90 SINGULAR REGION
+}
+
+[question] Minimum Space between NW and P+ AA inside PW is 0.08um, excluding LDMOS area.
+[answer] NW_16 {
+@ Minimum Space between NW and P+ AA inside PW is 0.08um, excluding LDMOS area.
+EXT (PTAP NOT (LDBK OR PSUB)) NW < 0.08 ABUT<90 SINGULAR REGION
+}
+[question] SN enclosure of AA is >= 0.4um.
+[answer] RESNWST_7{
+@ SN enclosure of AA is >= 0.4um.
+ENC (AA TOUCH NWRSTI) SN <0.4 ABUT<90 REGION
+}
+
+[question] AA enclosure of NW(the NW interacted with RESNW) EN2 >= 0.3
+[answer] RESNWST_8{
+@ AA enclosure of NW(the NW interacted with RESNW) EN2 >= 0.3
+ENC (NW INTERACT RESNW) AA <0.3 ABUT<90 REGION
+}
+
+[question] CT should be in (NW AND ( pick up AA))
+[answer] RESNWST_9{
+@ CT should be in (NW AND ( pick up AA))
+CT AND ((AA TOUCH RESNW) NOT NW)
+}
+
+[question] NW resistor under STI must not overlap with AADUM
+[answer] RESNWST_10{
+@ NW resistor under STI must not overlap with AADUM
+NWRSTI AND AADUM
+}
+
+[question] (RESNW AND NW) must be an orthogonal rectangle shape to have good simulation accuracy
+[answer] RESNWST_11{
+@ (RESNW AND NW) must be an orthogonal rectangle shape to have good simulation accuracy R3
+NOT RECTANGLE (RESNW AND NW) ORTHOGONAL ONLY
+}
+
+[question] RESNW must be an orthogonal rectangle
+[answer] RESNWAA_1{
+@ RESNW must be an orthogonal rectangle
+NOT RECTANGLE (RESNW INTERACT RESNWAA) ORTHOGONAL ONLY
+}
+[question] AA enclosure of RESNWAA (SMIC 2R no rule, 65nm rule number) >= 0.3
+[answer] RESNWAA_4{
+@ AA enclosure of RESNWAA (SMIC 2R no rule, 65nm rule number) >= 0.3
+ENC RESNWAA AA < 0.3 ABUT<90 REGION
+}
+
+[question] NW enclosure of CT (65nm rule, included in SMIC 2R) >= 0.20
+[answer] RESNWAA_5{
+@ NW enclosure of CT (65nm rule, included in SMIC 2R) >= 0.20
+ENC CT (NW ENCLOSE RESNWAA) <0.2 ABUT<90 REGION
+}
+
+[question] Enclosure of SAB beyond related NW (65nm rule) >= 0.20
+[answer] RESNWAA_6 {
+@ Enclosure of SAB beyond related NW (65nm rule) >= 0.20
+X1 = HOLES SAB
+X2 = SAB TOUCH X1
+ENC (NW INTERACT RESNWAA) X1 < 0.2 ABUT<90 SINGULAR REGION
+ENC (NW INTERACT RESNWAA) X2 < 0.2 ABUT<90 SINGULAR REGION
+(((NW INTERACT RESNWAA) INTERACT X1) NOT X1) NOT SAB
+}
+[question] Space between RESNW and CT inside (AA interact RESNW) = 0.70
+[answer] RESNWAA_8{
+@ Space between RESNW and CT inside (AA interact RESNW) = 0.70
+X0 = RESNW INTERACT RESNWAA
+X01 = (RESNW INTERACT RESNWAA) COIN EDGE SN
+X = CT INSIDE (AA INTERACT RESNW)
+X1 = EXT X01 X <= 0.76 ABUT<90 REGION OPPOSITE
+X2 = EXT X01 X == 0.7 ABUT<90 REGION OPPOSITE
+(X1 NOT (X2 NOT (X2 ENCLOSE CT))) OR (CT INTERACT X0)
+}
+
+[question] Extension of RESNW outside of NW (65nm 0.2um, SMIC 2R RESNW within NW) >= 0.00
+[answer] RESNWAA_9{
+@ Extension of RESNW outside of NW (65nm 0.2um, SMIC 2R RESNW within NW) >= 0.00
+X =RESNWAA TOUCH (RESNW NOT RESNWAA) >1
+Y = RESNW COIN EDGE NW
+Z =EXPAND EDGE Y INSIDE BY 0.001
+RESNW NOT INTERACT (X OR (RESNW INTERACT Z))
+}
+
+[question] SAB must include NW resistor except CT area
+[answer] RESNWAA_10{
+@ SAB must include NW resistor except CT area
+X = SAB INTERACT RESNWAA
+RESNWAA NOT X
+CT AND X
+}
+
+[question] Space between RESNW to SN (SMIC 2R no rule, 65nm no rule) = 0.00
+[answer] RESNWAA_11{
+@ Space between RESNW to SN (SMIC 2R no rule, 65nm no rule) = 0.00
+(RESNW INTERACT RESNWAA) NOT TOUCH SN
+(SN INTERACT (NW INTERACT RESNWAA)) NOT TOUCH (RESNW INTERACT RESNWAA)
+}
+
+[question] SAB enclosure of AA (SMIC 2R no rule, 65nm rule 0.2um, 0.18um is SMIC SAB main rule) >= 0.18
+[answer] RESNWAA_12{
+@ SAB enclosure of AA (SMIC 2R no rule, 65nm rule 0.2um, 0.18um is SMIC SAB main rule) >= 0.18
+ENC (AA INTERACT RESNWAA) SAB < 0.18 ABUT<90 REGION
+}
+
+[question] SAB overlap of SN = 0.4. Use the exact value on sides touch RESNW. (65nm rule 0.2, 40nm WAT TK 0.4um)
+[answer] RESNWAA_13 {
+@ SAB overlap of SN = 0.4. Use the exact value on sides touch RESNW. (65nm rule 0.2, 40nm WAT TK 0.4um)
+X = SN COIN EDGE RESNW
+Y = EXPAND EDGE X INSIDE BY 0.4
+Y NOT TOUCH (HOLES SAB)
+}
+
+[question] NW-Resistor and NW space S1 >= 1
+[answer] RESNWST_3{
+@ NW-Resistor and NW space S1 >= 1
+EXT NWRSTI NW < 1 ABUT<90 SINGULAR REGION
+}
+
+[question] The nearest CT space to (AA edge touch RESNW) S2 = 0.3
+[answer] RESNWST_4{
+@ The nearest CT space to (AA edge touch RESNW) S2 = 0.3
+X0 = RESNW INTERACT NWRSTI
+X01 = (RESNW COIN EDGE NWRSTI) TOUCH EDGE AA
+X1 = EXT X01 CT <= 0.36 ABUT<90 REGION OPPOSITE
+X2 = EXT X01 CT == 0.3 ABUT<90 REGION OPPOSITE
+(X1 NOT (X2 NOT (X2 ENCLOSE CT))) OR (CT INTERACT X0)
+}
+
+[question] Minimum space between NWSTI resistor and adjacent AA is 0.44um.
+[answer] RESNWST_5 {
+@ Minimum space between NWSTI resistor and adjacent AA is 0.44um.
+EXT NWRSTI (AA NOT INTERACT NWRSTI) < 0.44 ABUT<90 SINGULAR REGION
+}
+[question] SP, P+ implant area, is not allowed to exist in a PSUB region
+[answer] PSUB_Note4 {
+@ SP, P+ implant area, is not allowed to exist in a PSUB region
+(PSUB NOT INDMY) AND SP
+}
+
+[question] Bent Poly is not allowed to exist on AA in a PSUB region
+[answer] PSUB_13 {
+@ Bent Poly is not allowed to exist on AA in a PSUB region
+X = GT INSIDE EDGE PBAA
+INT X < 0.01 ABUT < 180 REGION
+EXT X < 0.01 ABUT < 180 REGION
+}
+
+[question] PSUB area is >= 0.7um2.
+[answer] PSUB_14 {
+@ PSUB area is >= 0.7um2.
+AREA PSUB < 0.7
+}
+
+[question] PSUB enclosed area is >= 0.64um2.
+[answer] PSUB_15 {
+@ PSUB enclosed area is >= 0.64um2.
+AREA ((HOLES PSUB INNER) NOT PSUB) < 0.64
+}
+
+[question] SDOP width is 0.18
+[answer] SDOP_1 {
+@ SDOP width is 0.18
+INT SDOP < 0.18 ABUT<90 SINGULAR REGION
+}
+
+[question] Space between two SDOP is 0.18. Merge if the space is less than this rule
+[answer] SDOP_2 {
+@ Space between two SDOP is 0.18. Merge if the space is less than this rule
+EXT SDOP < 0.18 ABUT<90 SINGULAR REGION
+}
+
+[question] Space between SDOP and N+/AA in PW or P+ AA in NW is 0.09
+[answer] SDOP_3 {
+@ Space between SDOP and N+/AA in PW or P+ AA in NW is 0.09
+EXT SDOP NTAP < 0.09 ABUT<90 SINGULAR REGION
+EXT SDOP PTAP < 0.09 ABUT<90 SINGULAR REGION
+}
+
+[question] SDOP extension outside of poly gate for NMOS along source drain direction is 0.18
+[answer] SDOP_4 {
+@ SDOP extension outside of poly gate for NMOS along source drain direction is 0.18
+ENC NGTEIAA SDOP < 0.18 ABUT<90 REGION
+}
+
+[question] Space between SDOP and P-channel poly gate is 0.2
+[answer] SDOP_5 {
+@ Space between SDOP and P-channel poly gate is 0.2
+EXT SDOP PGATE < 0.20 ABUT<90 SINGULAR REGION
+}
+
+[question] Space between SDOP SAB poly and AA resistor is 0.2
+[answer] SDOP_6 {
+@ Space between SDOP SAB poly and AA resistor is 0.2
+EXT SDOP (GTR INTERACT SAB) < 0.2 ABUT<90 SINGULAR REGION
+EXT SDOP (AAR INTERACT SAB) < 0.2 ABUT<90 SINGULAR REGION
+}
+
+[question] N+AA enclosure by SDOP is 0.08 if the distance to the poly gate w >0.16um
+[answer] SDOP_7 {
+@ N+AA enclosure by SDOP is 0.08 if the distance to the poly gate w >0.16um
+X = (NMOS AND SDOP) TOUCH EDGE NAAEIGT
+ENC X SDOP < 0.08 ABUT<90 REGION
+}
+
+[question] N+AA enclosure by SDOP is 0.18 if the distance to the poly gate w<=0.16um
+[answer] SDOP_8 {
+@ N+AA enclosure by SDOP is 0.18 if the distance to the poly gate w<=0.16um
+X = EXPAND EDGE (GT IN EDGE (AA AND SDOP)) OUTSIDE BY 0.16 EXTEND BY 0.18
+X NOT SDOP
+}
+
+[question] SDOP area is 0.1
+[answer] SDOP_9 {
+@ SDOP area is 0.1
+AREA SDOP < 0.10
+}
+
+[question] SDOP minimum enclosed area is 0.1
+[answer] SDOP_10 {
+@ SDOP minimum enclosed area is 0.1
+SDOPHOLE = HOLES SDOP INNER
+AREA (SDOPHOLE NOT SDOP) < 0.10
+}
+
+[question] SDOP can not overlap with P+ pickup AA or butted P+AA
+[answer] SDOP_11 {
+@ SDOP can not overlap with P+ pickup AA or butted P+AA
+SDOP AND PACT
+}
+
+[question] SDOP shapes must be orthogonal
+[answer] SDOP_12 {
+@ SDOP shapes must be orthogonal
+ANGLE SDOP >0<90
+}
+
+[question] (SDOP over AA) over (TG, DG, LVN, VTNH) is prohibited
+[answer] SDOP_13 {
+@ (SDOP over AA) over (TG, DG, LVN, VTNH) is prohibited
+SDAA = AA AND SDOP
+SDAA AND TG
+SDAA AND DG
+SDAA AND LVN
+SDAA AND VTNH
+}
+
+[question] Gate touching SDOP must be covered by SDOP
+[answer] SRDOP_101 {
+@ Gate touching SDOP must be covered by SDOP
+(GATE NOT OUTSIDE SDOP) NOT SDOP
+}
+
+[question] SDOP min. width is 0.18
+[answer] SRDOP_102 {
+@ SDOP min. width is 0.18
+INT SDOP < 0.18 ABUT<90 SINGULAR REGION
+}
+
+[question] SDOP min. area is 0.1
+[answer] SRDOP_103 {
+@ SDOP min. area is 0.1
+AREA SDOP < 0.1
+}
+
+[question] SDOP is must be in INST
+[answer] SRDOP_104 {
+@ SDOP is must be in INST
+SDOP NOT INST
+}
+
+[question] SDOP must enclose Real Gate is 0.056
+[answer] SRDOP_105 {
+@ SDOP must enclose Real Gate is 0.056
+ENC Real_GATE SDOP < 0.056 ABUT<90 SINGULAR REGION
+}
+
+[question] TG minimum width is 0.33(single-point-interact is allowed).
+[answer] TG_1 {
+@ TG minimum width is 0.33(single-point-interact is allowed).
+INT TG < 0.33 ABUT<90 REGION
+}
+
+[question] Minimum space between two TGs is 0.33(single-point-interact is allowed).
+[answer] TG_2 {
+@ Minimum space between two TGs is 0.33(single-point-interact is allowed).
+EXT TG < 0.33 ABUT<90 REGION
+}
+
+[question] AA with transistor minimum enclosure by TG is 0.20um(include AA area not under poly).
+[answer] TG_3 {
+@ AA with transistor minimum enclosure by TG is 0.20um(include AA area not under poly).
+ENC Real_MOS TG < 0.20 ABUT<90 SINGULAR REGION
+}
+
+[question] Real gate enclosure by TG is 0.20
+[answer] TG_4 {
+@ Real gate enclosure by TG is 0.20
+ENC Real_GATE TG < 0.20 ABUT<90 SINGULAR REGION
+}
