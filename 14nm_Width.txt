@@ -1,11 +1,15 @@
-VARIABLE FIN_WIDTH 0.010
+
 //FIN
+Q: FIN width in GATE poly direction = 0.01um
+A: 
 FIN_W_1 {
 @ FIN width in GATE poly direction = 0.01um
- err1 = INT (FIN_h_edges) == FIN_WIDTH ABUT<90 OPPOSITE
+ err1 = INT (FIN_h_edges) == 0.010 ABUT<90 OPPOSITE
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 // CELLB
+Q: CELLB width in S/D direction >= 0.43um
+A: 
 CELLB_W_1 {
 @ CELLB width in S/D direction >= 0.43um
  err1 = LENGTH (ANGLE CELLB_convex_eq_two_edges == 0) < 0.43
@@ -14,8 +18,9 @@ CELLB_W_1 {
  err2 = INT CELLB_v_edges < 0.43 ABUT<90 OPPOSITE REGION
  err2 NOT INSIDE SealR_NOT_BULK
 }
-
-CELLB_W_2 {22:29 2024/2/6
+Q: CELLB width in GATE poly direction = 0.288+0.048*num
+A: 
+CELLB_W_2 {
 @ CELLB width in GATE poly direction = 0.288+0.048*num
  chk_CELLB = ANGLE CELLB_convex_eq_two_edges == 90
  err1 = DFM PROPERTY chk_CELLB [-= ABS(REMAINDER((LENGTH(chk_CELLB) - 0.288),0.048))] > 0
@@ -25,6 +30,8 @@ CELLB_W_2 {22:29 2024/2/6
  err2 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: DMCB1 width in GATE poly direction = 0.288+0.048*num
+A: 
 CELLB_W_3 {
 @ DMCB1 width in GATE poly direction = 0.288+0.048*num
  chk_DMCB1 = ANGLE (CONVEX EDGE DMCB1 == 2) == 90
@@ -35,24 +42,33 @@ CELLB_W_3 {
  err2 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: DMCB1 horizontal edge length >= 0.388um
+A: 
 CELLB_W_4 {
 @ DMCB1 horizontal edge length >= 0.388um
  err1 = LENGTH DMCB1_h_edges < 0.388
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 //AA
+
+Q: ALL_AA width, except INST region >= 0.09um
+A: 
 AA_W_1 {
 @ ALL_AA width, except INST region >= 0.09um
  err1 = INT ALL_AA < 0.09 ABUT<90 SINGULAR REGION
  err1 NOT INSIDE INST
 }
 
+Q: ALL_AA width for I/O region, except DMC7 region >= 0.144um
+A: 
 AA_W_2 {
 @ ALL_AA width for I/O region, except DMC7 region >= 0.144um
  err1 = (INT ALL_AA_IO < 0.144 ABUT<90 SINGULAR REGION) AND DG
  err1 NOT INSIDE DMC7
 }
 
+Q: ALL_AA width in GATE poly direction, except INST region = 0.096+0.048*num
+A: 
 AA_W_3a {
 @ ALL_AA width in GATE poly direction, except INST region = 0.096+0.048*num
  err1 = INT ALL_AA_h_edges < 0.096 ABUT<90 OPPOSITE REGION
@@ -66,6 +82,8 @@ AA_W_3a {
 
 ALL_AA_convex_equal_two_v_edges = ANGLE ALL_AA_convex_equal_two_edge == 90
 
+Q: ALL_AA width in GATE poly direction for I/O region, except DMC7 region = 0.144+0.048*num
+A: 
 AA_W_3b {
 @ ALL_AA width in GATE poly direction for I/O region, except DMC7 region = 0.144+0.048*num
  err1 = (DFM COPY (DFM SPACE ALL_AA_IO < 0.144 BY INT VERTICAL) REGION) NOT INSIDE DMC7
@@ -77,6 +95,8 @@ AA_W_3b {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Channel width of core device, except DMPNP, ESDIO1, ESDIO2, INST regions = 0.096+0.048*num
+A: 
 AA_W_4a {
 @ Channel width of core device, except DMPNP, ESDIO1, ESDIO2, INST regions = 0.096+0.048*num
  except_area = OR DMPNP ESDIO_ALL INST
@@ -90,6 +110,8 @@ AA_W_4a {
  err2 NOT INSIDE EDGE except_area
 }
 
+Q: Channel width of I/O device, except (pick-up NOT VARMOS) = 0.192+0.048*num
+A: 
 AA_W_4b {
 @ Channel width of I/O device, except (pick-up NOT VARMOS) = 0.192+0.048*num
  err1 = (GATE_IO NOT WITH EDGE (LENGTH GATE_WE >= 0.192)) NOT INSIDE TAP_NOT_VARMOS
@@ -102,6 +124,8 @@ AA_W_4b {
  err2 NOT INSIDE EDGE TAP_NOT_VARMOS
 }
 
+Q: ALL_AA width in GATE poly direction, except INST region <= 0.96um
+A: 
 AA_W_5 {
 @ ALL_AA width in GATE poly direction, except INST region <= 0.96um
  err1 = INT (ALL_AA_h_edges) <= 0.96 ABUT<90 OPPOSITE EXCLUDE SHIELDED
@@ -109,6 +133,9 @@ AA_W_5 {
 }
 
 //AR
+
+Q: AR width in S/D direction, except OCOVL region = 0.02um
+A: 
 AR_W_1 {
 @ AR width in S/D direction, except OCOVL region = 0.02um
  err1 = INT (AR_v_edges) == 0.020 ABUT<90 OPPOSITE  //;AR.R.6 based on this
@@ -116,6 +143,9 @@ AR_W_1 {
 }
 
 //DNW
+
+Q: DNW width >= 1.49um
+A: 
 DNW_W_1 {
 @ DNW width >= 1.49um
  err1 = INT DNW < 1.49 ABUT<90 SINGULAR REGION
@@ -123,36 +153,48 @@ DNW_W_1 {
 }
 
 //DW
+Q: NW width, except INST region >= 0.214um
+A: 
 NW_W_1 {
 @ NW width, except INST region >= 0.214um
  err1 = INT NW < NW_MiniWidth ABUT<90 SINGULAR REGION
  err1 NOT INSIDE INST
 }
 
+Q: IO_NW width >= 0.214um
+A: 
 NW_W_2 {
 @ IO_NW width >= 0.214um
  err1 = INT IO_NW < 0.214 ABUT<90 SINGULAR REGION
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: IO_PW width, except INST region >= 0.238um
+A: 
 NW_W_2a {
 @ IO_PW width, except INST region >= 0.238um
  err1 = INT IO_PW < 0.238 ABUT<90 SINGULAR REGION
  err1 NOT INSIDE INST
 }
 
+Q: Core_NW width, except INST region >= 0.214um
+A: 
 NW_W_3_1 {
 @ Core_NW width, except INST region >= 0.214um
  err1 = INT core_NW < 0.214 ABUT<90 SINGULAR REGION
  err1 NOT INSIDE INST
 }
 
+Q: (NW OR DG) width, except INST region >= 0.214um
+A: 
 NW_W_3_2 {
 @ (NW OR DG) width, except INST region >= 0.214um
  err1 = INT DG_or_NW < 0.214 ABUT<90 SINGULAR REGION
  err1 NOT INSIDE INST
 }
 
+Q: NW width, when the space <= 0.235um, except INST region <= 0.365um
+A: 
 NW_W_4a {
 @ NW width, when the space <= 0.235um, except INST region <= 0.365um
  nw_meet_sps_sides = EXT [NW] <= 0.235 ABUT<90 OPPOSITE
@@ -163,6 +205,8 @@ NW_W_4a {
  err2 NOT INSIDE INST
 }
 
+Q: Core_NW width, when the space <= 0.235um, except INST region <= 0.365um
+A: 
 NW_W_4b {
 @ Core_NW width, when the space <= 0.235um, except INST region <= 0.365um
  nw_meet_sps_sides = EXT [core_NW] <= 0.235 ABUT<90 OPPOSITE
@@ -173,6 +217,8 @@ NW_W_4b {
  err2 NOT INSIDE INST
 }
 
+Q: IO_NW width, when the space <= 0.235um, except INST region <= 0.365um
+A: 
 NW_W_4d {
 @ IO_NW width, when the space <= 0.235um, except INST region <= 0.365um
  nw_meet_sps_sides = EXT [IO_NW] <= 0.235 ABUT<90 OPPOSITE
@@ -183,6 +229,8 @@ NW_W_4d {
  err2 NOT INSIDE INST
 }
 
+Q: IO_PW width, when the space <= 0.235um, except INST region <= 0.365um
+A: 
 NW_W_4e {
 @ IO_PW width, when the space <= 0.235um, except INST region <= 0.365um
  nw_meet_sps_sides = EXT [IO_PW] <= 0.235 ABUT<90 OPPOSITE
@@ -193,6 +241,8 @@ NW_W_4e {
 //; err2 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: (NW OR DG) width, when the space <= 0.235um. <= 0.365um
+A: 
 NW_W_5 {
 @ (NW OR DG) width, when the space <= 0.235um. <= 0.365um
  nw_meet_sps_sides = EXT [DG_or_NW] <= 0.235 ABUT<90 OPPOSITE
@@ -204,6 +254,9 @@ NW_W_5 {
 }
 
 //PSUB
+
+Q: PSUB width >= 0.214um
+A: 
 PSUB_W_1 {
 @ PSUB width >= 0.214um
  err1 = INT PSUB < 0.214 ABUT<90 SINGULAR REGION
@@ -211,6 +264,13 @@ PSUB_W_1 {
 }
 
 //SVT_N
+
+Q: SVT_N width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) SVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 SVT_N_W_1 {
 @ SVT_N width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -233,6 +293,12 @@ SVT_N_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: SVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) SVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 SVT_N_W_2 {
 @ SVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -250,6 +316,11 @@ SVT_N_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: SVT_N width in S/D direction, when one SVT_N vertical edge CUT (GTMK1 OR AR) and ABUT HVT_N >= 0.315um
+    DRC waive: 
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 SVT_N_W_3 {
 @ SVT_N width in S/D direction, when one SVT_N vertical edge CUT (GTMK1 OR AR) and ABUT HVT_N >= 0.315um
 @ DRC waive: 
@@ -264,6 +335,9 @@ SVT_N_W_3 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: SVT_N width in GATE poly direction when SVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction
+    (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 SVT_N_W_4 {
 @ SVT_N width in GATE poly direction when SVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction
 @ (except L-shape/T-shape concave corner) >= 0.238um
@@ -283,6 +357,13 @@ SVT_N_W_4 {
 }
 
 //SVT_P
+
+Q: SVT_P width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) SVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 SVT_P_W_1 {
 @ SVT_P width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -305,6 +386,12 @@ SVT_P_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: SVT_P width in S/D direction, single-point-interaction is allowed >= 0.270um
+    DRC waive:
+    1) SVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 SVT_P_W_2 {
 @ SVT_P width in S/D direction, single-point-interaction is allowed >= 0.270um
 @ DRC waive:
@@ -321,6 +408,11 @@ SVT_P_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: SVT_P width in S/D direction, when SVT_P vertical edge CUT (GTMK1 OR AR) and ABUT HVT_P >= 0.315um
+    DRC waive: 
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 SVT_P_W_3 {
 @ SVT_P width in S/D direction, when SVT_P vertical edge CUT (GTMK1 OR AR) and ABUT HVT_P >= 0.315um
 @ DRC waive: 
@@ -335,6 +427,8 @@ SVT_P_W_3 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: SVT_P width in GATE poly direction when SVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 SVT_P_W_4 {
 @ SVT_P width in GATE poly direction when SVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (SVT_P_h_edges_singular_point COIN EDGE SVT_P_concave_corner) SVT_P_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -353,6 +447,13 @@ SVT_P_W_4 {
 }
 
 //HVT_N
+
+Q: HVT_N width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) HVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 HVT_N_W_1 {
 @ HVT_N width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -375,6 +476,12 @@ HVT_N_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: HVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) HVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 HVT_N_W_2 {
 @ HVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -392,6 +499,8 @@ HVT_N_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: HVT_N width in GATE poly direction when HVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 HVT_N_W_3 {
 @ HVT_N width in GATE poly direction when HVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (HVT_N_h_edges_singular_point COIN EDGE HVT_N_concave_corner) HVT_N_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -410,6 +519,13 @@ HVT_N_W_3 {
 }
 
 //HVT_P
+
+Q: HVT_P width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) HVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 HVT_P_W_1 {
 @ HVT_P width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -432,6 +548,12 @@ HVT_P_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: HVT_P width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) HVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 HVT_P_W_2 {
 @ HVT_P width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -448,6 +570,8 @@ HVT_P_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: HVT_P width in GATE poly direction when HVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 HVT_P_W_3 {
 @ HVT_P width in GATE poly direction when HVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (HVT_P_h_edges_singular_point COIN EDGE HVT_P_concave_corner) HVT_P_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -466,6 +590,13 @@ HVT_P_W_3 {
 }
 
 //LVT_N
+
+Q: LVT_N width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+   1) LVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+   2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+   3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_N_W_1 {
 @ LVT_N width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -488,6 +619,12 @@ LVT_N_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) LVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_N_W_2 {
 @ LVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -505,6 +642,11 @@ LVT_N_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LVT_N width in S/D direction when just one LVT_N vertical edge CUT (GTMK1 OR AR), and ABUT SVT_N or HVT_N >= 0.315um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_N_W_3a {
 @ LVT_N width in S/D direction when just one LVT_N vertical edge CUT (GTMK1 OR AR), and ABUT SVT_N or HVT_N >= 0.315um
 @ DRC waive:
@@ -519,6 +661,11 @@ LVT_N_W_3a {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: LVT_N width in S/D direction when both two LVT_N’s vertical edges CUT (GTMK1 OR AR) and ABUT SVT_N or HVT_N >= 0.36um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_N_W_3b {
 @ LVT_N width in S/D direction when both two LVT_N’s vertical edges CUT (GTMK1 OR AR) and ABUT SVT_N or HVT_N >= 0.36um
 @ DRC waive:
@@ -533,6 +680,8 @@ LVT_N_W_3b {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: LVT_N width in GATE poly direction when LVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 LVT_N_W_4 {
 @ LVT_N width in GATE poly direction when LVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (LVT_N_h_edges_singular_point COIN EDGE LVT_N_concave_corner) LVT_N_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -552,6 +701,12 @@ LVT_N_W_4 {
 
 //LVT_P
 
+Q: LVT_P width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) LVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_P_W_1 {
 @ LVT_P width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -574,6 +729,12 @@ LVT_P_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LVT_P width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) LVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_P_W_2 {
 @ LVT_P width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -590,6 +751,11 @@ LVT_P_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LVT_P width in S/D direction when just one LVT_P vertical edge CUT (GTMK1 OR AR) and ABUT SVT_P or HVT_P >= 0.315um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_P_W_3 {
 @ LVT_P width in S/D direction when just one LVT_P vertical edge CUT (GTMK1 OR AR) and ABUT SVT_P or HVT_P >= 0.315um
 @ DRC waive:
@@ -604,6 +770,11 @@ LVT_P_W_3 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: LVT_P width in S/D direction when both LVT_P vertical edge CUT (GTMK1 OR AR) and ABUT SVT_P or HVT_P >= 0.36um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LVT_P_W_3a {
 @ LVT_P width in S/D direction when both LVT_P vertical edge CUT (GTMK1 OR AR) and ABUT SVT_P or HVT_P >= 0.36um
 @ DRC waive:
@@ -618,6 +789,8 @@ LVT_P_W_3a {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: LVT_P width in GATE poly direction when LVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 LVT_P_W_4 {
 @ LVT_P width in GATE poly direction when LVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (LVT_P_h_edges_singular_point COIN EDGE LVT_P_concave_corner) LVT_P_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -636,6 +809,12 @@ LVT_P_W_4 {
 }
 
 //ULVT_N
+Q: ULVT_N width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) ULVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_N_W_1 {
 @ ULVT_N width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -658,6 +837,12 @@ ULVT_N_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: ULVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) ULVT_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_N_W_2 {
 @ ULVT_N width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -675,6 +860,11 @@ ULVT_N_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: ULVT_N width when just one vertical edge CUT (GTMK1 OR AR)) in S/D direction >= 0.315um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_N_W_3a {
 @ ULVT_N width when just one vertical edge CUT (GTMK1 OR AR)) in S/D direction >= 0.315um
 @ DRC waive:
@@ -687,6 +877,11 @@ ULVT_N_W_3a {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: ULVT_N width when both vertical ULVT_N edges CUT (GTMK1 OR AR) in S/D direction >= 0.36um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_N_W_3b {
 @ ULVT_N width when both vertical ULVT_N edges CUT (GTMK1 OR AR) in S/D direction >= 0.36um
 @ DRC waive:
@@ -698,6 +893,8 @@ ULVT_N_W_3b {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: ULVT_N width in GATE poly direction when ULVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 ULVT_N_W_4 {
 @ ULVT_N width in GATE poly direction when ULVT_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (ULVT_N_h_edges_singular_point COIN EDGE ULVT_N_concave_corner) ULVT_N_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -716,6 +913,13 @@ ULVT_N_W_4 {
 }
 
 //ULVT_P
+
+Q: ULVT_P width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) ULVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_P_W_1 {
 @ ULVT_P width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -738,6 +942,12 @@ ULVT_P_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: ULVT_P width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) ULVT_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_P_W_2 {
 @ ULVT_P width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -754,6 +964,11 @@ ULVT_P_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: ULVT_P width when just one vertical edge CUT (GTMK1 OR AR) in S/D direction >= 0.315um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_P_W_3a {
 @ ULVT_P width when just one vertical edge CUT (GTMK1 OR AR) in S/D direction >= 0.315um
 @ DRC waive:
@@ -766,6 +981,11 @@ ULVT_P_W_3a {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: ULVT_P width when both vertical ULVT_P edge CUT (GTMK1 OR AR) in S/D direction >= 0.36um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 ULVT_P_W_3b {
 @ ULVT_P width when both vertical ULVT_P edge CUT (GTMK1 OR AR) in S/D direction >= 0.36um
 @ DRC waive:
@@ -777,6 +997,8 @@ ULVT_P_W_3b {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: ULVT_P width in GATE poly direction when ULVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 ULVT_P_W_4 {
 @ ULVT_P width in GATE poly direction when ULVT_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (ULVT_P_h_edges_singular_point COIN EDGE ULVT_P_concave_corner) ULVT_P_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -795,6 +1017,12 @@ ULVT_P_W_4 {
 }
 
 //LFN_N
+Q: LFN_N width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) LFN_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LFN_N_W_1 {
 @ LFN_N width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -817,6 +1045,12 @@ LFN_N_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LFN_N width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) LFN_N one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LFN_N_W_2 {
 @ LFN_N width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -834,6 +1068,11 @@ LFN_N_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LFN_N width in S/D direction, when one LFN_N vertical edge CUT (GTMK1 OR AR) and ABUT HVT_N >= 0.315um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LFN_N_W_3 {
 @ LFN_N width in S/D direction, when one LFN_N vertical edge CUT (GTMK1 OR AR) and ABUT HVT_N >= 0.315um
 @ DRC waive:
@@ -846,6 +1085,8 @@ LFN_N_W_3 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: LFN_N width in GATE poly direction when LFN_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 LFN_N_W_4 {
 @ LFN_N width in GATE poly direction when LFN_N point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (LFN_N_h_edges_singular_point COIN EDGE LFN_N_concave_corner) LFN_N_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -864,6 +1105,13 @@ LFN_N_W_4 {
 }
 
 //LFN_P
+
+Q: LFN_P width, single-point-interaction is allowed >= 0.192um
+    DRC waive:
+    1) LFN_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LFN_P_W_1 {
 @ LFN_P width, single-point-interaction is allowed >= 0.192um
 @ DRC waive:
@@ -886,6 +1134,12 @@ LFN_P_W_1 {
  err2 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LFN_P width in S/D direction, single-point-interaction is allowed >= 0.27um
+    DRC waive:
+    1) LFN_P one-track width within the range of 0.09~0.106um, 0.18~0.212um when PRL = 0um
+    2) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    3) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LFN_P_W_2 {
 @ LFN_P width in S/D direction, single-point-interaction is allowed >= 0.27um
 @ DRC waive:
@@ -902,6 +1156,11 @@ LFN_P_W_2 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: LFN_P width in S/D direction, when LFN_P vertical edge CUT (GTMK1 OR AR) and ABUT HVT_P >= 0.315um
+    DRC waive:
+    1) Jog width adjacent to edge (length <= 0.048um, between two consecutive 90-270 degree corners) = 0.18/0.192/0.225/0.24um in S/D direction
+    2) Jog width adjacent to edge (length = 0.002um, between two consecutive 90-270 degree corners) = 0.135/0.144um in S/D direction
+A: 
 LFN_P_W_3 {
 @ LFN_P width in S/D direction, when LFN_P vertical edge CUT (GTMK1 OR AR) and ABUT HVT_P >= 0.315um
 @ DRC waive:
@@ -914,6 +1173,8 @@ LFN_P_W_3 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: LFN_P width in GATE poly direction when LFN_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
+A: 
 LFN_P_W_4 {
 @ LFN_P width in GATE poly direction when LFN_P point touch or horizontal width in the range of 0.09~0.106um, 0.18~0.212um while PRL = 0um in GATE poly direction (except L-shape/T-shape concave corner) >= 0.238um
  err1 = INT (LFN_P_h_edges_singular_point COIN EDGE LFN_P_concave_corner) LFN_P_h_edges < 0.238 ABUT<90 OPPOSITE REGION
@@ -932,6 +1193,9 @@ LFN_P_W_4 {
 }
 
 //DG
+
+Q: DG width >= 0.286um
+A: 
 DG_W_1 {
 @ DG width >= 0.286um
  err1 = INT DG < 0.286 ABUT<90 SINGULAR REGION
@@ -939,12 +1203,17 @@ DG_W_1 {
 }
 
 //GT
+
+Q: ALL_GT width >= 0.016um
+A: 
 GT_W_1 {
 @ ALL_GT width >= 0.016um
  err1 = INT ALL_GT < GT_MiniWidth ABUT<90 SINGULAR REGION
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: ALL_GT width, except DMCMK1, LDBK, MARKS, OCOVL and LOGO regions <= 0.242um
+A: 
 GT_W_2 {
 @ ALL_GT width, except DMCMK1, LDBK, MARKS, OCOVL and LOGO regions <= 0.242um
  except_region = OR DMCMK1 LDBK OCOVL LOGO MARKS
@@ -952,6 +1221,8 @@ GT_W_2 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: ALL_GT width in core region, except GT_P96, INST, MARKS, OCOVL and LOGO regions = 0.016/0.018/0.02, 0.032, 0.07~0.242um
+A: 
 GT_W_3 {
 @ ALL_GT width in core region, except GT_P96, INST, MARKS, OCOVL and LOGO regions = 0.016/0.018/0.02, 0.032, 0.07~0.242um
  except_region = OR GT_P96 OCOVL LOGO INST MARKS
@@ -963,6 +1234,8 @@ GT_W_3 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: (GT OR GTDMP) width in core region INSIDE GT_P96 = 0.016/0.018/0.02/0.022/0.024um
+A: 
 GT_W_3a {
 @ (GT OR GTDMP) width in core region INSIDE GT_P96 = 0.016/0.018/0.02/0.022/0.024um
  chk_GT = (DMP_GT NOT INSIDE DG) INTERACT GT_P96
@@ -971,6 +1244,8 @@ GT_W_3a {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: (AOP_GT INTERACT DG) width, except DGV region >= 0.086um
+A: 
 GT_W_4 {
 @ (AOP_GT INTERACT DG) width, except DGV region >= 0.086um
  chk_GT = (AOP_GT INTERACT DG) NOT INSIDE DGV
@@ -978,6 +1253,8 @@ GT_W_4 {
  err1 NOT INSIDE DGV
 }
 
+Q: (AOP_GT INTERACT DG) width in DGV region >= 0.08um
+A: 
 GT_W_4a {
 @ (AOP_GT INTERACT DG) width in DGV region >= 0.08um
  chk_GT = (AOP_GT INTERACT DG) NOT OUTSIDE DGV
@@ -985,6 +1262,8 @@ GT_W_4a {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: Channel length for core NMOS/PMOS transistor, except ESDIO2, GT_P96, VARMOS, INST and PSUB regions = 0.016/0.018/0.02, 0.032, 0.07~0.242um
+A: 
 GT_W_5 {
 @ Channel length for core NMOS/PMOS transistor, except ESDIO2, GT_P96, VARMOS, INST and PSUB regions = 0.016/0.018/0.02, 0.032, 0.07~0.242um
  except_region = OR ESDIO2 GT_P96 VARMOS PSUB INST
@@ -998,6 +1277,8 @@ GT_W_5 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Channel length for core NMOS/PMOS transistor INSIDE GT_P96 = 0.016/0.018/0.02/0.022/0.024um
+A: 
 GT_W_5a {
 @ Channel length for core NMOS/PMOS transistor INSIDE GT_P96 = 0.016/0.018/0.02/0.022/0.024um
  chk_GATE = (GATE_CORE INTERACT GT_P96) COIN EDGE channel_width_GT_edge
@@ -1010,6 +1291,8 @@ GT_W_5a {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Channel length of 1.8V MOS underdrive to 1.5V I/O NMOS/PMOS transistor (GATE AND DGUD) = 0.086~0.242um
+A: 
 GT_W_6 {
 @ Channel length of 1.8V MOS underdrive to 1.5V I/O NMOS/PMOS transistor (GATE AND DGUD) = 0.086~0.242um
  chk_GATE = GATE_15 COIN EDGE channel_width_GT_edge
@@ -1017,6 +1300,8 @@ GT_W_6 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Channel length of 1.8V MOS underdrive to 1.2V I/O NMOS/PMOS transistor (GATE AND DGV) = 0.08~0.242um
+A: 
 GT_W_7 {
 @ Channel length of 1.8V MOS underdrive to 1.2V I/O NMOS/PMOS transistor (GATE AND DGV) = 0.08~0.242um
  chk_GATE = GATE_12 COIN EDGE channel_width_GT_edge
@@ -1024,6 +1309,8 @@ GT_W_7 {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Channel length of 1.8V I/O NMOS/PMOS transistor, except DGUD, DGV, VARMOS, LDBK regions = 0.134~0.242um
+A: 
 GT_W_8 {
 @ Channel length of 1.8V I/O NMOS/PMOS transistor, except DGUD, DGV, VARMOS, LDBK regions = 0.134~0.242um
  WAIVE_AREA = OR VARMOS LDBK
@@ -1032,6 +1319,8 @@ GT_W_8 {
  err1 NOT INSIDE EDGE WAIVE_AREA
 }
 
+Q: Channel length for core NMOS/PMOS transistor for HVT device <= 0.032um
+A: 
 GT_W_9 {
 @ Channel length for core NMOS/PMOS transistor for HVT device <= 0.032um
  chk_GATE = (GATE_CORE NOT OUTSIDE (OR HVT_N HVT_P)) COIN EDGE channel_width_GT_edge
@@ -1043,6 +1332,8 @@ GT_W_9 {
 gt_on_field_oxide = GT INTERACT AA
 gt_on_field_oxide_jog_004 = CONVEX EDGE gt_on_field_oxide == 1 WITH LENGTH <= 0.004
 
+Q: Width of AOP_GT neighboring to AOP_GT (width = 0.016/0.018um, space to AOP_GT < 0.117um), except ESDIO1, ESDIO2 regions = 0.016/0.018/0.02um
+A: 
 GT_W_10b {
 @ Width of AOP_GT neighboring to AOP_GT (width = 0.016/0.018um, space to AOP_GT < 0.117um), except ESDIO1, ESDIO2 regions = 0.016/0.018/0.02um
  chk_AOP_GT = OR EDGE AOP_GT_016_v_edges AOP_GT_018_v_edges
@@ -1055,6 +1346,8 @@ GT_W_10b {
 }
 
 
+Q: Width of AOP_GT neighboring to AOP_GT (width = 0.02um, space to AOP_GT < 0.117um), except INST, ESDIO1 and ESDIO2 regions = 0.016/0.018/0.02/0.022/0.024/0.032um
+A: 
 GT_W_10d {
 @ Width of AOP_GT neighboring to AOP_GT (width = 0.02um, space to AOP_GT < 0.117um), except INST, ESDIO1 and ESDIO2 regions = 0.016/0.018/0.02/0.022/0.024/0.032um
  out_0 = AOP_GT_noESD_SRAM COIN EDGE (EXT [AOP_GT_noESD_SRAM] AOP_GT_020_v_edges < 0.117 OPPOSITE)
@@ -1068,6 +1361,8 @@ GT_W_10d {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to AOP_GT (width = 0.022/0.024um, space to ALL_GT < 0.117um), except ESDIO1 and ESDIO2 regions = 0.02/0.022/0.024/0.032um
+A: 
 GT_W_10e {
 @ Width of AOP_GT neighboring to AOP_GT (width = 0.022/0.024um, space to ALL_GT < 0.117um), except ESDIO1 and ESDIO2 regions = 0.02/0.022/0.024/0.032um
  out_0 = AOP_GT_noESD COIN EDGE (EXT [AOP_GT_noESD] AOP_GT_022_024_v_edges < 0.117 OPPOSITE)
@@ -1079,6 +1374,8 @@ GT_W_10e {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to AOP_GT (width = 0.032um, space to ALL_GT < 0.117um), except INST, ESDIO1 and ESDIO2 regions = 0.02/0.022/0.024/0.032um
+A: 
 GT_W_10f {
 @ Width of AOP_GT neighboring to AOP_GT (width = 0.032um, space to ALL_GT < 0.117um), except INST, ESDIO1 and ESDIO2 regions = 0.02/0.022/0.024/0.032um
  out_0 = AOP_GT_noESD_SRAM COIN EDGE (EXT [AOP_GT_noESD_SRAM] AOP_GT_032_v_edges < 0.117 OPPOSITE)
@@ -1090,6 +1387,8 @@ GT_W_10f {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to GATE (channel length <= 0.02um, AOP_GT to neighboring GATE space < 0.117um), except INST, ESDIO1 and ESDIO2 regions = 0.016/0.018/0.02um
+A: 
 GT_W_11a {
 @ Width of AOP_GT neighboring to GATE (channel length <= 0.02um, AOP_GT to neighboring GATE space < 0.117um), except INST, ESDIO1 and ESDIO2 regions = 0.016/0.018/0.02um
  chk_GATE = GATE_noESD WITH EDGE (LENGTH GATE_LE <= 0.020)
@@ -1101,6 +1400,8 @@ GT_W_11a {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to GATE (channel length = 0.022/0.024um, AOP_GT to neighboring GATE space < 0.117um), except ESDIO1, ESDIO2 regions = 0.02/0.022/0.024um
+A: 
 GT_W_11b {
 @ Width of AOP_GT neighboring to GATE (channel length = 0.022/0.024um, AOP_GT to neighboring GATE space < 0.117um), except ESDIO1, ESDIO2 regions = 0.02/0.022/0.024um
  chk_GATE = GATE_noESD WITH EDGE (OR EDGE (LENGTH GATE_LE == 0.022) (LENGTH GATE_LE == 0.024))
@@ -1112,6 +1413,8 @@ GT_W_11b {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to GATE (channel length = 0.032um, AOP_GT to neighboring GATE space < 0.117um), AOP_GT should be same to neighboring GATE, except ESDIO1, ESDIO2 regions = 0.032um
+A: 
 GT_W_11c {
 @ Width of AOP_GT neighboring to GATE (channel length = 0.032um, AOP_GT to neighboring GATE space < 0.117um), AOP_GT should be same to neighboring GATE, except ESDIO1, ESDIO2 regions = 0.032um
  chk_GATE_032 = GATE_noESD WITH EDGE (LENGTH GATE_LE == 0.032)
@@ -1126,6 +1429,8 @@ GT_W_11c {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to GATE (channel length >= 0.07um, AOP_GT to neighboring GATE space = 0.117~0.118um), except ESDIO1, ESDIO2 and L-shape AA region >= 0.07um
+A: 
 GT_W_11d {
 @ Width of AOP_GT neighboring to GATE (channel length >= 0.07um, AOP_GT to neighboring GATE space = 0.117~0.118um), except ESDIO1, ESDIO2 and L-shape AA region >= 0.07um
  chk_GATE = (GATE_noESD WITH EDGE (LENGTH GATE_LE >= 0.070)) NOT INTERACT L_shape_AA
@@ -1135,6 +1440,8 @@ GT_W_11d {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to GATE (INSIDE DG, AOP_GT to neighboring GATE space = 0.117~0.118um), except DGV, ESDIO1, ESDIO2 and L-shape AA region >= 0.086um
+A: 
 GT_W_12a {
 @ Width of AOP_GT neighboring to GATE (INSIDE DG, AOP_GT to neighboring GATE space = 0.117~0.118um), except DGV, ESDIO1, ESDIO2 and L-shape AA region >= 0.086um
  chk_GATE = GATE_in_DG NOT INSIDE (OR DGV ESDIO_ALL L_shape_AA)
@@ -1144,6 +1451,8 @@ GT_W_12a {
  err1 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: Width of AOP_GT neighboring to GATE (INSIDE DGV, AOP_GT to neighboring GATE space = 0.117~0.118um), except ESDIO1, ESDIO2 and L-shape AA region >= 0.08um
+A: 
 GT_W_12b {
 @ Width of AOP_GT neighboring to GATE (INSIDE DGV, AOP_GT to neighboring GATE space = 0.117~0.118um), except ESDIO1, ESDIO2 and L-shape AA region >= 0.08um
  chk_GATE = (GATE INSIDE DGV) NOT INSIDE (OR ESDIO_ALL L_shape_AA)
@@ -1155,6 +1464,8 @@ GT_W_12b {
 
 //GT_P96
 
+Q: GT_P96 width in S/D direction >= 1.44um
+A: 
 GT_P96_W_1 {
 @ GT_P96 width in S/D direction >= 1.44um
  err1 = INT GT_P96_v_edges < 1.44 ABUT<90 OPPOSITE REGION
@@ -1162,6 +1473,8 @@ GT_P96_W_1 {
 }
 
 //GTDMP
+Q: GTDMP width = 0.016/0.018/0.02/0.022/0.024, 0.032, 0.07~0.242um
+A: 
 GTDMP_W_1 {
 @ GTDMP width = 0.016/0.018/0.02/0.022/0.024, 0.032, 0.07~0.242um
  good_range = OR (OR GTDMP_016 GTDMP_018 GTDMP_020 GTDMP_022 GTDMP_024 GTDMP_032) (WITH WIDTH GTDMP >= 0.07 <= 0.242)
@@ -1171,6 +1484,8 @@ GTDMP_W_1 {
  err2 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: GTDMP width when INTERACT DG, except DGV region = 0.086~0.242um
+A: 
 GTDMP_W_2 {
 @ GTDMP width when INTERACT DG, except DGV region = 0.086~0.242um
  GTDMP_chk = (GTDMP INTERACT DG) NOT INSIDE DGV
@@ -1179,6 +1494,8 @@ GTDMP_W_2 {
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: GTDMP width INSIDE GT_P96, except dummy cell = 0.016~0.024um
+A: 
 GTDMP_W_3 {
 @ GTDMP width INSIDE GT_P96, except dummy cell = 0.016~0.024um
  good_1 = WITH WIDTH GTDMP_in_GT_P96 == 0.016
@@ -1191,18 +1508,25 @@ GTDMP_W_3 {
 }
 
 //P2
+
+Q: P2 width in GATE poly direction, except INST and OCOVL region = 0.048, 0.068, 0.108um
+A: 
 P2_W_1 {
 @ P2 width in GATE poly direction, except INST and OCOVL region = 0.048, 0.068, 0.108um
  err1 = P2 NOT (OR P2_W_048 P2_W_068 P2_W_108)
  err1 NOT INSIDE INST_OCOVL
 }
 
+Q: Maximum width of ((ALL_GT INTERACT P2) NOT DG) <= 0.092um
+A: 
 P2_W_2 {
 @ Maximum width of ((ALL_GT INTERACT P2) NOT DG) <= 0.092um
  err1 = ALL_GT_with_P2_core WITH WIDTH > 0.092
  err1 NOT INSIDE SealR_NOT_BULK
 }
 
+Q: Maximum width of ((ALL_GT INTERACT P2) NOT DG) when P2 width = 0.048um. < 0.07um
+A: 
 P2_W_3 {
 @ Maximum width of ((ALL_GT INTERACT P2) NOT DG) when P2 width = 0.048um. < 0.07um
  chk_ALL_GT = ALL_GT_with_P2_core INTERACT P2_W_048
@@ -1211,6 +1535,9 @@ P2_W_3 {
 }
 
 //SN
+
+Q: SN width, except INST region >= 0.192um
+A: 
 SN_W_1 {
 @ SN width, except INST region >= 0.192um
  err1 = INT SN < SN_MiniWidth ABUT<90 SINGULAR REGION
@@ -1218,6 +1545,8 @@ SN_W_1 {
 }
 
 //SP
+Q: SP width, except INST region and 45-degree SP in MARKS region >= 0.192um
+A: 
 SP_W_1 {
 @ SP width, except INST region and 45-degree SP in MARKS region >= 0.192um
  err1 = INT (SP NOT INSIDE MARKS) < SP_MiniWidth ABUT<90 SINGULAR REGION
@@ -1227,6 +1556,8 @@ SP_W_1 {
 }
 
 //M0DMP
+Q: M0DMP width = 0.04, 0.042, 0.054um
+A: 
 M0DMP_W_1 {
 @ M0DMP width = 0.04, 0.042, 0.054um
  err1 = INT M0DMP < 0.001 ABUT<90 SINGULAR REGION
@@ -1236,6 +1567,8 @@ M0DMP_W_1 {
 }
 
 //M0GDMP
+Q: M0GDMP width = 0.04/0.05/0.06um
+A: 
 M0GDMP_W_1 {
 @ M0GDMP width = 0.04/0.05/0.06um
  err1 = INT M0GDMP < 0.001 ABUT<90 SINGULAR REGION
@@ -1245,6 +1578,8 @@ M0GDMP_W_1 {
 }
 
 //M0
+Q: M0 width, except MARKS and OCOVL regions = 0.04, 0.042, 0.054um
+A: 
 M0_W_1 {
 @ M0 width, except MARKS and OCOVL regions = 0.04, 0.042, 0.054um
 //; point touch will be flagged by M0_S_1
@@ -1257,9 +1592,10 @@ M0_W_1 {
  err3 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: M0 width in S/D direction when M0 INTERACT (AA INTERACT GT (width >= 0.07um)), except MARKS region = 0.054um
+A: 
 M0_W_2 {
 @ M0 width in S/D direction when M0 INTERACT (AA INTERACT GT (width >= 0.07um)), except MARKS region = 0.054um
-//;based on M0.R.1
  chk_m0 = (M0_h_edges COIN EDGE (M0 INTERACT (AA INTERACT GT_eqgt_070))) NOT INSIDE EDGE MARKS
  err1 = LENGTH chk_m0 < 0.054
  err2 = LENGTH chk_m0 > 0.054
@@ -1268,6 +1604,8 @@ M0_W_2 {
 }
 
 //M0C
+Q: M0C width in GATE poly direction, except INST and OCOVL regions = 0.048, 0.051, 0.052, 0.082, 0.108um
+A: 
 M0C_W_1 {
 @ M0C width in GATE poly direction, except INST and OCOVL regions = 0.048, 0.051, 0.052, 0.082, 0.108um
  err1 = (DFM COPY (DFM SPACE M0C < M0C_MiniWidth BY INT VERTICAL) REGION) OR (INT M0C < 0.01 ABUT<90 SINGULAR REGION)
@@ -1283,6 +1621,8 @@ M0C_W_1 {
  err5 NOT INSIDE EDGE INST_OCOVL
 }
 
+Q: AOP_M0C width in GATE poly direction when INTERACT ALL_M0 (width = 0.054um) = 0.082, 0.108um
+A: 
 M0C_W_2 {
 @ AOP_M0C width in GATE poly direction when INTERACT ALL_M0 (width = 0.054um) = 0.082, 0.108um
  in_Layer = AOP_M0C INTERACT ALL_M0_054 //; point touch flagged by M0C_S_7
@@ -1295,6 +1635,8 @@ M0C_W_2 {
  err3 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: DOP_M0C width in GATE poly direction = 0.052, 0.082, 0.360um
+A: 
 M0C_W_3 {
 @ DOP_M0C width in GATE poly direction = 0.052, 0.082, 0.360um
  err1 = DFM COPY (DFM SPACE DOP_M0C < 0.052 BY INT VERTICAL) REGION
@@ -1308,6 +1650,8 @@ M0C_W_3 {
  err4 NOT INSIDE EDGE SealR_NOT_BULK
 }
 
+Q: M0C width when M0C interact RSPMK1 = 0.051um
+A: 
 M0C_W_4 {
 @ M0C width when M0C interact RSPMK1 = 0.051um
  err1 = (M0C INTERACT RSPMK1) NOT M0C_051
@@ -1315,6 +1659,8 @@ M0C_W_4 {
 }
 
 //M0G
+Q: M0G width, except OCOVL region = 0.04, 0.05~0.055, 0.06, 0.088um
+A: 
 M0G_W_1 {
 @ M0G width, except OCOVL region = 0.04, 0.05~0.055, 0.06, 0.088um
  check_M0G = M0G NOT INSIDE OCOVL
@@ -1332,6 +1678,9 @@ M0G_W_1 {
 }
 
 //V0
+
+Q: V0 width and length, except 0.032*0.08um RV0, MARKS, MARKG, OCOVL and LOGO regions = 0.032um
+A: 
 V0_W_1 {
 @ V0 width and length, except 0.032*0.08um RV0, MARKS, MARKG, OCOVL and LOGO regions = 0.032um
  WAIVE_AREA = OR MARKS_MARKG_INDMY_LOGO OCOVL
@@ -1339,6 +1688,9 @@ V0_W_1 {
  err1 NOT INSIDE WAIVE_AREA
 }
 
+Q: V0 bar width, and V0 bar is only allowed in MARKS, MARKG, INDMY and LOGO region = 0.100um
+     It allows 0.002um DRC checking telerance in 45-degree region
+A: 
 V0_W_2 {
 @ V0 bar width, and V0 bar is only allowed in MARKS, MARKG, INDMY and LOGO region = 0.100um
 @ It allows 0.002um DRC checking telerance in 45-degree region
@@ -1364,6 +1716,9 @@ V0_W_2 {
 }
 
 //RV0
+Q: RV0.W.1: Rectangular V0 width, except OCOVL, MARKS and MARKG region = 0.032um
+    RV0.L.1: Rectangular V0 length, except OCOVL, MARKS and MARKG region = 0.080um
+A: 
 RV0_W_1_L_1 {
 @ RV0.W.1: Rectangular V0 width, except OCOVL, MARKS and MARKG region = 0.032um
 @ RV0.L.1: Rectangular V0 length, except OCOVL, MARKS and MARKG region = 0.080um
@@ -1373,6 +1728,10 @@ RV0_W_1_L_1 {
 }
 
 //BM0
+Q: BM0.W.1: M0_B1 or M0_B2 width in S/D direction = 0.04um
+    BM0.L.1: M0_B1 length in GATE poly direction = 0.022um
+    BM0.L.2: M0_B2 length in GATE poly direction = 0.064um
+A: 
 BM0_W_1_L_1_L_2 {
 @ BM0.W.1: M0_B1 or M0_B2 width in S/D direction = 0.04um
 @ BM0.L.1: M0_B1 length in GATE poly direction = 0.022um
@@ -1385,6 +1744,9 @@ BM0_W_1_L_1_L_2 {
 
 //BV0
 
+Q: BV0_W_1: V0_B0 width in S/D direction = 0.032um
+    BV0.L.1: Length of V0_B0 = 0.08um
+A: 
 BV0_W_1_L_1_L_2 {
 @ BV0_W_1: V0_B0 width in S/D direction = 0.032um
 @ BV0.L.1: Length of V0_B0 = 0.08um
