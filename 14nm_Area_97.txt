@@ -1,0 +1,1014 @@
+//AA
+
+Q: AOP_AA area, except INST region >= 0.0138um2
+A: 
+AA_A_1 {
+@ AOP_AA area, except INST region >= 0.0138um2
+ err1 = AREA AOP_AA < 0.0138
+ err1 NOT INSIDE INST
+}
+
+Q: AOP_AA area in I/O region, except DMC7 region >= 0.0285um2
+A:
+AA_A_2 {
+@ AOP_AA area in I/O region, except DMC7 region >= 0.0285um2
+ err1 = AREA (AOP_AA NOT OUTSIDE DG) < 0.0285
+ err1 NOT INSIDE DMC7
+}
+
+Q: AOP_AA area (length = 0.09um in S/D direction) >= 0.0172um2
+A: 
+AA_A_3 {
+@ AOP_AA area (length = 0.09um in S/D direction) >= 0.0172um2
+ err1 = AREA (AOP_AA WITH EDGE (LENGTH AOP_AA_h_edges == 0.09)) < 0.0172
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Total area of ((ACTIVE INTERACT GT) NOT GT) in the same AA for NMOS or PMOS device <= 100um2
+A: 
+AA_A_4 {
+@ Total area of ((ACTIVE INTERACT GT) NOT GT) in the same AA for NMOS or PMOS device <= 100um2
+ AA_SUM = (ACT INTERACT GT) NOT GT
+ err1 = DFM PROPERTY (AA INTERACT AA_SUM) AA_SUM OVERLAP ABUT ALSO MULTI [-= AREA(AA_SUM)] > 100
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//AR
+
+Q: AR area >= 0.0048um2
+A: 
+AR_A_1 {
+@ AR area >= 0.0048um2
+ err1 = AREA AR < 0.0048
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//NW
+
+Q: NW area, except 1.546um*0.196um NW in INST region >= 0.32um2
+A: 
+NW_A_1 {
+@ NW area, except 1.546um*0.196um NW in INST region >= 0.32um2
+ WAIVE_AREA = (NW INSIDE INST) RECTANGLE == 0.196 BY == 1.546
+ err1 = AREA (NW NOT WAIVE_AREA) < NW_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of Core_NW, Core_PW, IO_NW, IO_PW, except 1.546um*0.196um Core_NW in INST region >= 0.32um2
+A:
+NW_A_2 {
+@ Area of Core_NW, Core_PW, IO_NW, IO_PW, except 1.546um*0.196um Core_NW in INST region >= 0.32um2
+ WAIVE_AREA = (Core_NW INSIDE INST) RECTANGLE == 0.196 BY == 1.546
+ err1 = AREA (Core_NW NOT WAIVE_AREA) < NW_MiniArea
+ err2 = AREA Core_PW < NW_MiniArea
+ err3 = AREA IO_NW < NW_MiniArea
+ err4 = AREA IO_PW < NW_MiniArea
+
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+ err3 NOT INSIDE SealR_NOT_BULK
+ err4 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: NW enclosed area >= 0.32um2
+A: 
+NW_A_3 {
+@ NW enclosed area >= 0.32um2
+ err1 = AREA ((HOLES NW INNER) NOT NW) < NW_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Enclosed area of Core_NW, Core_PW, IO_NW, IO_PW, except Core_PW enclosed area is 1.546um*0.196um in INST region >= 0.32um2
+A: 
+NW_A_4 {
+@ Enclosed area of Core_NW, Core_PW, IO_NW, IO_PW, except Core_PW enclosed area is 1.546um*0.196um in INST region >= 0.32um2
+ WAIVE_AREA = (((HOLES Core_PW INNER) NOT Core_PW) INSIDE INST) RECTANGLE == 0.196 BY == 1.546
+ err1 = AREA ((HOLES Core_NW INNER) NOT Core_NW) < NW_MiniArea
+ err2 = AREA (((HOLES Core_PW INNER) NOT Core_PW) NOT WAIVE_AREA) < NW_MiniArea
+ err3 = AREA ((HOLES IO_NW INNER) NOT IO_NW) < NW_MiniArea
+ err4 = AREA ((HOLES IO_PW INNER) NOT IO_PW) < NW_MiniArea
+
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+ err3 NOT INSIDE SealR_NOT_BULK
+ err4 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//PSUB
+
+Q: PSUB area >= 0.32um2
+A: 
+PSUB_A_1 {
+@ PSUB area >= 0.32um2
+ err1 = AREA PSUB < 0.32
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: PSUB enclosed area >= 0.32um2
+A: 
+PSUB_A_2 {
+@ PSUB enclosed area >= 0.32um2
+ err1 = AREA ((HOLES PSUB INNER) NOT PSUB) < 0.32
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//SVT_N
+
+Q: SVT_N area >= 0.085um2
+A: 
+SVT_N_A_1 {
+@ SVT_N area >= 0.085um2
+ err1 = AREA SVT_N < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: SVT_N enclosed area >= 0.085um2
+A: 
+SVT_N_A_2 {
+@ SVT_N enclosed area >= 0.085um2
+ err1 = AREA ((HOLES SVT_N INNER SINGULAR ALSO) NOT SVT_N) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND SVT_N) >= 0.00158um2
+A: 
+SVT_N_A_3 {
+@ Area of ((ALL_GT NOT P2) AND SVT_N) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND SVT_N) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//SVT_P
+
+Q: SVT_P area >= 0.085um2
+A: 
+SVT_P_A_1 {
+@ SVT_P area >= 0.085um2
+ err1 = AREA SVT_P < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: SVT_P enclosed area >= 0.085um2
+A: 
+SVT_P_A_2 {
+@ SVT_P enclosed area >= 0.085um2
+ err1 = AREA ((HOLES SVT_P INNER SINGULAR ALSO) NOT SVT_P) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND SVT_P) >= 0.00158um2
+A:
+SVT_P_A_3 {
+@ Area of ((ALL_GT NOT P2) AND SVT_P) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND SVT_P) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//HVT_N
+
+Q: HVT_N area >= 0.085um2
+A: 
+HVT_N_A_1 {
+@ HVT_N area >= 0.085um2
+ err1 = AREA HVT_N < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: HVT_N enclosed area >= 0.085um2
+A: 
+HVT_N_A_2 {
+@ HVT_N enclosed area >= 0.085um2
+ err1 = AREA ((HOLES HVT_N INNER SINGULAR ALSO) NOT HVT_N) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND HVT_N) >= 0.00158um2
+A: 
+HVT_N_A_3 {
+@ Area of ((ALL_GT NOT P2) AND HVT_N) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND HVT_N) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//HVT_P
+
+Q: HVT_P area >= 0.085um2
+A:
+HVT_P_A_1 {
+@ HVT_P area >= 0.085um2
+ err1 = AREA HVT_P < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: HVT_P enclosed area >= 0.085um2
+A:
+HVT_P_A_2 {
+@ HVT_P enclosed area >= 0.085um2
+ err1 = AREA ((HOLES HVT_P INNER SINGULAR ALSO) NOT HVT_P) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND HVT_P) >= 0.00158um2
+A: 
+HVT_P_A_3 {
+@ Area of ((ALL_GT NOT P2) AND HVT_P) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND HVT_P) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//LVT_N
+
+Q: LVT_N area >= 0.085um2
+A: 
+LVT_N_A_1 {
+@ LVT_N area >= 0.085um2
+ err1 = AREA LVT_N < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: LVT_N enclosed area >= 0.085um2
+A: 
+LVT_N_A_2 {
+@ LVT_N enclosed area >= 0.085um2
+ err1 = AREA ((HOLES LVT_N INNER SINGULAR ALSO) NOT LVT_N) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND LVT_N) >= 0.00158um2
+A: 
+LVT_N_A_3 {
+@ Area of ((ALL_GT NOT P2) AND LVT_N) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND LVT_N) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//LVT_P
+
+Q: LVT_P area >= 0.085um2
+A: 
+LVT_P_A_1 {
+@ LVT_P area >= 0.085um2
+ err1 = AREA LVT_P < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: LVT_P enclosed area >= 0.085um2
+A: 
+LVT_P_A_2 {
+@ LVT_P enclosed area >= 0.085um2
+ err1 = AREA ((HOLES LVT_P INNER SINGULAR ALSO) NOT LVT_P) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND LVT_P) >= 0.00158um2
+A: 
+LVT_P_A_3 {
+@ Area of ((ALL_GT NOT P2) AND LVT_P) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND LVT_P) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//ULVT_N
+
+Q: ULVT_N area >= 0.085um2
+A: 
+ULVT_N_A_1 {
+@ ULVT_N area >= 0.085um2
+ err1 = AREA ULVT_N < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: ULVT_N enclosed area >= 0.085um2
+A: 
+ULVT_N_A_2 {
+@ ULVT_N enclosed area >= 0.085um2
+ err1 = AREA ((HOLES ULVT_N INNER SINGULAR ALSO) NOT ULVT_N) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND ULVT_N) >= 0.00158um2
+A: 
+ULVT_N_A_3 {
+@ Area of ((ALL_GT NOT P2) AND ULVT_N) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND ULVT_N) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//ULVT_P
+
+Q: ULVT_P area >= 0.085um2
+A: 
+ULVT_P_A_1 {
+@ ULVT_P area >= 0.085um2
+ err1 = AREA ULVT_P < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: ULVT_P enclosed area >= 0.085um2
+A: 
+ULVT_P_A_2 {
+@ ULVT_P enclosed area >= 0.085um2
+ err1 = AREA ((HOLES ULVT_P INNER SINGULAR ALSO) NOT ULVT_P) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND ULVT_P) >= 0.00158um2
+A: 
+ULVT_P_A_3 {
+@ Area of ((ALL_GT NOT P2) AND ULVT_P) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND ULVT_P) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//LFN
+
+Q: LFN_N area >= 0.085um2
+A:
+LFN_N_A_1 {
+@ LFN_N area >= 0.085um2
+ err1 = AREA LFN_N < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: LFN_N enclosed area >= 0.085um2
+A: 
+LFN_N_A_2 {
+@ LFN_N enclosed area >= 0.085um2
+ err1 = AREA ((HOLES LFN_N INNER SINGULAR ALSO) NOT LFN_N) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND LFN_N) >= 0.00158um2
+A: 
+LFN_N_A_3 {
+@ Area of ((ALL_GT NOT P2) AND LFN_N) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND LFN_N) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: LFN_P area >= 0.085um2
+A: 
+LFN_P_A_1 {
+@ LFN_P area >= 0.085um2
+ err1 = AREA LFN_P < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: LFN_P enclosed area >= 0.085um2
+A: 
+LFN_P_A_2 {
+@ LFN_P enclosed area >= 0.085um2
+ err1 = AREA ((HOLES LFN_P INNER SINGULAR ALSO) NOT LFN_P) < VT_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Area of ((ALL_GT NOT P2) AND LFN_P) >= 0.00158um2
+A: 
+LFN_P_A_3 {
+@ Area of ((ALL_GT NOT P2) AND LFN_P) >= 0.00158um2
+ err1 = AREA (ALL_GT_NOT_P2 AND LFN_P) < 0.00158
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//DG
+
+Q: DG area >= 0.32um2
+A: 
+DG_A_1 {
+@ DG area >= 0.32um2
+ err1 = AREA DG < 0.32
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: DG enclosed area >= 0.32um2
+A: 
+DG_A_2 {
+@ DG enclosed area >= 0.32um2
+ err1 = AREA ((HOLES DG INNER) NOT DG) < 0.32
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//GT
+
+Q: GT area >= 0.00416um2
+A: 
+GT_A_1 {
+@ GT area >= 0.00416um2
+ err1 = AREA GT < 0.00416
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+VARIABLE GT_A_2_val 2.45
+
+ALL_GT_area_CHK = AREA (ALL_GT_NOT_P2_ALL NOT (OR DMPNP MARKS OCOVL)) > GT_A_2_val
+ALL_GT_filt_a = ALL_GT_area_CHK WITH WIDTH <= 0.032
+ALL_GT_filt_b = (WITH WIDTH ALL_GT_area_CHK >= 0.1 <= 0.242) NOT ENCLOSE RECTANGLE 0.001 30+GLOBAL_TOLERANCE
+ALL_GT_filt_c = OR ALL_GT_filt_a ALL_GT_filt_b
+ALL_GT_filt_d = SIZE ALL_GT_filt_c BY 5
+
+Q: (ALL_GT NOT ALL_P2) area <= 2.45um2
+     DRC don't check:
+     1) BJT region (DMPNP) and OCOVL region
+     2) (AOP_GT NOT ALL_P2) (width <= 0.032um) enclosed in 10um*10um window with GT density <= 50%
+     3) (ALL_GT NOT ALL_P2) (width = 0.1um ~ 0.242um, length <= 30um) enclosed in 10um*10um window with poly density <= 50%
+A: 
+GT_A_2 {
+@ (ALL_GT NOT ALL_P2) area <= 2.45um2
+@ DRC don't check:
+@ 1) BJT region (DMPNP) and OCOVL region
+@ 2) (AOP_GT NOT ALL_P2) (width <= 0.032um) enclosed in 10um*10um window with GT density <= 50%
+@ 3) (ALL_GT NOT ALL_P2) (width = 0.1um ~ 0.242um, length <= 30um) enclosed in 10um*10um window with poly density <= 50%
+ STEP_1 = ALL_GT_NOT_P2_ALL AND ALL_GT_filt_d
+ STEP_2 = DENSITY STEP_1 ALL_GT_filt_d [!!AREA(ALL_GT_filt_d)*AREA(STEP_1)/AREA(ALL_GT_filt_d)] > 0.5 WINDOW 10 STEP 5 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_GT_A_2.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_GT_A_2.rdb"
+ STEP_3 = ALL_GT_filt_c NOT INTERACT (ALL_GT_filt_c AND STEP_2)
+ err1 = (ALL_GT_area_CHK NOT STEP_3) NOT (OR DMPNP MARKS OCOVL)
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: (ALL_GT NOT ALL_P2) area INSIDE DMPNP region <= 4.1um2
+A: 
+GT_A_3 {
+@ (ALL_GT NOT ALL_P2) area INSIDE DMPNP region <= 4.1um2
+ err1 = AREA (ALL_GT_NOT_P2_ALL INSIDE DMPNP) > 4.1
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+Q: When (ALL_GT NOT ALL_P2) space >= 1.21um, the PRL must be <= 17um, except (NODMF OR MARKS), DIR, DIRDMP, OCOVL regions
+A: 
+GT_A_4 {
+@ When (ALL_GT NOT ALL_P2) space >= 1.21um, the PRL must be <= 17um, except (NODMF OR MARKS), DIR, DIRDMP, OCOVL regions
+ except_area = OR NODMF MARKS DIR DIRDMP OCOVL
+ STEP_1 = SIZE ALL_GT_NOT_P2_ALL BY 1.21/2 OVERUNDER
+ STEP_2 = (DRC:1 NOT STEP_1) NOT except_area
+ STEP_3 = SIZE STEP_2 BY 1.21/2 UNDEROVER
+ err1 = ENCLOSE RECTANGLE STEP_3 17 1.21 ORTHOGONAL ONLY
+ err1 NOT INSIDE except_area
+}
+
+Q: When (ALL_GT NOT ALL_P2) space >= 0.91um, the PRL must be <= 5.5um
+    Except (NODMF OR MARKS), RESNW, DIR, DIRDMP, DMPNP, LOGO, OCOVL regions
+A: 
+GT_A_4a {
+@ When (ALL_GT NOT ALL_P2) space >= 0.91um, the PRL must be <= 5.5um
+@ Except (NODMF OR MARKS), RESNW, DIR, DIRDMP, DMPNP, LOGO, OCOVL regions
+ except_area = OR NODMF MARKS RESNW DIR DIRDMP DMPNP LOGO OCOVL
+ STEP_1 = SIZE ALL_GT_NOT_P2_ALL BY 0.91/2 OVERUNDER
+ STEP_2 = (DRC:1 NOT STEP_1) NOT except_area
+ STEP_3 = SIZE STEP_2 BY 0.91/2 UNDEROVER
+ err1 = ENCLOSE RECTANGLE STEP_3 5.5 0.91 ORTHOGONAL ONLY
+ err1 NOT INSIDE except_area
+}
+
+GT_A_5_except_1_TMP = EXT INST (AOP_GT NOT ALL_P2) <= 0.4 OPPOSITE
+GT_A_5_except_1 = DFM COPY (DFM PROPERTY GT_A_5_except_1_TMP [-= EC(GT_A_5_except_1_TMP)] > 0.25) REGION
+GT_A_5_except_2 = ENC INST BORDER <= 0.16 ABUT<90 SINGULAR REGION
+
+Q: When (ALL_GT NOT ALL_P2) space >= 0.55um in ((INST SIZING 1um) NOT INST), the PRL must be <= 10um
+    Except BORDER enclosure INST <= 0.16um in cell level
+A: 
+GT_A_5 {
+@ When (ALL_GT NOT ALL_P2) space >= 0.55um in ((INST SIZING 1um) NOT INST), the PRL must be <= 10um
+@ Except BORDER enclosure INST <= 0.16um in cell level
+ STEP_1 = (SIZE INST BY 1) NOT INST
+ STEP_2 = SIZE ALL_GT_NOT_P2_ALL BY 0.55/2 OVERUNDER
+ STEP_3 = (STEP_1 NOT STEP_2) NOT GT_A_5_except_2
+ err1 = ENCLOSE RECTANGLE STEP_3 10 0.55 ORTHOGONAL ONLY
+ err1 NOT INSIDE MARKS
+}
+
+
+
+
+//P2
+
+Q: (ALL_GT NOT P2) area, except INST region >= 0.0024um2
+A: 
+P2_A_1 {
+@ (ALL_GT NOT P2) area, except INST region >= 0.0024um2
+ err1 = AREA ALL_GT_NOT_P2 < 0.0024
+ err1 NOT INSIDE INST
+}
+
+//SN
+
+Q: SN area, except INST region >= 0.087um2
+A: 
+SN_A_1a {
+@ SN area, except INST region >= 0.087um2
+ err1 = AREA SN < SN_MiniArea
+ err1 NOT INSIDE INST
+}
+
+NW_PSUB_VARMOS_DMPNP = OR NW PSUB VARMOS DMPNP
+NW_not_PSUB_VARMOS_DMPNP = ((NW NOT PSUB) OR VARMOS) OR DMPNP
+
+Q: SN area, >= 0.087um2
+    (((((SN NOT DG) NOT (((NW OR PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+    (((((SN AND DG) NOT (((NW NOT PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+A: 
+SN_A_1b {
+@ SN area, >= 0.087um2
+@ (((((SN NOT DG) NOT (((NW OR PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+@ (((((SN AND DG) NOT (((NW NOT PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+ STEP_1a = SIZE ((SN NOT DG) NOT NW_PSUB_VARMOS_DMPNP) BY 0.095
+ STEP_2a = SIZE (SIZE STEP_1a BY -0.190) BY 0.095
+ err1 = AREA STEP_2a < SN_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+
+ STEP_1b = SIZE ((SN AND DG) NOT NW_not_PSUB_VARMOS_DMPNP) BY 0.095
+ STEP_2b = SIZE (SIZE STEP_1b BY -0.190) BY 0.095
+ err2 = AREA STEP_2b < SN_MiniArea
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: SN enclosed area, except INST region >= 0.087um2
+A: 
+SN_A_2a {
+@ SN enclosed area, except INST region >= 0.087um2
+ err1 = AREA ((HOLES SN INNER) NOT SN) < SN_MiniArea
+ err1 NOT INSIDE INST
+}
+
+Q: SN enclosed area, except INST region >= 0.087um2
+    (((((SN NOT DG) NOT (((NW OR PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um),
+    (((((SN AND DG) NOT (((NW NOT PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+A: 
+SN_A_2b {
+@ SN enclosed area, except INST region >= 0.087um2
+@ (((((SN NOT DG) NOT (((NW OR PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um),
+@ (((((SN AND DG) NOT (((NW NOT PSUB) OR VARMOS) OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+ STEP_1a = SIZE ((SN NOT DG) NOT NW_PSUB_VARMOS_DMPNP) BY 0.095
+ STEP_2a = SIZE (SIZE STEP_1a BY -0.190) BY 0.095
+ STEP_3a = (HOLES STEP_2a INNER) NOT SN
+ err1 = AREA STEP_3a < SN_MiniArea
+ err1 NOT INSIDE INST
+
+ STEP_1b = SIZE ((SN AND DG) NOT NW_not_PSUB_VARMOS_DMPNP) BY 0.095
+ STEP_2b = SIZE (SIZE STEP_1b BY -0.190) BY 0.095
+ STEP_3b = (HOLES STEP_2b INNER) NOT SN
+ err2 = AREA STEP_3b < SN_MiniArea
+ err2 NOT INSIDE INST
+}
+
+//SP
+
+
+Q: SP area, except INST region >= 0.087um2
+A: 
+SP_A_1a {
+@ SP area, except INST region >= 0.087um2
+ err1 = AREA SP < SP_MiniArea
+ err1 NOT INSIDE INST
+}
+
+Q: SP area, >= 0.087um2
+    (((((SP NOT ((DG OR VARMOS) OR DMPNP)) AND NW) su 0.095um) sd 0.19um) su 0.095um)
+    ((((((SP AND DG) AND NW) NOT (VARMOS OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+A: 
+SP_A_1b {
+@ SP area, >= 0.087um2
+@ (((((SP NOT ((DG OR VARMOS) OR DMPNP)) AND NW) su 0.095um) sd 0.19um) su 0.095um)
+@ ((((((SP AND DG) AND NW) NOT (VARMOS OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+ STEP_1a = SIZE ((SP NOT (OR DG VARMOS DMPNP)) AND NW) BY 0.095
+ STEP_2a = SIZE (SIZE STEP_1a BY -0.190) BY 0.095
+ err1 = AREA STEP_2a < SP_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+
+ STEP_1b = SIZE (((SP AND DG) AND NW) NOT (OR VARMOS DMPNP)) BY 0.095
+ STEP_2b = SIZE (SIZE STEP_1b BY -0.190) BY 0.095
+ err2 = AREA STEP_2b < SP_MiniArea
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: SP enclosed area >= 0.087um2
+A: 
+SP_A_2a {
+@ SP enclosed area >= 0.087um2
+ err1 = AREA ((HOLES SP INNER) NOT SP) < SP_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: SP enclosed area, >= 0.087um2
+    (((((SP NOT ((DG OR VARMOS) OR DMPNP)) AND NW) su 0.095um) sd 0.19um) su 0.095um)
+    ((((((SP AND DG) AND NW) NOT (VARMOS OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+A: 
+SP_A_2b {
+@ SP enclosed area, >= 0.087um2
+@ (((((SP NOT ((DG OR VARMOS) OR DMPNP)) AND NW) su 0.095um) sd 0.19um) su 0.095um)
+@ ((((((SP AND DG) AND NW) NOT (VARMOS OR DMPNP)) su 0.095um) sd 0.19um) su 0.095um)
+ STEP_1a = SIZE (SIZE ((SP NOT (OR DG VARMOS DMPNP)) AND NW) BY 0.095) BY -0.190
+ STEP_2a = SIZE STEP_1a BY 0.095
+ STEP_3a = (HOLES STEP_2a INNER) NOT SP
+ err1 = AREA STEP_3a < SP_MiniArea
+ err1 NOT INSIDE SealR_NOT_BULK
+
+ STEP_1b = SIZE (SIZE (((SP AND DG) AND NW) NOT (VARMOS OR DMPNP)) BY 0.095) BY -0.190
+ STEP_2b = SIZE STEP_1b BY 0.095
+ STEP_3b = (HOLES STEP_2b INNER) NOT SP
+ err2 = AREA STEP_3b < SP_MiniArea
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//M0DMP
+
+Q: M0DMP area >= 0.0046um
+A: 
+M0DMP_A_1 {
+@ M0DMP area >= 0.0046um
+ err1 = AREA M0DMP < 0.0046
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//M0
+
+Q: M0 area, except (M0 interact TRCMK) region >= 0.0046um2
+A: 
+M0_A_1 {
+@ M0 area, except (M0 interact TRCMK) region >= 0.0046um2
+ err1 = AREA (M0 NOT INTERACT TRCMK) < 0.0046
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//M0C
+
+Q: AOP_M0C area, except RSPMK1 and INST regions >= 0.0072um2
+A: 
+M0C_A_1 {
+@ AOP_M0C area, except RSPMK1 and INST regions >= 0.0072um2
+ err1_TMP = AREA (AOP_M0C NOT INSIDE INST) < 0.0072
+ err1 = err1_TMP NOT INTERACT RSPMK1  //; AOP_M0C is allowed to straddle on RSPMK1
+ err1 NOT INSIDE INST
+}
+
+Q: AOP_M0C area when interact RSPMK1 >= 0.004um2
+A: 
+M0C_A_2 {
+@ AOP_M0C area when interact RSPMK1 >= 0.004um2
+ err1 = AREA (AOP_M0C NOT OUTSIDE RSPMK1) < 0.004
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//M1
+
+
+Q: M1 area, except INST region >= 0.0061um2
+A: 
+M1_A_1 {
+@ M1 area, except INST region >= 0.0061um2
+ err1 = AREA M1 < 0.0061
+ err1 NOT INSIDE INST
+}
+
+Q: M1 area (with all of edge lengths < 0.203um, any edge length >= 0.117um) >= 0.0072um2
+    Except:
+    1) The pattern can fill 0.045um*0.117um rectangular pattern
+    2) M1 edge of length >= 0.046um if this edge have another neighboring edge of length < 0.032um
+    3) INST region
+A: 
+M1_A_2 {
+@ M1 area (with all of edge lengths < 0.203um, any edge length >= 0.117um) >= 0.0072um2
+@ Except:
+@ 1) The pattern can fill 0.045um*0.117um rectangular pattern
+@ 2) M1 edge of length >= 0.046um if this edge have another neighboring edge of length < 0.032um
+@ 3) INST region
+ M1_check = AREA M1 < 0.0072
+ M1_check_a = LENGTH M1_check >= 0.046
+ M1_check_b = LENGTH M1_check < 0.032
+ M1_edge_any = LENGTH M1_check >= 0.117
+ M1_edge_all = LENGTH M1_check >= 0.203
+
+ M1_waive_1 = ENCLOSE RECTANGLE M1 0.045 0.117 ORTHOGONAL ONLY
+ M1_waive_2 = M1_check INTERACT ((INT M1_check_a M1_check_b < 0.005 ABUT INTERSECTING ONLY REGION) OR (EXT M1_check_a M1_check_b < 0.005 ABUT INTERSECTING ONLY REGION))
+ M1_waive = M1_waive_1 OR M1_waive_2
+ err1 = ((M1_check WITH EDGE M1_edge_any) NOT WITH EDGE M1_edge_all) NOT M1_waive
+ err1 NOT INSIDE INST
+}
+
+Q: M1 area when all of edge lengths < 0.081um, except a M1 filling 0.077um*0.077um rectangular pattern, except INST region >= 0.0176um2
+A: 
+M1_A_3 {
+@ M1 area when all of edge lengths < 0.081um, except a M1 filling 0.077um*0.077um rectangular pattern, except INST region >= 0.0176um2
+ M1_waive = ENCLOSE RECTANGLE M1 0.077 0.077 ORTHOGONAL ONLY
+ M1_check = AREA M1 < 0.0176
+ M1_edge_all = LENGTH M1_check >= 0.081
+ err1 = (M1_check NOT WITH EDGE M1_edge_all) NOT M1_waive
+ err1 NOT INSIDE INST
+}
+
+Q: M1 enclosed area >= 0.16um2
+A: 
+M1_A_4 {
+@ M1 enclosed area >= 0.16um2
+ err1 = AREA ((HOLES M1 INNER) NOT M1) < 0.16
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//M2
+
+Q: M2 Area, except INST region >= 0.0066um2
+A: 
+M2_A_1_ME {
+@ M2 Area, except INST region >= 0.0066um2
+ err1 = AREA M2 < 0.0066
+ err1 NOT INSIDE INST
+}
+
+Q:  Recommended Mxy area >= 0.01um2
+A: 
+M2_A_1_DFM1 {
+@ Recommended Mxy area >= 0.01um2
+ err1 = AREA M2 < 0.01
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M2 area >= 0.0061um2
+A: 
+M2_A_1 {
+@ M2 area >= 0.0061um2
+ err1 = AREA M2 < 0.0061
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  M2 Area (with all of edge length < 0.204um, any edge length >= 0.117um) >= 0.0072um2
+     Except:
+     1) The patterns filling 0.046um*0.117um rectangular pattern or
+     2) M2 edge of length >= 0.046um if this edge have another adjacent edge of length < 0.032um
+A: 
+M2_A_3 {
+@ M2 Area (with all of edge length < 0.204um, any edge length >= 0.117um) >= 0.0072um2
+@ Except:
+@ 1) The patterns filling 0.046um*0.117um rectangular pattern or
+@ 2) M2 edge of length >= 0.046um if this edge have another adjacent edge of length < 0.032um
+ Mn_check = AREA M2 < 0.0072
+ Mn_check_a = LENGTH Mn_check >= 0.046
+ Mn_check_b = LENGTH Mn_check < 0.032
+ Mn_edge_any = LENGTH Mn_check >= 0.117
+ Mn_edge_all = LENGTH Mn_check >= 0.204
+ // 
+ Mn_waive_1 = ENCLOSE RECTANGLE M2 0.046 0.117 ORTHOGONAL ONLY
+ Mn_waive_2 = Mn_check INTERACT ((INT Mn_check_a Mn_check_b < 0.005 ABUT INTERSECTING ONLY REGION) OR (EXT Mn_check_a Mn_check_b < 0.005 ABUT INTERSECTING ONLY REGION))
+ Mn_waive = Mn_waive_1 OR Mn_waive_2
+ err1 = ((Mn_check WITH EDGE Mn_edge_any) NOT WITH EDGE Mn_edge_all) NOT Mn_waive
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  Mxy area (with all of edge lengths < 0.082um) (Except a pattern filling 0.078um*0.078um rectangular pattern) >= 0.0178um2
+A: 
+M2_A_4 {
+@ Mxy area (with all of edge lengths < 0.082um) (Except a pattern filling 0.078um*0.078um rectangular pattern) >= 0.0178um2
+ Mn_waive = ENCLOSE RECTANGLE M2 0.078 0.078 ORTHOGONAL ONLY
+ Mn_check = AREA M2 < 0.0178
+ Mn_edge_all = LENGTH Mn_check >= 0.082
+ err1 = (Mn_check NOT WITH EDGE Mn_edge_all) NOT Mn_waive
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  Mxy enclosed area >= 0.161um2
+A: 
+M2_A_5 {
+@ Mxy enclosed area >= 0.161um2
+ err1 = AREA ((HOLES M2 INNER) NOT M2) < 0.161
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+
+//M3
+
+Q: Recommended Mxy area >= 0.01um2
+A: 
+M3_A_1_DFM1 {
+@ Recommended Mxy area >= 0.01um2
+ err1 = AREA M3 < 0.01
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M3 area >= 0.0072um2
+A: 
+M3_A_2 {
+@ M3 area >= 0.0072um2
+ err1 = AREA M3 < 0.0072
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  Mxy area (with all of edge lengths < 0.082um) (Except a pattern filling 0.078um*0.078um rectangular pattern) >= 0.0178um2
+A: 
+M3_A_4 {
+@ Mxy area (with all of edge lengths < 0.082um) (Except a pattern filling 0.078um*0.078um rectangular pattern) >= 0.0178um2
+ Mn_waive = ENCLOSE RECTANGLE M3 0.078 0.078 ORTHOGONAL ONLY
+ Mn_check = AREA M3 < 0.0178
+ Mn_edge_all = LENGTH Mn_check >= 0.082
+ err1 = (Mn_check NOT WITH EDGE Mn_edge_all) NOT Mn_waive
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  Mxy enclosed area >= 0.161um2
+A: 
+M3_A_5 {
+@ Mxy enclosed area >= 0.161um2
+ err1 = AREA ((HOLES M3 INNER) NOT M3) < 0.161
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//125xmy4
+
+Q: Recommended 1.25xMy area >= 0.02um2
+A: 
+125xmy4_A_1_DFM1 {
+@ Recommended 1.25xMy area >= 0.02um2
+ err1 = AREA M4 < 0.02
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: 1.25xMy area >= 0.0148um2
+A: 
+125xmy4_A_1 {
+@ 1.25xMy area >= 0.0148um2
+ err1 = AREA M4 < 0.0148
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMy area when all of edge length <= 0.115um, except can fill 0.05*0.13um rectangle >= 0.039um2
+A: 
+125xmy4_A_2 {
+@ 1.25xMy area when all of edge length <= 0.115um, except can fill 0.05*0.13um rectangle >= 0.039um2
+ M4_waive = ENCLOSE RECTANGLE M4 0.050 0.130 ORTHOGONAL ONLY
+ M4_check = AREA M4 < 0.039
+ M4_edge_all = LENGTH M4_check > 0.115
+ err1 = (M4_check NOT WITH EDGE M4_edge_all) NOT M4_waive
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMy enclosed area >= 0.181um2
+A: 
+125xmy4_A_3 {
+@ 1.25xMy enclosed area >= 0.181um2
+ err1 = AREA ((HOLES M4 INNER) NOT M4) < 0.181
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//125xm6
+
+Q: 1.25xMn area >= 0.0148um2
+A: 
+125xm6_A_1 {
+@ 1.25xMn area >= 0.0148um2
+ err1 = AREA M6 < 0.0148
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMn area when all of edge lengths < 0.115um, except can fill a 0.05um*0.13um rectangle >= 0.039um2
+A: 
+125xm6_A_2 {
+@ 1.25xMn area when all of edge lengths < 0.115um, except can fill a 0.05um*0.13um rectangle >= 0.039um2
+ M6_waive = ENCLOSE RECTANGLE M6 0.050 0.130 ORTHOGONAL ONLY
+ M6_check = AREA M6 < 0.039
+ M6_edge_all = LENGTH M6_check >= 0.115
+ err1 = (M6_check NOT WITH EDGE M6_edge_all) NOT M6_waive
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMn enclosed area >= 0.181um2
+A: 
+125xm6_A_3 {
+@ 1.25xMn enclosed area >= 0.181um2
+ err1 = AREA ((HOLES M6 INNER) NOT M6) < 0.181
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//125xm5
+
+Q: Recommended 1.25xMn area >= 0.02um2
+A:
+125xm5_A_1_DFM1 {
+@ Recommended 1.25xMn area >= 0.02um2
+ err1 = AREA M5 < 0.02
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: 1.25xMn area >= 0.0148um2
+A: 
+25xm5_A_1 {
+@ 1.25xMn area >= 0.0148um2
+ err1 = AREA M5 < 0.0148
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMn area when all of edge lengths < 0.115um, except can fill a 0.05um*0.13um rectangle >= 0.039um2
+A: 
+125xm5_A_2 {
+@ 1.25xMn area when all of edge lengths < 0.115um, except can fill a 0.05um*0.13um rectangle >= 0.039um2
+ M5_waive = ENCLOSE RECTANGLE M5 0.050 0.130 ORTHOGONAL ONLY
+ M5_check = AREA M5 < 0.039
+ M5_edge_all = LENGTH M5_check >= 0.115
+ err1 = (M5_check NOT WITH EDGE M5_edge_all) NOT M5_waive
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMn enclosed area >= 0.181um2
+A: 
+125xm5_A_3 {
+@ 1.25xMn enclosed area >= 0.181um2
+ err1 = AREA ((HOLES M5 INNER) NOT M5) < 0.181
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//125xm7
+
+Q: Recommended 1.25xMn area >= 0.02um2
+A: 
+125xm7_A_1_DFM1 {
+@ Recommended 1.25xMn area >= 0.02um2
+ err1 = AREA M7 < 0.02
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: 1.25xMn area >= 0.0148um2
+A: 
+125xm7_A_1 {
+@ 1.25xMn area >= 0.0148um2
+ err1 = AREA M7 < 0.0148
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMn area when all of edge lengths < 0.115um, except can fill a 0.05um*0.13um rectangle >= 0.039um2
+A: 
+125xm7_A_2 {
+@ 1.25xMn area when all of edge lengths < 0.115um, except can fill a 0.05um*0.13um rectangle >= 0.039um2
+ M7_waive = ENCLOSE RECTANGLE M7 0.050 0.130 ORTHOGONAL ONLY
+ M7_check = AREA M7 < 0.039
+ M7_edge_all = LENGTH M7_check >= 0.115
+ err1 = (M7_check NOT WITH EDGE M7_edge_all) NOT M7_waive
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q:  1.25xMn enclosed area >= 0.181um2
+A: 
+125xm7_A_3 {
+@ 1.25xMn enclosed area >= 0.181um2
+ err1 = AREA ((HOLES M7 INNER) NOT M7) < 0.181
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+
+//10xTM2
+
+Q: 10xTMn area >= 0.453um2
+A: 
+10xTM2_A_1 {
+@ 10xTMn area >= 0.453um2
+ err1 = AREA TM2 < 0.453
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: 10xTMn enclosed area >= 0.463um2
+A: 
+10xTM2_A_2 {
+@ 10xTMn enclosed area >= 0.463um2
+ err1 = AREA ((HOLES TM2 INNER) NOT TM2) < 0.463
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//HR
+
+Q: Area of DIR or DIRDMP >= 0.092um2
+A: 
+HR_A_1 {
+@ Area of DIR or DIRDMP >= 0.092um2
+ err1 = AREA DIR < 0.092
+ err2 = AREA DIRDMP < 0.092
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//DSTR
+
+Q: Area of DSTR (INTERACT ACTIVE) >= 0.092um2
+A: 
+DSTR_A_1 {
+@ Area of DSTR (INTERACT ACTIVE) >= 0.092um2
+ err1 = AREA (DSTR INTERACT ACT) < 0.092
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Enclosed area of DSTR (INTERACT ACTIVE) >= 0.092um2
+A: 
+DSTR_A_2 {
+@ Enclosed area of DSTR (INTERACT ACTIVE) >= 0.092um2
+ err1 = AREA (((HOLES DSTR INNER) INTERACT ACT) NOT DSTR) < 0.092
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+

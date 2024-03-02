@@ -1,0 +1,988 @@
+//AA
+
+
+Q: Full chip ALL_AA density >= 25%
+A: 
+AA_D_1 {
+@ Full chip ALL_AA density >= 25%
+ DENSITY ALL_AA_NOT_MARKS CHIP_NOT_MARKS [AREA(ALL_AA_NOT_MARKS)/AREA(CHIP_NOT_MARKS)] < 0.25 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_1.rdb"
+}
+
+
+Q: Full chip ALL_AA density <= 60%
+A: 
+AA_D_2 {
+@ Full chip ALL_AA density <= 60%
+ DENSITY ALL_AA_NOT_MARKS CHIP_NOT_MARKS [AREA(ALL_AA_NOT_MARKS)/AREA(CHIP_NOT_MARKS)] > 0.60 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_2.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_2.rdb"
+}
+
+
+VARIABLE AA_D_3_val 12.4
+VARIABLE AA_D_3_window 18
+
+Q: ALL_AA density (window 18um*18um, stepping 18um/step_number), except LOGO, OCOVL, (NODMF su 1um) region >= 12.4%
+A: 
+AA_D_3 {
+@ ALL_AA density (window 18um*18um, stepping 18um/step_number), except LOGO, OCOVL, (NODMF su 1um) region >= 12.4%
+ check_region = DRC:1 NOT (OR MARKS_LOGO OCOVL NODMF_SIZE_1)
+ check_pattern = ALL_AA AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AA_D_3_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < AA_D_3_val/100 WINDOW AA_D_3_window STEP AA_D_3_window/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AA_D_3_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < AA_D_3_val/100 WINDOW AA_D_3_window STEP AA_D_3_window/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AA_D_3_window/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < AA_D_3_val/100 WINDOW AA_D_3_window STEP AA_D_3_window/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_3.rdb"
+}
+
+Q: ALL_AA density in ((RESP1 su 10um) NOT RESP1) >= 20%
+A: 
+AA_D_4 {
+@ ALL_AA density in ((RESP1 su 10um) NOT RESP1) >= 20%
+ check_region = (SIZE RESP1 BY 10) NOT RESP1
+ check_pattern = ALL_AA AND check_region
+ err1 = DFM PROPERTY check_region check_pattern OVERLAP [-= AREA(check_pattern)/AREA(check_region)] < 0.20
+
+ DFM RDB err1 "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_4.rdb"
+ COPY err1
+}
+
+
+VARIABLE AA_D_5_val 66.5
+VARIABLE AA_D_5_window 100
+
+Q: Maximum ALL_AA density in core region (window 100um*100um, stepping 100um/step_number) <= 66.5%
+A: 
+AA_D_5 {
+@ Maximum ALL_AA density in core region (window 100um*100um, stepping 100um/step_number) <= 66.5%
+ check_region = CHIP_NOT_MARKS NOT DG
+ check_pattern = ALL_AA AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AA_D_5_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > AA_D_5_val/100 WINDOW AA_D_5_window STEP AA_D_5_window/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AA_D_5_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > AA_D_5_val/100 WINDOW AA_D_5_window STEP AA_D_5_window/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AA_D_5_window/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > AA_D_5_val/100 WINDOW AA_D_5_window STEP AA_D_5_window/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_5.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_5.rdb"
+}
+
+VARIABLE AA_D_6_val 76
+VARIABLE AA_D_6_window 100
+
+Q: Maximum ALL_AA density in I/O region (window 100um*100um, stepping 100um/step_number) <= 76%
+A: 
+AA_D_6 {
+@ Maximum ALL_AA density in I/O region (window 100um*100um, stepping 100um/step_number) <= 76%
+ check_region = DG NOT MARKS
+ check_pattern = ALL_AA AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AA_D_6_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > AA_D_6_val/100 WINDOW AA_D_6_window STEP AA_D_6_window/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AA_D_6_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > AA_D_6_val/100 WINDOW AA_D_6_window STEP AA_D_6_window/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AA_D_6_window/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > AA_D_6_val/100 WINDOW AA_D_6_window STEP AA_D_6_window/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_6.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_6.rdb"
+}
+
+
+Q: Full chip ALL_AA density >= 25%
+A: 
+AA_D_1 {
+@ Full chip ALL_AA density >= 25%
+ DENSITY ALL_AA_NOT_MARKS CHIP_NOT_MARKS [AREA(ALL_AA_NOT_MARKS)/AREA(CHIP_NOT_MARKS)] < 0.25 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_1.rdb"
+}
+
+
+Q: Full chip ALL_AA density <= 60%
+A: 
+AA_D_2 {
+@ Full chip ALL_AA density <= 60%
+ DENSITY ALL_AA_NOT_MARKS CHIP_NOT_MARKS [AREA(ALL_AA_NOT_MARKS)/AREA(CHIP_NOT_MARKS)] > 0.60 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_2.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_2.rdb"
+}
+
+
+VARIABLE AA_D_3_val 11.8
+VARIABLE AA_D_3_window 18
+
+Q: ALL_AA density (window 18um*18um, stepping 9um), except LOGO, OCOVL, (NODMF su 1um) region >= 11.8%
+A: 
+AA_D_3 {
+@ ALL_AA density (window 18um*18um, stepping 9um), except LOGO, OCOVL, (NODMF su 1um) region >= 11.8%
+ check_region = DRC:1 NOT (OR MARKS_LOGO OCOVL NODMF_SIZE_1)
+ check_pattern = ALL_AA AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AA_D_3_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < AA_D_3_val/100 WINDOW AA_D_3_window STEP AA_D_3_window/2 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AA_D_3_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < AA_D_3_val/100 WINDOW AA_D_3_window STEP AA_D_3_window/2 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AA_D_3_window/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < AA_D_3_val/100 WINDOW AA_D_3_window STEP AA_D_3_window/2 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_3.rdb"
+}
+
+Q: ALL_AA density in ((RESP1 su 10um) NOT RESP1) >= 20%
+A: 
+AA_D_4 {
+@ ALL_AA density in ((RESP1 su 10um) NOT RESP1) >= 20%
+ check_region = (SIZE RESP1 BY 10) NOT RESP1
+ check_pattern = ALL_AA AND check_region
+ err1 = DFM PROPERTY check_region check_pattern OVERLAP [-= AREA(check_pattern)/AREA(check_region)] < 0.20
+
+ DFM RDB err1 "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_4.rdb"
+ COPY err1
+}
+
+
+VARIABLE AA_D_5_val 70
+VARIABLE AA_D_5_window 100
+
+Q: Maximum ALL_AA density in core region (window 100um*100um, stepping 50um) <= 70%
+A: 
+AA_D_5 {
+@ Maximum ALL_AA density in core region (window 100um*100um, stepping 50um) <= 70%
+ check_region = CHIP_NOT_MARKS NOT DG
+ check_pattern = ALL_AA AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AA_D_5_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > AA_D_5_val/100 WINDOW AA_D_5_window STEP AA_D_5_window/2 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AA_D_5_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > AA_D_5_val/100 WINDOW AA_D_5_window STEP AA_D_5_window/2 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AA_D_5_window/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > AA_D_5_val/100 WINDOW AA_D_5_window STEP AA_D_5_window/2 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_5.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_5.rdb"
+}
+
+VARIABLE AA_D_6_val 80
+VARIABLE AA_D_6_window 100
+
+Q: Maximum ALL_AA density in I/O region (window 100um*100um, stepping 50um) <= 80%
+A: 
+AA_D_6 {
+@ Maximum ALL_AA density in I/O region (window 100um*100um, stepping 50um) <= 80%
+ check_region = DG NOT MARKS
+ check_pattern = ALL_AA AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AA_D_6_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > AA_D_6_val/100 WINDOW AA_D_6_window STEP AA_D_6_window/2 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AA_D_6_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > AA_D_6_val/100 WINDOW AA_D_6_window STEP AA_D_6_window/2 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AA_D_6_window/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > AA_D_6_val/100 WINDOW AA_D_6_window STEP AA_D_6_window/2 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_6.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AA_D_6.rdb"
+}
+
+
+//AR
+
+
+
+Q: Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density >= 5%
+A: 
+AR_DN_1 {
+@ Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density >= 5%
+ DENSITY AR_DUM_AR_NOT_MARKS_0.2 CHIP_NOT_MARKS [!AREA(AR_DUM_AR_NOT_MARKS_0.2) + !!AREA(AR_DUM_AR_NOT_MARKS_0.2)*AREA(AR_DUM_AR_NOT_MARKS_0.2)/AREA(CHIP_NOT_MARKS)] < 0.05 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_1.rdb"
+}
+
+
+Q: Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density <= 10%
+A: 
+AR_DN_2 {
+@ Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density <= 10%
+ DENSITY AR_DUM_AR_NOT_MARKS_0.2 CHIP_NOT_MARKS [AREA(AR_DUM_AR_NOT_MARKS_0.2)/AREA(CHIP_NOT_MARKS)] > 0.1 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_2.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_2.rdb"
+}
+
+
+VARIABLE AR_DN_3_val 14.3
+VARIABLE AR_DN_3_window 18
+
+Q: ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density (window 18umx18um, stepping 18um/step_number), except OCOVL region <= 14.3%
+A: 
+AR_DN_3 {
+@ ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density (window 18umx18um, stepping 18um/step_number), except OCOVL region <= 14.3%
+ check_region = DRC:1 NOT MARKS_OCOVL
+ check_pattern = (AR_DUM_AR_NOT_MARKS_0.2 NOT MARKS_OCOVL) AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AR_DN_3_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > AR_DN_3_val/100 WINDOW AR_DN_3_window STEP AR_DN_3_window/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AR_DN_3_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > AR_DN_3_val/100 WINDOW AR_DN_3_window STEP AR_DN_3_window/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AR_DN_3_window/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > AR_DN_3_val/100 WINDOW AR_DN_3_window STEP AR_DN_3_window/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_3.rdb"
+}
+
+
+Q: Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density >= 5%
+A: 
+AR_DN_1 {
+@ Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density >= 5%
+ DENSITY AR_DUM_AR_NOT_MARKS_0.2 CHIP_NOT_MARKS [!AREA(AR_DUM_AR_NOT_MARKS_0.2) + !!AREA(AR_DUM_AR_NOT_MARKS_0.2)*AREA(AR_DUM_AR_NOT_MARKS_0.2)/AREA(CHIP_NOT_MARKS)] < 0.05 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_1.rdb"
+}
+
+
+Q: Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density <= 10%
+A: 
+AR_DN_2 {
+@ Full chip ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density <= 10%
+ DENSITY AR_DUM_AR_NOT_MARKS_0.2 CHIP_NOT_MARKS [AREA(AR_DUM_AR_NOT_MARKS_0.2)/AREA(CHIP_NOT_MARKS)] > 0.1 PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_2.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_2.rdb"
+}
+
+
+VARIABLE AR_DN_3_val 15
+VARIABLE AR_DN_3_window 18
+
+Q: ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density (window 18umx18um, stepping 9um), except OCOVL region <= 15%
+A: 
+AR_DN_3 {
+@ ((AR OR (ARDUM sd 0.02um)) OR ARDOP) density (window 18umx18um, stepping 9um), except OCOVL region <= 15%
+ check_region = DRC:1 NOT MARKS_OCOVL
+ check_pattern = (AR_DUM_AR_NOT_MARKS_0.2 NOT MARKS_OCOVL) AND check_region
+
+ check_window1 = check_region WITH WIDTH >= AR_DN_3_window/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > AR_DN_3_val/100 WINDOW AR_DN_3_window STEP AR_DN_3_window/2 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= AR_DN_3_window/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > AR_DN_3_val/100 WINDOW AR_DN_3_window STEP AR_DN_3_window/2 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= AR_DN_3_window/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > AR_DN_3_val/100 WINDOW AR_DN_3_window STEP AR_DN_3_window/2 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_AR_DN_3.rdb"
+}
+
+
+
+//125xmy4
+
+Q: 1.25xMy Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+A: 
+125xmy4_DN_1 {
+@ 1.25xMy Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+ except_area = OR LOGO MARKS (OCOVL AND M4DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M4_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1.rdb"
+}
+
+
+Q:  1.25xMy Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+A: 
+125xmy4_DN_1a {
+@ 1.25xMy Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+ except_area = OR LOGO MARKS (OCOVL AND M4DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M4_all) >= 3
+ check_pattern = M4_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1a.rdb"
+}
+
+
+
+ 
+Q: 1.25xMy maximum density (window 50um*50um, stepping 25um), except dummy metal <= 65%
+A: 
+125xmy4_DN_2_R {
+@ 1.25xMy maximum density (window 50um*50um, stepping 25um), except dummy metal <= 65%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M4 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_2_R.rdb"
+}
+
+
+
+ 
+Q: 1.25xMy maximum density (window 50um*50um, stepping 50um/step_number) <= 71.3%
+A: 
+125xmy4_DN_3 {
+@ 1.25xMy maximum density (window 50um*50um, stepping 50um/step_number) <= 71.3%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M4_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_3.rdb"
+}
+ 
+Q: 1.25xMy density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF su 0.4um) region <= 47.5%
+A: 
+125xmy4_DN_4 {
+@ 1.25xMy density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF su 0.4um) region <= 47.5%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M4_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 360/step_number GRADIENT > 0.475 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_4.rdb"
+}
+ 
+
+
+
+ 
+
+
+
+Q: 1.25xMy Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+A: 
+125xmy4_DN_1 {
+@ 1.25xMy Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+ except_area = OR LOGO MARKS (OCOVL AND M4DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M4_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1.rdb"
+}
+ 
+Q: 1.25xMy Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+A: 
+125xmy4_DN_1a {
+@ 1.25xMy Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+ except_area = OR LOGO MARKS (OCOVL AND M4DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M4_all) >= 3
+ check_pattern = M4_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_1a.rdb"
+}
+
+
+
+ 
+Q: 1.25xMy maximum density (window 50um*50um, stepping 25um), except dummy metal <= 65%
+A: 
+125xmy4_DN_2_R {
+@ 1.25xMy maximum density (window 50um*50um, stepping 25um), except dummy metal <= 65%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M4 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_2_R.rdb"
+}
+
+
+
+ 
+Q: 1.25xMy maximum density (window 50um*50um, stepping 25um) <= 75%
+A: 
+125xmy4_DN_3 {
+@ 1.25xMy maximum density (window 50um*50um, stepping 25um) <= 75%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M4_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_3.rdb"
+}
+ 
+Q: 1.25xMy density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF su 0.4um) region <= 50%
+A: 
+125xmy4_DN_4 {
+@ 1.25xMy density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF su 0.4um) region <= 50%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M4_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 180 GRADIENT > 0.5 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xmy4_DN_4.rdb"
+}
+ 
+//125xm6
+
+
+Q: 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10.5%
+A: 
+125xm6_DN_1 {
+@ 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10.5%
+ except_area = OR LOGO MARKS (OCOVL AND M6DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M6_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1.rdb"
+}
+ 
+Q: 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+A: 
+125xm6_DN_1a {
+@ 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+ except_area = OR LOGO MARKS (OCOVL AND M6DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M6_all) >= 3
+ check_pattern = M6_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1a.rdb"
+}
+
+
+
+ 
+Q: 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+A: 
+125xm6_DN_2_R {
+@ 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M6 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_2_R.rdb"
+}
+
+
+
+
+Q:  Maximum 1.25xMn density (window 50um*50um, stepping 50um/step_number). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 71.3%
+A: 
+125xm6_DN_3 {
+@ Maximum 1.25xMn density (window 50um*50um, stepping 50um/step_number). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 71.3%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M6_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_3.rdb"
+}
+ 
+Q: 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF) su 0.4um region <= 47.5%
+A: 
+125xm6_DN_4 {
+@ 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF) su 0.4um region <= 47.5%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M6_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 360/step_number GRADIENT > 0.475 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_4.rdb"
+}
+ 
+
+
+
+ 
+
+Q: 1.25xMn Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+A: 
+125xm6_DN_1 {
+@ 1.25xMn Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+ except_area = OR LOGO MARKS (OCOVL AND M6DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M6_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1.rdb"
+}
+ 
+Q: 1.25xMn Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+A: 
+125xm6_DN_1a {
+@ 1.25xMn Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+ except_area = OR LOGO MARKS (OCOVL AND M6DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M6_all) >= 3
+ check_pattern = M6_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_1a.rdb"
+}
+
+
+
+Q:  1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+A: 
+125xm6_DN_2_R {
+@ 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M6 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_2_R.rdb"
+}
+
+
+
+Q:  Maximum 1.25xMn density (window 50um*50um, stepping 25um). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 75%
+A: 
+125xm6_DN_3 {
+@ Maximum 1.25xMn density (window 50um*50um, stepping 25um). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 75%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M6_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_3.rdb"
+}
+ 
+Q: 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF) su 0.4um region <= 50%
+A: 
+125xm6_DN_4 {
+@ 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF) su 0.4um region <= 50%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M6_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 180 GRADIENT > 0.5 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm6_DN_4.rdb"
+}
+ 
+
+//125xm5
+
+Q: 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10.5%
+A: 
+125xm5_DN_1 {
+@ 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10.5%
+ except_area = OR LOGO MARKS (OCOVL AND M5DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M5_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1.rdb"
+}
+ 
+Q: 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+A: 
+125xm5_DN_1a {
+@ 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+ except_area = OR LOGO MARKS (OCOVL AND M5DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M5_all) >= 3
+ check_pattern = M5_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1a.rdb"
+}
+
+
+ 
+Q: 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+A: 
+125xm5_DN_2_R {
+@ 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M5 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_2_R.rdb"
+}
+
+
+
+ 
+Q: Maximum 1.25xMn density (window 50um*50um, stepping 50um/step_number). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 71.3%
+A: 
+125xm5_DN_3 {
+@ Maximum 1.25xMn density (window 50um*50um, stepping 50um/step_number). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 71.3%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M5_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_3.rdb"
+}
+ 
+Q: 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF) su 0.4um region <= 47.5%
+A: 
+125xm5_DN_4 {
+@ 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF) su 0.4um region <= 47.5%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M5_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 360/step_number GRADIENT > 0.475 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_4.rdb"
+}
+ 
+
+
+
+ 
+
+
+Q: 1.25xMn Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+A: 
+125xm5_DN_1 {
+@ 1.25xMn Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+ except_area = OR LOGO MARKS (OCOVL AND M5DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M5_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1.rdb"
+}
+ 
+Q: 1.25xMn Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+A: 
+125xm5_DN_1a {
+@ 1.25xMn Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+ except_area = OR LOGO MARKS (OCOVL AND M5DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M5_all) >= 3
+ check_pattern = M5_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_1a.rdb"
+}
+
+
+
+ 
+Q: 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+A: 
+125xm5_DN_2_R {
+@ 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M5 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_2_R.rdb"
+}
+
+
+
+ 
+Q: Maximum 1.25xMn density (window 50um*50um, stepping 25um). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 75%
+A: 
+125xm5_DN_3 {
+@ Maximum 1.25xMn density (window 50um*50um, stepping 25um). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 75%
+ check_region = COPY CHIP_NOT_MARKS
+ check_pattern = M5_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_3.rdb"
+}
+
+Q:  1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF) su 0.4um region <= 50%
+A: 
+125xm5_DN_4 {
+@ 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF) su 0.4um region <= 50%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M5_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 180 GRADIENT > 0.5 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm5_DN_4.rdb"
+}
+ 
+
+//125xm7
+
+Q: 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10.5%
+A: 
+125xm7_DN_1 {
+@ 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10.5%
+ except_area = OR LOGO MARKS (OCOVL AND M7DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M7_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.105 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1.rdb"
+}
+ 
+Q: 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+A: 
+125xm7_DN_1a {
+@ 1.25xMn Density (window 50um*50um, stepping 50um/step_number), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 26.3%
+ except_area = OR LOGO MARKS (OCOVL AND M7DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M7_all) >= 3
+ check_pattern = M7_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.263 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1a.rdb"
+}
+
+
+ 
+Q: 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+A: 
+125xm7_DN_2_R {
+@ 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+ check_region = CHIP_NOT_MARKS NOT DUPMK1
+ check_pattern = M7 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_2_R.rdb"
+}
+
+
+
+ 
+Q: Maximum 1.25xMn density (window 50um*50um, stepping 50um/step_number). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 71.3%
+A: 
+125xm7_DN_3 {
+@ Maximum 1.25xMn density (window 50um*50um, stepping 50um/step_number). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 71.3%
+ check_region = CHIP_NOT_MARKS NOT DUPMK1
+ check_pattern = M7_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.713 WINDOW 50 STEP 50/step_number BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_3.rdb"
+}
+ 
+Q: 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF) su 0.4um region <= 47.5%
+A: 
+125xm7_DN_4 {
+@ 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 360um/step_number), except (NODMF) su 0.4um region <= 47.5%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M7_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 360/step_number GRADIENT > 0.475 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_4.rdb"
+}
+ 
+
+
+
+ 
+
+
+Q: 1.25xMn Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+A: 
+125xm7_DN_1 {
+@ 1.25xMn Density (window 50um*50um, stepping 25um), except LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 10%
+ except_area = OR LOGO MARKS (OCOVL AND M7DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ check_pattern = M7_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!AREA(check_window1) + !!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!AREA(check_window2) + !!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!AREA(check_window3) + !!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.1 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1.rdb"
+}
+ 
+Q: 1.25xMn Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+A: 
+125xm7_DN_1a {
+@ 1.25xMn Density (window 50um*50um, stepping 25um), except the window not interact 3um*3um empty area, LOGO, MARKS, (OCOVL AND MnDUB), (NODMF su 1um) regions >= 25%
+ except_area = OR LOGO MARKS (OCOVL AND M7DUB) NODMF_SIZE_1
+ check_region = DRC:1 NOT except_area
+ ck3x3_window = WITH WIDTH (check_region NOT M7_all) >= 3
+ check_pattern = M7_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window1) + !!AREA(ck3x3_window)*!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window2) + !!AREA(ck3x3_window)*!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region ck3x3_window [!AREA(ck3x3_window) + !AREA(check_window3) + !!AREA(ck3x3_window)*!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] < 0.25 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1a.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_1a.rdb"
+}
+
+
+
+Q:  1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+A: 
+125xm7_DN_2_R {
+@ 1.25xMn maximum density (window 50um*50um, stepping 25um), except dummy metal. DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 65%
+ check_region = CHIP_NOT_MARKS NOT DUPMK1
+ check_pattern = M7 AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.65 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_2_R.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_2_R.rdb"
+}
+
+
+ 
+Q: Maximum 1.25xMn density (window 50um*50um, stepping 25um). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 75%
+A: 
+125xm7_DN_3 {
+@ Maximum 1.25xMn density (window 50um*50um, stepping 25um). DRC doesn't check (1.25xMn AND DUPMK1) region when the 1.25xMn layer is used as TM-1 <= 75%
+ check_region = CHIP_NOT_MARKS NOT DUPMK1
+ check_pattern = M7_all AND check_region
+ // 
+ check_window1 = check_region WITH WIDTH >= 50/4
+ err1_TMP1 = DENSITY check_pattern check_window1 check_region [!!AREA(check_window1)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER DRC:1 BY POLYGON
+ // 
+ check_window2 = WITH WIDTH (check_region AND err1_TMP1) >= 50/4
+ err1_TMP2 = DENSITY check_pattern check_window2 check_region [!!AREA(check_window2)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP1 BY POLYGON
+ // 
+ check_window3 = WITH WIDTH (check_region AND err1_TMP2) >= 50/4
+ DENSITY check_pattern check_window3 check_region [!!AREA(check_window3)*AREA(check_pattern)/AREA(check_region)] > 0.75 WINDOW 50 STEP 25 BACKUP INSIDE OF LAYER err1_TMP2 BY POLYGON PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_3.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_3.rdb"
+}
+ 
+Q: 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF) su 0.4um region <= 50%
+A: 
+125xm7_DN_4 {
+@ 1.25xMn density difference between two neighboring checking windows (window 180um*180um, stepping 180um), except (NODMF) su 0.4um region <= 50%
+ except_area = OR MARKS NODMF_SIZE_0.4
+ check_pattern = M7_all NOT except_area
+ check_region = DRC:1 NOT except_area
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0 WINDOW 180 STEP 180 GRADIENT > 0.5 ABSOLUTE BACKUP PRINT "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_4.log" RDB "./SMIC_14SFPLUS_DRC_logFile/density_report_125xm7_DN_4.rdb"
+}
+ 
