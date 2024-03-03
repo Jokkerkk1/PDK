@@ -1,0 +1,838 @@
+// AR
+Q: AA overlap AR in S/D direction = 0.01, 0.02um
+A: 
+AR_O_1 {
+@ AA overlap AR in S/D direction = 0.01, 0.02um
+//;space = 0 covered by AR.S.1.1
+ err1 = DFM COPY (DFM SPACE AA AR < 0.01 BY INT HORIZONTAL) REGION
+ err2 = DFM COPY (DFM SPACE AA AR > 0.01 < 0.02 BY INT HORIZONTAL) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+//DNW
+
+Q: Overlap of NW and DNW >= 0.358um
+A: 
+DNW_O_1 {
+@ Overlap of NW and DNW >= 0.358um
+ err1 = INT NW DNW_in_NW_hole < 0.358 ABUT<90 SINGULAR REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+
+ err2 = DNW_in_NW_hole NOT INSIDE EDGE NW
+ err2 NOT INSIDE EDGE SealR_NOT_BULK
+
+ err3 = INT NW (DNW NOT DNW_in_NW_hole) < 0.358 ABUT<90 SINGULAR REGION
+ err3 NOT INSIDE SealR_NOT_BULK
+}
+
+//SVT_N
+
+Q: Overlap of (ALL_GT NOT P2) and SVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and SVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut SVT_N vertical edge) >= 0.083um
+A: 
+SVT_N_O_1 {
+@ Overlap of (ALL_GT NOT P2) and SVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and SVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut SVT_N vertical edge) >= 0.083um
+//;Only need to check the vertical overlap
+ y1 = SVT_N_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (SVT_N_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (SVT_N_in_all_GT_in_ar_gtmk1_area WITH EDGE (SVT_N_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = SVT_N_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//SVT_P
+
+Q: Overlap of (ALL_GT NOT P2) and SVT_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and SVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut SVT_P vertical edge) >= 0.083um
+A: 
+SVT_P_O_1 {
+@ Overlap of (ALL_GT NOT P2) and SVT_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and SVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut SVT_P vertical edge) >= 0.083um
+//;Only need to check the vertical overlap
+ y1 = SVT_P_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (SVT_P_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (SVT_P_in_all_GT_in_ar_gtmk1_area WITH EDGE (SVT_P_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = SVT_P_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//HVT_N
+
+
+Q: Overlap of (ALL_GT NOT P2) and HVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and HVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut HVT_N vertical edge) >= 0.083um
+A: 
+HVT_N_O_1 {
+@ Overlap of (ALL_GT NOT P2) and HVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and HVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut HVT_N vertical edge) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = HVT_N_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (HVT_N_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (HVT_N_in_all_GT_in_ar_gtmk1_area WITH EDGE (HVT_N_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = HVT_N_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//HVT_P
+
+Q: Overlap of (ALL_GT NOT P2) and HVT_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and HVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut HVT_P vertical edge) >= 0.083um
+A: 
+HVT_P_O_1 {
+@ Overlap of (ALL_GT NOT P2) and HVT_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and HVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut HVT_P vertical edge) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = HVT_P_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (HVT_P_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (HVT_P_in_all_GT_in_ar_gtmk1_area WITH EDGE (HVT_P_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = HVT_P_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//LVT_N
+
+Q: Overlap of (ALL_GT NOT P2) and LVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LVT_N vertical edge) >= 0.083um
+A: 
+LVT_N_O_1 {
+@ Overlap of (ALL_GT NOT P2) and LVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LVT_N vertical edge) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = LVT_N_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (LVT_N_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (LVT_N_in_all_GT_in_ar_gtmk1_area WITH EDGE (LVT_N_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = LVT_N_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//LVT_P
+
+Q: Overlap of (ALL_GT NOT P2) and LVT_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LVT_P vertical edge) >= 0.083um
+A: 
+LVT_P_O_1 {
+@ Overlap of (ALL_GT NOT P2) and LVT_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LVT_P vertical edge) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = LVT_P_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (LVT_P_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (LVT_P_in_all_GT_in_ar_gtmk1_area WITH EDGE (LVT_P_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = LVT_P_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//ULVT_N
+
+Q: Overlap of (ALL_GT NOT P2) and ULVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and ULVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut ULVT_N vertical edge) >= 0.083um
+A: 
+ULVT_N_O_1 {
+@ Overlap of (ALL_GT NOT P2) and ULVT_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and ULVT_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut ULVT_N vertical edge) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = ULVT_N_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (ULVT_N_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (ULVT_N_in_all_GT_in_ar_gtmk1_area WITH EDGE (ULVT_N_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = ULVT_N_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//ULVT_P
+
+Q: Overlap of (ALL_GT NOT P2) and ULVT_P (Except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and ULVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut ULVT_P vertical edge)) >= 0.083um
+A: 
+ULVT_P_O_1 {
+@ Overlap of (ALL_GT NOT P2) and ULVT_P (Except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and ULVT_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut ULVT_P vertical edge)) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = ULVT_P_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (ULVT_P_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (ULVT_P_in_all_GT_in_ar_gtmk1_area WITH EDGE (ULVT_P_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = ULVT_P_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//LFN_N
+
+Q: Overlap of (ALL_GT NOT P2) and LFN_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LFN_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LFN_N vertical edge) >= 0.083um
+A: 
+LFN_N_O_1 {
+@ Overlap of (ALL_GT NOT P2) and LFN_N, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LFN_N vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LFN_N vertical edge) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = LFN_N_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (LFN_N_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (LFN_N_in_all_GT_in_ar_gtmk1_area WITH EDGE (LFN_N_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = LFN_N_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//LFN_P
+
+Q: Overlap of (ALL_GT NOT P2) and LFN_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LFN_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LFN_P vertical edge) >= 0.083um
+A: 
+LFN_P_O_1 {
+@ Overlap of (ALL_GT NOT P2) and LFN_P, except small ALL_GT jogs <= 0.004um, Dummy_Cell_WO_IMP, and LFN_P vertical edge CUT (GTMK1 OR AR) (channel length <= 0.024um, centerline abut LFN_P vertical edge) >= 0.083um
+//;Only need to check the vertical overlap.
+ y1 = LFN_P_in_all_GT_in_ar_gtmk1_edges COIN EDGE all_GT_center_even
+ y2 = ANGLE (LFN_P_in_all_GT_in_ar_gtmk1_edges TOUCH EDGE (LFN_P_in_all_GT_in_ar_gtmk1_area WITH EDGE (LFN_P_in_all_GT_in_ar_gtmk1_area COIN EDGE y1))) == 0
+ y3 = LFN_P_in_ALL_GT_h_edges NOT COIN EDGE y2
+ err1 = INT y3 ALL_GT_NOT_P2_not_jog_lteq_004 < 0.083 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE Dummy_Cell_WO_IMP
+}
+
+//DG
+
+Q: DG overlap of NW (abut is allowed) >= 0.238um
+A: 
+DG_O_1 {
+@ DG overlap of NW (abut is allowed) >= 0.238um
+ err1 = INT DG NW < 0.238 ABUT>0<90 SINGULAR REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+//P2
+
+Q: Overlap of AOP_GT and P2 in GATE poly direction, except AOP_GT jog <= 0.004um and INST region >= 0.04um
+A: 
+P2_O_1 {
+@ Overlap of AOP_GT and P2 in GATE poly direction, except AOP_GT jog <= 0.004um and INST region >= 0.04um
+ err1 = INT (AOP_GT NOT COIN EDGE AOP_GT_jog_lteq_004) P2_h_edges < 0.04 ABUT<90 OPPOSITE REGION  //; exclude jog, GT can be jointed in P2
+ err1 NOT INSIDE INST
+}
+
+//M0C
+
+Q: M0C (width = 0.048um) overlap ALL_M0 in GATE poly direction = 0.024, 0.048um
+A: 
+M0C_O_1 {
+@ M0C (width = 0.048um) overlap ALL_M0 in GATE poly direction = 0.024, 0.048um
+ err1_TMP = DFM SPACE M0C_048 ALL_M0 < M0C_O_1_overlap_a BY INT VERTICAL
+ err2_TMP = DFM SPACE M0C_048 ALL_M0 > M0C_O_1_overlap_a < M0C_O_1_overlap_b BY INT VERTICAL
+ err1 = DFM COPY err1_TMP REGION
+ err2 = DFM COPY err2_TMP REGION  //; space = 0 is flagged by M0C_S_7
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+VARIABLE M0C_O_2_overlap_a 0.026
+VARIABLE M0C_O_2_overlap_b 0.051
+
+Q: M0C (width = 0.051um) overlap ALL_M0 in GATE poly direction = 0.026, 0.051um
+A: 
+M0C_O_2 {
+@ M0C (width = 0.051um) overlap ALL_M0 in GATE poly direction = 0.026, 0.051um
+ err1_TMP = DFM SPACE M0C_051 ALL_M0 < M0C_O_2_overlap_a BY INT VERTICAL
+ err2_TMP = DFM SPACE M0C_051 ALL_M0 > M0C_O_2_overlap_a < M0C_O_2_overlap_b BY INT VERTICAL
+ err1 = DFM COPY err1_TMP REGION
+ err2 = DFM COPY err2_TMP REGION  //; space = 0 is flagged by M0C_S_7
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+VARIABLE M0C_O_3_overlap_a 0.026
+VARIABLE M0C_O_3_overlap_b 0.052
+
+Q: AOP_M0C (width = 0.052um) overlap ALL_M0 in GATE poly direction = 0.026, 0.052um
+A:
+M0C_O_3 {
+@ AOP_M0C (width = 0.052um) overlap ALL_M0 in GATE poly direction = 0.026, 0.052um
+ err1_TMP = DFM SPACE AOP_M0C_052 ALL_M0 < M0C_O_3_overlap_a BY INT VERTICAL
+ err2_TMP = DFM SPACE AOP_M0C_052 ALL_M0 > M0C_O_3_overlap_a < M0C_O_3_overlap_b BY INT VERTICAL
+ err1 = DFM COPY err1_TMP REGION
+ err2 = DFM COPY err2_TMP REGION  //; space = 0 is flagged by M0C_S_7
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+VARIABLE M0C_O_4_overlap_a 0.041
+VARIABLE M0C_O_4_overlap_b 0.082
+
+Q: AOP_M0C (width = 0.082um) overlap ALL_M0 in GATE poly direction = 0.041, 0.082um
+A: 
+M0C_O_4 {
+@ AOP_M0C (width = 0.082um) overlap ALL_M0 in GATE poly direction = 0.041, 0.082um
+ err1_TMP = DFM SPACE AOP_M0C_082 ALL_M0 < M0C_O_4_overlap_a BY INT VERTICAL
+ err2_TMP = DFM SPACE AOP_M0C_082 ALL_M0 > M0C_O_4_overlap_a < M0C_O_4_overlap_b BY INT VERTICAL
+ err1 = DFM COPY err1_TMP REGION
+ err2 = DFM COPY err2_TMP REGION  //; space = 0 is flagged by M0C_S_7
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+VARIABLE M0C_O_5_overlap_a 0.054
+VARIABLE M0C_O_5_overlap_b 0.108
+
+Q: M0C (width = 0.108um) overlap ALL_M0 in GATE poly direction = 0.054, 0.108um
+A: 
+M0C_O_5 {
+@ M0C (width = 0.108um) overlap ALL_M0 in GATE poly direction = 0.054, 0.108um
+ err1_TMP = DFM SPACE M0C_108 ALL_M0 < M0C_O_5_overlap_a BY INT VERTICAL
+ err2_TMP = DFM SPACE M0C_108 ALL_M0 > M0C_O_5_overlap_a < M0C_O_5_overlap_b BY INT VERTICAL
+ err1 = DFM COPY err1_TMP REGION
+ err2 = DFM COPY err2_TMP REGION  //; space = 0 is flagged by M0C_S_7
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: AOP_M0C overlap AOP_AA (INTERACT the same AOP_M0) in GATE poly direction <= 0.01um
+A:
+M0C_O_6 {
+@ AOP_M0C overlap AOP_AA (INTERACT the same AOP_M0) in GATE poly direction <= 0.01um
+ m0c_EDGE = AOP_M0C INSIDE EDGE AOP_AA
+ m0c_GOOD = DFM SPACE AOP_AA [m0c_EDGE] <= 0.010 BY INT VERTICAL
+
+ err1_TMP = (ANGLE m0c_EDGE == 0) NOT COIN EDGE m0c_GOOD
+ err1 = err1_TMP TOUCH EDGE (err1_TMP NOT OUTSIDE EDGE AOP_M0)
+ err1 NOT INSIDE EDGE SealR_NOT_BULK
+}
+
+//M0G
+
+
+Q: M0G and (M0 NOT M0C) (width = 0.04/0.042um) overlap in S/D direction, except INST region >= 0.026um
+A:
+M0G_O_1 {
+@ M0G and (M0 NOT M0C) (width = 0.04/0.042um) overlap in S/D direction, except INST region >= 0.026um
+ err1 = INT M0G_v_edges M0_NOT_M0C_040_042 < 0.026 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE INST
+}
+
+M0_NOT_M0C_040_042_inside_AA = (M0_040_042 AND M0_NOT_M0C) AND AA
+M0_NOT_M0C_040_inside_AA = (M0_040 AND M0_NOT_M0C) AND AA
+M0_NOT_M0C_054_inside_AA = (M0_054 AND M0_NOT_M0C) AND AA
+
+Q: M0G and ((M0 NOT M0C) AND AA) (M0 width = 0.04/0.042um) overlap in S/D direction (M0G cross M0 is not allowed), except (pick-up NOT VARMOS) and INST region. = 0.026, 0.027um
+A:
+M0G_O_1a {
+@ M0G and ((M0 NOT M0C) AND AA) (M0 width = 0.04/0.042um) overlap in S/D direction (M0G cross M0 is not allowed), except (pick-up NOT VARMOS) and INST region. = 0.026, 0.027um
+ chk_M0G = M0G_v_edges NOT OUTSIDE EDGE M0_NOT_M0C_040_042_inside_AA
+ err1 = (INT (chk_M0G) M0_NOT_M0C_040_042_inside_AA >= 0.026 <= 0.027 ABUT<90 OPPOSITE) OUTSIDE EDGE TAP_NOT_VARMOS
+ err2 = (ANGLE (LENGTH (M0G AND M0_NOT_M0C_040_042_inside_AA) >= 0.04) == 0) OUTSIDE EDGE TAP_NOT_VARMOS
+ err3 = (M0G_v_edges COIN OUTSIDE EDGE M0_NOT_M0C_040_042_inside_AA) OUTSIDE EDGE TAP_NOT_VARMOS
+
+ err1 NOT INSIDE EDGE INST
+ err2 NOT INSIDE EDGE INST
+ err3 NOT INSIDE EDGE INST
+}
+
+Q: M0G and ((M0 NOT M0C) AND AA) (M0 width = 0.054um) overlap in S/D direction (M0G cross M0 is not allowed), except (pick-up NOT VARMOS), and INST region. = 0.04, 0.041um
+A: 
+M0G_O_2a {
+@ M0G and ((M0 NOT M0C) AND AA) (M0 width = 0.054um) overlap in S/D direction (M0G cross M0 is not allowed), except (pick-up NOT VARMOS), and INST region. = 0.04, 0.041um
+ chk_M0G = M0G_v_edges NOT OUTSIDE EDGE M0_NOT_M0C_054_inside_AA
+ err1 = (INT (chk_M0G) M0_NOT_M0C_054_inside_AA >= 0.04 <= 0.041 ABUT<90 OPPOSITE) OUTSIDE EDGE TAP_NOT_VARMOS
+ err2 = (ANGLE (LENGTH (M0G AND M0_NOT_M0C_054_inside_AA) >= 0.054) == 0) OUTSIDE EDGE TAP_NOT_VARMOS
+ err3 = (M0G_v_edges COIN OUTSIDE EDGE M0_NOT_M0C_054_inside_AA) OUTSIDE EDGE TAP_NOT_VARMOS
+
+ err1 NOT INSIDE EDGE INST
+ err2 NOT INSIDE EDGE INST
+ err3 NOT INSIDE EDGE INST
+}
+
+Q: M0G and (M0 NOT M0C) (width = 0.054um) overlap in S/D direction, except M0G.O.2a >= 0.046um
+A: 
+M0G_O_2 {
+@ M0G and (M0 NOT M0C) (width = 0.054um) overlap in S/D direction, except M0G.O.2a >= 0.046um
+ err1 = (INT M0G_v_edges M0_NOT_M0C_054 < 0.046 ABUT<90 OPPOSITE REGION) NOT (INT M0G_v_edges M0_NOT_M0C_054_inside_AA >= 0.04 <= 0.041 ABUT<90 OPPOSITE REGION)
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G and (M0 NOT M0C) overlap in length direction, M0G and M0 are both in vertical direction >= 0.059um
+A: 
+M0G_O_3 {
+@ M0G and (M0 NOT M0C) overlap in length direction, M0G and M0 are both in vertical direction >= 0.059um
+ chk_M0 = M0_NOT_M0C_h_edges TOUCH EDGE M0_W_edges  //; M0G.O.3 conflict with M0G.EX.4/4a
+ err1 = INT chk_M0 M0G_W_edges < 0.059 ABUT<90 OPPOSITE REGION EXCLUDE SHIELDED
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+GT_0_014 = GT_014 AND GT_0
+GT_0_016 = GT_016 AND GT_0
+GT_0_018 = GT_018 AND GT_0
+GT_0_020 = GT_020 AND GT_0
+GT_0_022 = GT_022 AND GT_0
+GT_0_024 = GT_024 AND GT_0
+
+Q: M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.016um) overlap in S/D direction >= 0.014um
+A: 
+M0G_O_4a {
+@ M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.016um) overlap in S/D direction >= 0.014um
+ err1 = DFM COPY (DFM SPACE GT_0_016 M0G_040_050 < 0.014 BY INT HORIZONTAL) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.018um) overlap in S/D direction >= 0.015um
+A: 
+M0G_O_4b {
+@ M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.018um) overlap in S/D direction >= 0.015um
+ err1 = DFM COPY (DFM SPACE GT_0_018 M0G_040_050 < 0.015 BY INT HORIZONTAL) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.02um) overlap in S/D direction, except INST region >= 0.016um
+A: 
+M0G_O_4c {
+@ M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.02um) overlap in S/D direction, except INST region >= 0.016um
+ err1 = DFM COPY (DFM SPACE GT_0_020 M0G_040_050 < 0.016 BY INT HORIZONTAL) REGION
+ err1 NOT INSIDE INST
+}
+
+Q: M0G (width = 0.04/0.05um) overlap with (GT width = 0.022um, INSIDE GT_P96) in S/D direction >= 0.017um
+A: 
+M0G_O_4d {
+@ M0G (width = 0.04/0.05um) overlap with (GT width = 0.022um, INSIDE GT_P96) in S/D direction >= 0.017um
+ err1 = DFM COPY (DFM SPACE M0G_040_050 ((GT_022 NOT OUTSIDE GT_P96) AND GT_0) < 0.017 BY INT) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.04/0.05um) overlap with (GT width = 0.024um, INSIDE GT_P96) in S/D direction >= 0.018um
+A: 
+M0G_O_4e {
+@ M0G (width = 0.04/0.05um) overlap with (GT width = 0.024um, INSIDE GT_P96) in S/D direction >= 0.018um
+ err1 = DFM COPY (DFM SPACE M0G_040_050 ((GT_024 NOT OUTSIDE GT_P96) AND GT_0) < 0.018 BY INT) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.032um) overlap in S/D direction >= 0.018um
+A:
+M0G_O_4f {
+@ M0G (width = 0.04/0.05um) and (GT NOT P2) (GT width = 0.032um) overlap in S/D direction >= 0.018um
+ err1 = DFM COPY (DFM SPACE (GT_032 AND GT_0) M0G_040_050 < 0.018 BY INT HORIZONTAL) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.04um) and (GT NOT P2) (GT width >= 0.07um) overlap in S/D direction >= 0.07um
+A: 
+M0G_O_4g {
+@ M0G (width = 0.04um) and (GT NOT P2) (GT width >= 0.07um) overlap in S/D direction >= 0.07um
+ err1 = DFM COPY (DFM SPACE (GT_eqgt_070 AND GT_0) M0G_040 < 0.07 BY INT HORIZONTAL) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.05um) and (GT NOT P2) (GT width >= 0.07um) overlap in S/D direction >= 0.02um
+A: 
+M0G_O_4h {
+@ M0G (width = 0.05um) and (GT NOT P2) (GT width >= 0.07um) overlap in S/D direction >= 0.02um
+ err1 = DFM COPY (DFM SPACE (GT_eqgt_070 AND GT_0) M0G_050 < 0.02 BY INT HORIZONTAL) REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.016um) overlap in S/D direction >= 0.008um
+A: 
+M0G_O_5a {
+@ M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.016um) overlap in S/D direction >= 0.008um
+ err1 = INT GT_0_016 M0G_051_To_055_088_v_edges < 0.008 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.018um) overlap in S/D direction >= 0.009um
+A: 
+M0G_O_5b {
+@ M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.018um) overlap in S/D direction >= 0.009um
+ err1 = INT GT_0_018 M0G_051_To_055_088_v_edges < 0.009 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.02um) overlap in S/D direction >= 0.01um
+A: 
+M0G_O_5c {
+@ M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.02um) overlap in S/D direction >= 0.01um
+ err1 = INT GT_0_020 M0G_051_To_055_088_v_edges < 0.010 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.022um) overlap in S/D direction >= 0.011um
+A: 
+M0G_O_5d {
+@ M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.022um) overlap in S/D direction >= 0.011um
+ err1 = INT GT_0_022 M0G_051_To_055_088_v_edges < 0.011 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.024um) overlap in S/D direction >= 0.012um
+A: 
+M0G_O_5e {
+@ M0G (width = 0.051~0.053/0.054~0.055/0.088um) and (GT NOT P2) (GT width = 0.024um) overlap in S/D direction >= 0.012um
+ err1 = INT GT_0_024 M0G_051_To_055_088_v_edges < 0.012 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M0G (width/length = 0.06/0.095~0.096um) and (GT NOT P2) overlap in GATE poly direction >= 0.024um
+A: 
+M0G_O_6 {
+@ M0G (width/length = 0.06/0.095~0.096um) and (GT NOT P2) overlap in GATE poly direction >= 0.024um
+ err1 = INT GT_0 (ANGLE (OR M0G_W060_L095 M0G_W060_L096) == 0) < 0.024 ABUT<90 OPPOSITE REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+
+//V0
+
+Q: V0.OR.1: ORCL cannot cross other ORCL or touch other ORCLs
+    V0.OR.2: ORCL count of the closed loop formed by original polygons and ORCLs cannot be odd number
+    V0.OR.10: ORCA cross another ORCA or touch ORLA is not allowed
+    V0.OR.11: OR-AREA count of the close loop formed by original polygons and OR-AREA cannot be odd number
+A: 
+V0_OR_1_2 {
+@ V0.OR.1: ORCL cannot cross other ORCL or touch other ORCLs
+@ V0.OR.2: ORCL count of the closed loop formed by original polygons and ORCLs cannot be odd number
+@ V0.OR.10: ORCA cross another ORCA or touch ORLA is not allowed
+@ V0.OR.11: OR-AREA count of the close loop formed by original polygons and OR-AREA cannot be odd number
+ err1 = COPY V0_conflict
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: V0 DP even cycles associated with an odd cycle violation
+    Avoid fixing odd cycle locations that touch a warning ring
+A: 
+V0_OR_2_warning {
+@ V0 DP even cycles associated with an odd cycle violation
+@ Avoid fixing odd cycle locations that touch a warning ring
+ err1 = COPY V0_warning
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: V0DPMK must be drawn identically to V0 or RV0
+A: 
+V0_OR_3 {
+@ V0DPMK must be drawn identically to V0 or RV0
+ err1 = (V0_SR INTERACT V0DPMK) XOR V0DPMK
+ err2 = V0DPMK NOT COIN EDGE V0_SR
+ err3 = V0DPMK NOT V0_SR
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE EDGE SealR_NOT_BULK
+ err3 NOT INSIDE SealR_NOT_BULK
+}
+
+//;Flag (V0CA, V0CB or V0DPMK) interact ORCS
+V0CA_RN_cen = V0_RN_cen INTERACT V0CA
+V0CB_RN_cen = V0_RN_cen INTERACT V0CB
+V0DPMK_RN_cen = V0_RN_cen INTERACT V0DPMK
+
+Q: (V0 INTERACT V0DPMK) cannot have ORCS with V0 (including square V0 and rectangular V0)
+A: 
+V0_OR_4 {
+@ (V0 INTERACT V0DPMK) cannot have ORCS with V0 (including square V0 and rectangular V0)
+ err1 = EXT V0CA_RN_cen < 0.108 - 0.0002 REGION
+ err2 = EXT V0CB_RN_cen < 0.108 - 0.0002 REGION
+ err3 = EXT V0DPMK_RN_cen < 0.108 - 0.0002 REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+ err3 NOT INSIDE SealR_NOT_BULK
+ }
+
+Q: (V0 INTERACT INST) INTERACT V0DPMK is not allowed (including square V0 and rectangular V0)
+A: 
+V0_OR_5 {
+@ (V0 INTERACT INST) INTERACT V0DPMK is not allowed (including square V0 and rectangular V0)
+ err1 = (V0_SR INTERACT INST) INTERACT V0DPMK SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Pre-coloring marker V0CA and V0CB must be drawn identically to (V0 OR RV0)
+A: 
+V0_OR_6 {
+@ Pre-coloring marker V0CA and V0CB must be drawn identically to (V0 OR RV0)
+ err1 = V0CA NOT COIN INSIDE EDGE V0
+ err2 = V0CB NOT COIN INSIDE EDGE V0
+ err1 NOT INSIDE EDGE SealR_NOT_BULK
+ err2 NOT INSIDE EDGE SealR_NOT_BULK
+}
+
+Q: V0CA INTERACT V0CB is not allowed
+A: 
+V0_OR_7 {
+@ V0CA INTERACT V0CB is not allowed
+ err1 = V0CA INTERACT V0CB SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: (V0 INTERACT INST) INTERACT (V0CA OR V0CB) is not allowed
+A: 
+V0_OR_8 {
+@ (V0 INTERACT INST) INTERACT (V0CA OR V0CB) is not allowed
+ err1 = (V0CA OR V0CB) INTERACT (V0 INTERACT INST) SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: (V0CA OR V0CB) INTERACT V0DPMK is not allowed
+A: 
+V0_OR_9 {
+@ (V0CA OR V0CB) INTERACT V0DPMK is not allowed
+ err1 = (V0CA OR V0CB) INTERACT V0DPMK SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: OR-AREA count of any path starting from V0CA and ending at V0CA must not be a odd number
+    OR-AREA count of any path starting from V0CB and ending at V0CB must not be a odd number
+    OR-AREA count of any path starting from V0CA and ending at V0CB must not be a even number
+A: 
+V0_OR_12_13_14 {
+@ OR-AREA count of any path starting from V0CA and ending at V0CA must not be a odd number
+@ OR-AREA count of any path starting from V0CB and ending at V0CB must not be a odd number
+@ OR-AREA count of any path starting from V0CA and ending at V0CB must not be a even number
+ err1 = COPY V0_conflict_anchor
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Maximum pre-coloring ratio of ((V0CA + V0CB + V0DPMK)/(V0 OR RV0)) before decomposition < 16%
+A: 
+V0_OR_15 {
+@ Maximum pre-coloring ratio of ((V0CA + V0CB + V0DPMK)/(V0 OR RV0)) before decomposition < 16%
+ check_pattern = (V0CA OR V0CB) OR V0DPMK
+ check_region = COPY V0
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0.16 PRINT "./SMIC_14SFPLUS_DRC_logFile/pre_coloring_ratio_V0_OR_15.log" RDB "./SMIC_14SFPLUS_DRC_logFile/pre_coloring_ratio_V0_OR_15.rdb"
+}
+
+//RSPMK1
+
+Q: M0C (width = 0.051um) overlap (AOP_M0 OR (M0_B1 OR M0_B2)) in GATE poly direction. = 0.026/0.051um
+     Flag://;Overlap not equal to 0.026/0.051um
+     Flag://;RSPMK1 without (AOP_M0 OR (M0_B1 OR_M0_B2))
+A: 
+RSPMK1_O_1 {
+@ M0C (width = 0.051um) overlap (AOP_M0 OR (M0_B1 OR M0_B2)) in GATE poly direction. = 0.026/0.051um
+@ Flag://;Overlap not equal to 0.026/0.051um
+@ Flag://;RSPMK1 without (AOP_M0 OR (M0_B1 OR_M0_B2))
+ y1 = AOP_M0 NOT INTERACT M0_B1_B2   //AOP_M0 not interact M0_B1/M0_B2
+ y2 = AOP_M0_M0_B1_B2 NOT y1   //AOP_M0 interact M0_B1/M0_B2
+
+ z1 = y1 INTERACT (M0C INTERACT RSPMK1)
+ z2 = y2 INTERACT (M0C INTERACT RSPMK1)
+ err1 = INT z1 M0C_h_edges < 0.026 ABUT<90 OPPOSITE REGION  //m0c overlap with Y0 < 0.026, space = 0 is covered by M0C.S.7
+ err2 = INT z1 M0C_h_edges > 0.026 < 0.051 ABUT<90 OPPOSITE REGION
+ err3 = INT z2 M0C_h_edges < 0.026 ABUT<90 OPPOSITE REGION  //Y2 overlap with Y0 < 0.026
+ err4 = INT z2 M0C_h_edges > 0.026 < 0.051 ABUT<90 OPPOSITE REGION
+ err1 INTERACT RSPMK1
+ err2 INTERACT RSPMK1
+ err3 INTERACT RSPMK1
+ err4 INTERACT RSPMK1
+
+//;RSPMK1 without (AOP_M0 OR (M0_B1 OR_M0_B2))
+ err5 = RSPMK1 NOT INTERACT (OR AOP_M0 M0_B1_B2)  //interact one of them is ok
+ err5 NOT INSIDE SealR_NOT_BULK
+}
+
+//BM0
+
+Q: M0_B1 overlap M0 in GATE poly direction and S/D direction respectively = 0.022/0.040um
+A: 
+BM0_O_1 {
+@ M0_B1 overlap M0 in GATE poly direction and S/D direction respectively = 0.022/0.040um
+ err1 = INT M0_B1_h_edges M0i < 0.022 ABUT>0<90 OPPOSITE REGION //;exclude butted M0_B1 and M0
+ err2 = INT M0_B1_v_edges M0i < 0.040 ABUT>0<90 OPPOSITE REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+//M1
+
+Q: OR-AREA formed by single polygon is not allowed, except LOGO region
+A:
+M1_OR_1 {
+@ OR-AREA formed by single polygon is not allowed, except LOGO region
+ err1 = DFM COPY M1_ORCS_1_single M1_ORCS_2_single M1_ORCS_3_single M1_ORCS_1a_single REGION
+ err2 = EXT M1 < 0.058 ABUT<90 NOTCH REGION
+ err1 NOT INSIDE LOGO
+ err2 NOT INSIDE LOGO
+}
+
+Q: M1.OR.3: OR-AREA count of the close loop formed by original polygons and OR-AREA cannot be odd number
+    M1.OR.2: ORCA cross another ORCA or touch ORLA is not allowed
+A:
+M1_OR_3 {
+@ M1.OR.3: OR-AREA count of the close loop formed by original polygons and OR-AREA cannot be odd number
+@ M1.OR.2: ORCA cross another ORCA or touch ORLA is not allowed
+//;M1.OR.2 never happen in calibre mp engine
+ err1 = COPY M1_conflict_rings
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M1 DP even cycles associated with an odd cycle violation
+    Avoid fixing odd cycle locations that touch a warning ring
+A:
+M1_OR_3_warning {
+@ M1 DP even cycles associated with an odd cycle violation
+@ Avoid fixing odd cycle locations that touch a warning ring
+ err1 = M1_warning_rings INTERACT M1_conflict_rings
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M1DPMK must be drawn identically to M1
+A:
+M1_OR_4 {
+@ M1DPMK must be drawn identically to M1
+ err1 = M1DPMK NOT COIN EDGE M1
+ err2 = M1DPMK NOT M1
+ err1 NOT INSIDE EDGE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: (M1 INTERACT M1DPMK) INTERACT ORLS or ORCS is not allowed
+A: 
+M1_OR_5 {
+@ (M1 INTERACT M1DPMK) INTERACT ORLS or ORCS is not allowed
+ err1 = M1_ORCS_AREA INTERACT (M1 INTERACT M1DPMK) SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: (M1 INTERACT INST) INTERACT M1DPMK is not allowed
+A: 
+M1_OR_6 {
+@ (M1 INTERACT INST) INTERACT M1DPMK is not allowed
+ err1 = (M1 INTERACT INST) INTERACT M1DPMK SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Pre-coloring marker M1CA and M1CB must be drawn identically to M1
+A: 
+M1_OR_7 {
+@ Pre-coloring marker M1CA and M1CB must be drawn identically to M1
+ err1 = M1CA NOT COIN EDGE M1
+ err2 = M1CB NOT COIN EDGE M1
+ err3 = M1CA NOT M1
+ err4 = M1CB NOT M1
+ err1 NOT INSIDE EDGE SealR_NOT_BULK
+ err2 NOT INSIDE EDGE SealR_NOT_BULK
+ err3 NOT INSIDE SealR_NOT_BULK
+ err4 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: M1CA INTERACT M1CB is not allowed
+A: 
+M1_OR_8 {
+@ M1CA INTERACT M1CB is not allowed
+ err1 = M1CA INTERACT M1CB SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: (M1 INTERACT INST) INTERACT (M1CA OR M1CB) is not allowed
+A: 
+M1_OR_9 {
+@ (M1 INTERACT INST) INTERACT (M1CA OR M1CB) is not allowed
+ err1 = (M1CA OR M1CB) INTERACT (M1 INTERACT INST) SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: (M1CA OR M1CB) INTERACT M1DPMK is not allowed
+A: 
+M1_OR_10 {
+@ (M1CA OR M1CB) INTERACT M1DPMK is not allowed
+ err1 = (M1CA OR M1CB) INTERACT M1DPMK SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: OR-AREA count of any path starting from M1CA and ending at M1CA must not be an odd number
+    OR-AREA count of any path starting from M1CB and ending at M1CB must not be an odd number
+    OR-AREA count of any path starting from M1CA and ending at M1CB must not be an even number
+A:
+M1_OR_11_12_13 {
+@ OR-AREA count of any path starting from M1CA and ending at M1CA must not be an odd number
+@ OR-AREA count of any path starting from M1CB and ending at M1CB must not be an odd number
+@ OR-AREA count of any path starting from M1CA and ending at M1CB must not be an even number
+ err1 = COPY M1_conflict_anchor
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+
+Q: Maximum pre-coloring ratio of ((M1CA + M1CB + M1DPMK)/M1) before decomposition < 16%
+A: 
+M1_OR_14 {
+@ Maximum pre-coloring ratio of ((M1CA + M1CB + M1DPMK)/M1) before decomposition < 16%
+ check_pattern = (M1CA OR M1CB) OR M1DPMK
+ check_region = COPY M1
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0.16 PRINT "./SMIC_14SFPLUS_DRC_logFile/pre_coloring_ratio_M1_OR_14.log" RDB "./SMIC_14SFPLUS_DRC_logFile/pre_coloring_ratio_M1_OR_14.rdb"
+}
+
+//M3
+
+Q: OR-AREA formed by single polygon is not allowed
+A: 
+M3_OR_1 {
+@ OR-AREA formed by single polygon is not allowed
+ err1 = DFM COPY M3_ORCS_1_single M3_ORCS_2_single M3_ORCS_3_single REGION
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: M3.OR.3: OR-AREA count of the close loop formed by original polygons and OR-AREA cannot be odd number
+    M3.OR.2: ORCA cannot cross another ORCA or touch ORLA
+A: 
+M3_OR_3 {
+@ M3.OR.3: OR-AREA count of the close loop formed by original polygons and OR-AREA cannot be odd number
+@ M3.OR.2: ORCA cannot cross another ORCA or touch ORLA
+ err1 = COPY M3_conflict_rings
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: MxyDPMK must be drawn identically to Mxy
+A: 
+M3_OR_4 {
+@ MxyDPMK must be drawn identically to Mxy
+ err1 = M3DPMK NOT COIN EDGE M3
+ err2 = M3DPMK NOT M3
+ err1 NOT INSIDE EDGE SealR_NOT_BULK
+ err2 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: (Mxy INTERACT MxyDPMK) INTERACT ORLS or ORCS is not allowed
+A: 
+M3_OR_5 {
+@ (Mxy INTERACT MxyDPMK) INTERACT ORLS or ORCS is not allowed
+ err1 = M3_ORCS_AREA INTERACT (M3 INTERACT M3DPMK) SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: (Mxy INTERACT INST) INTERACT MxyDPMK is not allowed
+A: 
+M3_OR_6 {
+@ (Mxy INTERACT INST) INTERACT MxyDPMK is not allowed
+ err1 = (M3 INTERACT INST) INTERACT M3DPMK SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: Pre-coloring marker MxyCA and MxyCB must be drawn identically to Mxy
+A: 
+M3_OR_7 {
+@ Pre-coloring marker MxyCA and MxyCB must be drawn identically to Mxy
+ err1 = (M3CA OUTSIDE INST) NOT COIN EDGE M3
+ // based M3_OR_9: CA/CB is forbidden in INST region
+ err2 = (M3CB OUTSIDE INST) NOT COIN EDGE M3
+ err3 = (M3CA OUTSIDE INST) NOT M3
+ err4 = (M3CB OUTSIDE INST) NOT M3
+ err1 NOT INSIDE EDGE SealR_NOT_BULK
+ err2 NOT INSIDE EDGE SealR_NOT_BULK
+ err3 NOT INSIDE SealR_NOT_BULK
+ err4 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: MxyCA INTERACT MxyCB is not allowed
+A: 
+M3_OR_8 {
+@ MxyCA INTERACT MxyCB is not allowed
+ err1 = M3CA INTERACT M3CB SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: (Mxy INTERACT INST) INTERACT (MxyCA OR MxyCB) is not allowed
+A: 
+M3_OR_9 {
+@ (Mxy INTERACT INST) INTERACT (MxyCA OR MxyCB) is not allowed
+ err1 = (M3CA OR M3CB) INTERACT (M3 INTERACT INST) SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: (MxyCA OR MxyCB) INTERACT MxyDPMK is not allowed
+A: 
+M3_OR_10 {
+@ (MxyCA OR MxyCB) INTERACT MxyDPMK is not allowed
+ err1 = (M3CA OR M3CB) INTERACT M3DPMK SINGULAR ALSO
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: OR-AREA count of any path starting from MxyCA and ending at MxyCA must not be an odd number
+    OR-AREA count of any path starting from MxyCB and ending at MxyCB must not be an odd number
+    OR-AREA count of any path starting from MxyCA and ending at MxyCB must not be an even number
+A: 
+M3_OR_11_12_13 {
+@ OR-AREA count of any path starting from MxyCA and ending at MxyCA must not be an odd number
+@ OR-AREA count of any path starting from MxyCB and ending at MxyCB must not be an odd number
+@ OR-AREA count of any path starting from MxyCA and ending at MxyCB must not be an even number
+ err1 = COPY M3_conflict_anchor
+ err1 NOT INSIDE SealR_NOT_BULK
+}
+ 
+Q: Maximum pre-coloring ratio of ((MxyCA + MxyCB + MxyDPMK)/Mxy) before decomposition < 16%
+A: 
+M3_OR_14 {
+@ Maximum pre-coloring ratio of ((MxyCA + MxyCB + MxyDPMK)/Mxy) before decomposition < 16%
+ check_pattern = (M3CA OR M3CB) OR M3DPMK
+ check_region = COPY M3
+ DENSITY check_pattern check_region [AREA(check_pattern)/AREA(check_region)] >= 0.16 PRINT "./SMIC_14SFPLUS_DRC_logFile/pre_coloring_ratio_M3_OR_14.log" RDB "./SMIC_14SFPLUS_DRC_logFile/pre_coloring_ratio_M3_OR_14.rdb"
+}
+
